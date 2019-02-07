@@ -1,0 +1,15 @@
+{
+  "name": "sbot",
+  "version": "1.1.0",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "xmlhttprequest": "^1.8.0",
+    "cheerio": "^1.0.0-rc.2"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
