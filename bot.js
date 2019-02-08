@@ -790,9 +790,7 @@ function cmdSFTime(msg, args) {
 		if (arg.match(/\d{17,20}/)) {
 			let totalMatches = arg.match(/\d{17,20}/g);
 			for (let i in totalMatches) {
-				if (i) {
-					totalSFTimes += dateStr(sfTime(Number(i))) + "\n";
-				}
+				totalSFTimes += dateStr(sfTime(Number(totalMatches[i]))) + "\n";
 			}
 		}
 	});
