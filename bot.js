@@ -66,8 +66,6 @@ let botID;
 let timeoutForAutoReact;
 let whoNeedsToReactToSomething = {};
 let whichGuildThisUserMeans = {};
-const timezoneOffset = 3
-const timezoneSuffix = ' МСК'
 
 // вспомогательные функции
 function escapeRegExp(str) {
@@ -385,8 +383,8 @@ function dateStr(d) {
     if (!d.toJSON) {
         d = new Date(d);
     }
-    d.setHours(d.getHours() + timezoneOffset);
-    return d.toJSON().split(".")[0].replace(/T/, ' ') + timezoneSuffix;
+    d.setHours(d.getHours() + 3);
+    return d.toJSON().split(".")[0].replace(/T/, ' ') + ' МСК';
 }
 
 // функции-команды
@@ -787,10 +785,15 @@ function cmdCinemaPing(msg) {
 		.catch(error => console.log(error));
 }
 function cmdSFTime(msg, args) {
-	totalSFTimes = "";
+	let totalSFTimes = "";
 	args.forEach(arg => {
-		if (arg.match(/\d{17,}/)) {
-			totalSFTimes += dateStr(sfTime(Number(arg))) + "\n";
+		if (arg.match(/\d{17,20}/)) {
+			let totalMatches = arg.match(/\d{17,20}/g);
+			for (let i in totalMatches) {
+				if (i) {
+					totalSFTimes += dateStr(sfTime(Number(i))) + "\n";
+				}
+			}
 		}
 	});
 	if (totalSFTimes) {
