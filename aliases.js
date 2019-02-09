@@ -1,3 +1,5 @@
+import * as c from "./commands";
+
 export const commandsRegExp = [
 	{
 		r: /^(х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
