@@ -62,7 +62,7 @@ const translatedTags = {
 	"irondoor" : "железнаядверь|жд"
 };
 const ownerID = "172075054912372737";
-let botID;
+const botID = "343848758259482624";
 let timeoutForAutoReact;
 let whoNeedsToReactToSomething = {};
 let whichGuildThisUserMeans = {};
@@ -784,7 +784,7 @@ function cmdCinemaPing(msg) {
 		})
 		.catch(error => console.log(error));
 }
-function cmdSFTime(msg, args) {
+function cmdSnowflakeTime(msg, args) {
 	let totalSFTimes = "";
 	args.forEach(arg => {
 		if (arg.match(/\d{17,20}/)) {
@@ -800,7 +800,7 @@ function cmdSFTime(msg, args) {
 }
 
 // регулярки для команд
-const commands = [
+const commandsRegExp = [
 	{
 		r: /^(х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
 		f: cmdHelp
@@ -859,7 +859,7 @@ const commands = [
 	},
 	{
 		r: /^(sftime)[.!]?$/,
-		f: cmdSFTime
+		f: cmdSnowflakeTime
 	}
 ]
 const simpleAnswers = [
@@ -946,7 +946,7 @@ function answerInRegularMode(msg) {
 	var cmd = args.shift();
 
 	// ищем команду в регулярках
-	for (var i of commands) {
+	for (var i of commandsRegExp) {
 		if (cmd.match(i.r)) {
 			i.f(msg, args, msgCommandOriginal);
 			return;
@@ -977,7 +977,7 @@ client.on('ready', () => {
 	console.log(client.user.tag + " entered Discord on " + readyTimeString);
 
 	client.user.setPresence({game: {name: "Сбот, команды", type: 0}});
-	botID = client.user.id;
+	// botID = client.user.id;
 
 	// кэширование сообщений для реакций
 	client.guilds.forEach(guild => {
