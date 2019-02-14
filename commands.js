@@ -106,8 +106,11 @@ export function Send(msg, args, msgCommandOriginal) {
 	var imageLink = imageParamsArray[1];
 	var imageTitle = imageParamsArray[2];
 
-	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + imageTitle + "\n" + imageLink);
-	msg.react("📮");
+	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + imageTitle + "\n" + imageLink)
+		.then(() => {
+			msg.react("📮");
+		})
+		.catch(error => console.log(error));
 }
 export function React(msg, args) {
 	s.autoreact(msg, args, false); // функция вынесена, так как к ней нужен доступ и без команды

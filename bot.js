@@ -2,9 +2,7 @@
 require('http').createServer().listen(3000);
 const Discord = require("discord.js");
 export const client = new Discord.Client();
-const TOKEN = process.env.BOT_TOKEN;
 
-// вспомогательные данные
 export const readyTime = Date.now();
 export const dateOptions = {
 	weekday: "long",
@@ -20,15 +18,12 @@ export const dateOptions = {
 export const ownerID = "172075054912372737";
 export const botID = "343848758259482624";
 
-// вспомогательные функции
 import * as s from "./secondary";
-// функции-команды
 import * as c from "./commands";
-// регулярки
 import {commandsRegExp, simpleAnswers} from "./aliases";
 
 // что делать в ответ на сообщение
-function answerInRegularMode(msg) {
+function processMessage(msg) {
 	// если юзер отправил в лс картинку-аттачмент
 	if (msg.channel.type == "dm") {
 		let attList = [];
@@ -137,7 +132,7 @@ client.on('ready', () => {
 });
 client.on('message', msg => {
 	if (msg.author.id == botID) return;
-	setTimeout(answerInRegularMode, 300, msg);
+	setTimeout(processMessage, 300, msg);
 });
 client.on('messageReactionAdd', (messageReaction, user) => {
 	let msg = messageReaction.message;
@@ -166,4 +161,5 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 });
 
 // подключение к Дискорду
+const TOKEN = process.env.BOT_TOKEN;
 client.login(TOKEN);
