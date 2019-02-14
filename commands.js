@@ -37,8 +37,11 @@ const helpLines = [
 const helpText = helpLines.join("\n");
 
 export function Help(msg) {
-	msg.author.send(helpText);
-	s.envelope(msg);
+	msg.author.send(helpText)
+		.then(() => {
+			s.envelope(msg);
+		})
+		.catch(error => console.log(error));
 }
 export function Ping(msg) {
 	let pongText = "🏓 Понг!";
@@ -121,8 +124,11 @@ export function Tags(msg, args) {
 	for (var key in translatedTags) {
 		tags += ("`" + key + "` ");
 	}
-	msg.author.send(tags);
-	s.envelope(msg);
+	msg.author.send(tags)
+		.then(() => {
+			s.envelope(msg);
+		})
+		.catch(error => console.log(error));
 }
 export function Send(msg, args, msgCommandOriginal) {
 	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) (.+)/);
@@ -150,7 +156,11 @@ export function EmojiList(msg, args) {
 		return;
 	}
 
-	msg.author.send("Доступные эмоджи:");
+	msg.author.send("Доступные эмоджи:")
+		.then(() => {
+			s.envelope(msg);
+		})
+		.catch(error => console.log(error));
 	let sendingTimer = 800;
 	client.guilds.forEach(key => {
 		if (key.emojis.size) {
@@ -169,7 +179,6 @@ export function EmojiList(msg, args) {
 			sendingTimer += 800;
 		}
 	});
-	s.envelope(msg);
 	return;
 }
 export function Sticker(msg, args) {
@@ -222,8 +231,11 @@ export function Servers(msg) {
 	client.guilds.forEach(key => {
 		servers += ("\n" + key.name + " (`" + key.id + "`)");
 	});
-	msg.author.send(servers, {split: {char: "\n"}});
-	s.envelope(msg);
+	msg.author.send(servers, {split: {char: "\n"}})
+		.then(() => {
+			s.envelope(msg);
+		})
+		.catch(error => console.log(error));
 }
 export function Avatar(msg, args, msgCommandOriginal) {
 	// do not spam by pictures
@@ -247,8 +259,11 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	}
 }
 export function Invite(msg) {
-	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \nhttps://discordapp.com/api/oauth2/authorize?client_id=" + botID + "&scope=bot&permissions=0");
-	s.envelope(msg);
+	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \nhttps://discordapp.com/api/oauth2/authorize?client_id=" + botID + "&scope=bot&permissions=0")
+		.then(() => {
+			s.envelope(msg);
+		})
+		.catch(error => console.log(error));
 }
 export function Uptime(msg) {
 
