@@ -141,7 +141,9 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 	if (s.checkReactionForAutoreact(messageReaction, user)) {
 		return;
 	} else if (msgReaction == "❌" && [botID, ownerID].includes(msg.author.id) && user.id == ownerID) {
-		msg.delete(300);
+		if (msg.channel.id != "526441608250392577") {
+			msg.delete(300);
+		}
 	} else if (msgReaction == "📽" && msg.id == "542389154424553549") {
 		s.setCinemaRole(user, true);
 	} else {
