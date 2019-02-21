@@ -146,7 +146,7 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 	var imageLink = imageParamsArray[1];
 	var imageTitle = imageParamsArray[2];
 
-	var imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "",\n\t\t"big": true,\n\t\t"tags": ["screenshot", "minecraft", "rncr"]\n\t},\n```';
+	var imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "' + msg.author.username + '",\n\t\t"big": true,\n\t\t"tags": ["screenshot", "minecraft"]\n\t},\n```';
 
 	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + "<" + discordLink + ">\n" + imageLink + "\n" + imageJSON)
 		.then(() => {
