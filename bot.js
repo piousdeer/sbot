@@ -39,7 +39,7 @@ function processMessage(msg) {
 					if (msg.content) {
 						let ogURLParts = att.url.split("/");
 						let ogImgName = ogURLParts[ogURLParts.length - 1];
-						c.Send(msg, false, "sbot " + imgurData.link + " " + msg.content + " `" + ogImgName + "` `" + imgurData.id + "`");
+						c.Send(msg, false, "sbot " + imgurData.link + " " + msg.content + "\n`" + ogImgName + "` `" + imgurData.id + "`\n<" + att.url + ">");
 					} else {
 						msg.react("📜");
 						msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.");

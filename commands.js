@@ -131,7 +131,7 @@ export function Tags(msg, args) {
 		.catch(error => console.log(error));
 }
 export function Send(msg, args, msgCommandOriginal) {
-	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) (.+)/);
+	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/);
 
 	if (!imageParamsArray) {
 		msg.react("📜");
