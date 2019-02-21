@@ -2,6 +2,7 @@
 require('http').createServer().listen(3000);
 const Discord = require("discord.js");
 export const client = new Discord.Client();
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 export const readyTime = Date.now();
 export const dateOptions = {
@@ -24,6 +25,8 @@ import {commandsRegExp, simpleAnswers} from "./aliases";
 
 // что делать в ответ на сообщение
 function processMessage(msg) {
+	let isSentImageHere = false;
+
 	// если юзер отправил в лс картинку-аттачмент
 	if (msg.channel.type == "dm") {
 		msg.attachments.forEach(att => {
@@ -31,19 +34,27 @@ function processMessage(msg) {
 			xhrImgur.open("POST", "https://api.imgur.com/3/image");
 			xhrImgur.setRequestHeader("Authorization", "Client-ID 734f878d1bebba9");
 			xhrImgur.onload = function() {
-				let imgurLink = JSON.parse(xhrImgur.responseText).data.link;
-				if (imgurLink) {
+				let imgurData = JSON.parse(xhrImgur.responseText).data;
+				if (imgurData) {
 					if (msg.content) {
-						c.Send(msg, false, "sbot " + imgurLink + " " + msg.content + "\n`" + att.url + "`");
+						let ogURLParts = att.url.split("/");
+						let ogImgName = ogURLParts[ogURLParts.length - 1];
+						c.Send(msg, false, "sbot " + imgurData.link + " " + msg.content + " `" + ogImgName + "` `" + imgurData.id + "`");
 					} else {
 						msg.react("📜");
 						msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.");
 					}
-					return;
+				} else {
+					c.Send(msg, false, "sbot " + att.url + " " + msg.content);
 				}
 			}
 			xhrImgur.send(att.url);
+			isSentImageHere = true;
 		});
+	}
+
+	if (isSentImageHere) {
+		return;
 	}
 
 	// обработка сообщения
