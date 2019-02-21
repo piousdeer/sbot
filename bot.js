@@ -26,20 +26,24 @@ import {commandsRegExp, simpleAnswers} from "./aliases";
 function processMessage(msg) {
 	// если юзер отправил в лс картинку-аттачмент
 	if (msg.channel.type == "dm") {
-		let attList = [];
 		msg.attachments.forEach(att => {
-			attList.push(att.url);
-		});
-
-		if (attList.length) {
-			if (msg.content) {
-				c.Send(msg, false, "sbot " + attList.join(" ") + " " + msg.content);
-			} else {
-				msg.react("📜");
-				msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.");
+			let xhrImgur = new XMLHttpRequest();
+			xhrImgur.open("POST", "https://api.imgur.com/3/image");
+			xhrImgur.setRequestHeader("Authorization", "Client-ID 734f878d1bebba9");
+			xhrImgur.onload = function() {
+				let imgurLink = JSON.parse(xhrImgur.responseText).data.link;
+				if (imgurLink) {
+					if (msg.content) {
+						c.Send(msg, false, "sbot " + imgurLink + " " + msg.content + "\n`" + att.url + "`");
+					} else {
+						msg.react("📜");
+						msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.");
+					}
+					return;
+				}
 			}
-			return;
-		}
+			xhrImgur.send(att.url);
+		});
 	}
 
 	// обработка сообщения
