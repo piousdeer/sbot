@@ -39,7 +39,11 @@ function processMessage(msg) {
 					if (msg.content) {
 						let ogURLParts = att.url.split("/");
 						let ogImgName = ogURLParts[ogURLParts.length - 1];
-						c.Send(msg, false, "sbot " + imgurData.link + " " + msg.content + "\n`" + ogImgName + "` `" + imgurData.id + "`\n<" + att.url + ">");
+						let imageDate = "";
+						if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
+							imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0];
+						}
+						c.Send(msg, false, "sbot " + imgurData.link + " " + msg.content + "\n`" + "`\n<" + att.url + ">", att.url, imgurData.id, imageDate);
 					} else {
 						msg.react("📜");
 						msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.");

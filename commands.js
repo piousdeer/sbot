@@ -130,8 +130,12 @@ export function Tags(msg, args) {
 		})
 		.catch(error => console.log(error));
 }
-export function Send(msg, args, msgCommandOriginal) {
-	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/);
+export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageDate) {
+	if (!discordLink) discordLink = "";
+	if (!imageID) imageID = "";
+	if (!imageDate) imageDate = "";
+
+	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) (.+)/);
 
 	if (!imageParamsArray) {
 		msg.react("📜");
@@ -142,7 +146,9 @@ export function Send(msg, args, msgCommandOriginal) {
 	var imageLink = imageParamsArray[1];
 	var imageTitle = imageParamsArray[2];
 
-	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + imageTitle + "\n" + imageLink)
+	var imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "",\n\t\t"big": true,\n\t\t"tags": ["screenshot", "minecraft", "rncr"]\n\t},\n```';
+
+	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + "<" + discordLink + ">\n" + imageLink + "\n" + imageJSON)
 		.then(() => {
 			msg.react("📮");
 		})
