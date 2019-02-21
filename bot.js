@@ -35,7 +35,7 @@ function processMessage(msg) {
 			xhrImgur.setRequestHeader("Authorization", "Client-ID 734f878d1bebba9");
 			xhrImgur.onload = function() {
 				let imgurData = JSON.parse(xhrImgur.responseText).data;
-				if (imgurData) {
+				if (!imgurData.error) {
 					if (msg.content) {
 						let ogURLParts = att.url.split("/");
 						let ogImgName = ogURLParts[ogURLParts.length - 1];
