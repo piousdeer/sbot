@@ -135,7 +135,7 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 	if (!imageID) imageID = "";
 	if (!imageDate) imageDate = "";
 
-	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) (.+)/);
+	var imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/);
 
 	if (!imageParamsArray) {
 		msg.react("📜");
@@ -144,9 +144,24 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 	}
 
 	var imageLink = imageParamsArray[1];
-	var imageTitle = imageParamsArray[2];
 
-	var imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "' + msg.author.username + '",\n\t\t"big": true,\n\t\t"tags": ["screenshot", "minecraft"]\n\t},\n```';
+	var tagsSplit = imageParamsArray[2].split(/(?:tags|т[еаэ]ги):/i, 2);
+	var imageTitle = tagsSplit[0].replace(/\s+$/g, "");
+
+	var imageTags = [];
+	if (tagsSplit[1]) {
+		imageTags = tagsSplit[1].toLowerCase().replace(/^\s+/g, "").split(/[,;\s]+/);
+	}
+	imageTags.unshift("screenshot", "minecraft");
+	var imageTagsText = "";
+	for (var i in imageTags) {
+		imageTagsText += '\"' + imageTags[i] + '\", ';
+	}
+	if (imageTagsText) {	
+		imageTagsText = imageTagsText.slice(0, -2);
+	}
+
+	var imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "' + msg.author.username + '",\n\t\t"big": true,\n\t\t"tags": ['+ imageTagsText +']\n\t},\n```';
 
 	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + "<" + discordLink + ">\n" + imageLink + "\n" + imageJSON)
 		.then(() => {
