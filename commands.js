@@ -32,7 +32,7 @@ const helpEmbed = {
 		},
 		{
 			name: "<описание пикчи> <прикреплённое изображение>",
-			value: "Предложить свой скриншот в Галерею."
+			value: "Предложить свой скриншот в Галерею (только в ЛС).\nЕсли я поставил в ответ 📮, значит, успешно отправилось."
 		}
 	],
 	image: {
@@ -41,11 +41,12 @@ const helpEmbed = {
 }
 
 export function Help(msg) {
-	msg.author.send({embed: helpEmbed})
-		.then(() => {
-			s.envelope(msg);
-		})
-		.catch(error => console.log(error));
+	if (!s.isThisBotsChannel(msg)) {
+		msg.react("🤖");
+		return;
+	}
+
+	msg.channel.send({embed: helpEmbed});
 }
 export function Ping(msg) {
 	let pongText = "🏓 Понг!";
