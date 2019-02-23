@@ -135,7 +135,7 @@ client.on('ready', () => {
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
 				if (channel.permissionsFor(client.user).has("READ_MESSAGES")) {
-					channel.fetchMessages({limit: 100})
+					channel.fetchMessages({limit: 50})
 						.then(() => {})
 						.catch(error => console.log(error));
 				}
@@ -151,7 +151,7 @@ client.on('ready', () => {
 });
 client.on('message', msg => {
 	if (msg.author.id == botID) return;
-	setTimeout(processMessage, 300, msg);
+	setTimeout(processMessage, 100, msg);
 });
 client.on('messageReactionAdd', (messageReaction, user) => {
 	let msg = messageReaction.message;
