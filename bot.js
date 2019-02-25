@@ -127,7 +127,7 @@ client.on('ready', () => {
 	var readyTimeString = new Date(readyTime).toLocaleString("ru", dateOptions);
 	console.log(client.user.tag + " entered Discord on " + readyTimeString);
 
-	client.user.setPresence({game: {name: "Сбот, команды", type: 0}});
+	client.user.setPresence({game: {name: "sb help", type: 0}});
 	// botID = client.user.id;
 
 	// кэширование сообщений для реакций
