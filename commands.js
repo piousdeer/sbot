@@ -190,18 +190,22 @@ export function EmojiList(msg, args) {
 	let sendingTimer = 800;
 	client.guilds.forEach(key => {
 		if (key.emojis.size) {
-			let emojis = "";
-			emojis += (key.name + " (`" + key.id + "`):\n");
+			let i = 0;
+			let emojis = key.name + " (`" + key.id + "`):";
 			let emojiList = [];
 			key.emojis.forEach(key => {
-					if (key.animated) {
-				emojiList.push("<a:" + key.name + ":" + key.id + ">`" + key.name + "`");
-					} else {
-				emojiList.push("<:" + key.name + ":" + key.id + ">`" + key.name + "`");
-					}
+				let prefix = "<:";
+				let postfix = ">";
+				if (key.animated) {
+					prefix = "<a:";
+				}
+				if (++i % 10 == 1) {
+					prefix = "\n" + prefix
+				}
+				emojiList.push(prefix + key.name + ":" + key.id + postfix);
 			});
-			emojis += emojiList.join(", ");
-			setTimeout(() => {msg.author.send(emojis, {split: {char: " ", append: "⬛⬛⬛\n"}});}, sendingTimer);
+			emojis += emojiList.join(" ");
+			setTimeout(() => {msg.author.send(emojis, {split: {char: " ", append: "…\n"}});}, sendingTimer);
 			sendingTimer += 800;
 		}
 	});
