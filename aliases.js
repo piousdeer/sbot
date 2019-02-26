@@ -26,11 +26,11 @@ export const commandsRegExp = [
 		f: c.React
 	},
 	{
-		r: /^(эмо(д[жз]|ж)и|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
+		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
 		f: c.EmojiList
 	},
 	{
-		r: /^(стикер|sticker|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
+		r: /^(с(тикер)?|sticker|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
 		f: c.Sticker
 	},
 	{
