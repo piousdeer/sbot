@@ -223,7 +223,7 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 			emojiList.push(prefix + key.name + ":" + key.id + postfix);
 		});
 		emojis += emojiList.join(" ");
-		if (emojis.length > 2048) {
+		if (emojis.length >= 2000) {
 			emojis.substring(0, emojis.length) + "…";
 		}
 
@@ -232,7 +232,6 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 		} else {
 			msg.channel.send(emojis)
 				.then((msg) => {
-					s.envelope(msg);
 					msg.react("⬅")
 						.then(() => {
 							msg.react("➡");
