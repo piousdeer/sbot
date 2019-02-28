@@ -178,15 +178,18 @@ export function React(msg, args) {
 	s.autoreact(msg, args, false); // функция вынесена, так как к ней нужен доступ и без команды
 }
 export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, serverArray) {
+	let fromWhichServer = "343851676404547585";
+	let askedServer = s.getGuild(args[0]);
+	
 	let goRight = false; 
 	let goLeft = false;
 	if (args[0] == "+") {
 		goRight = true;
 	} else if (args[0] == "-") {
 		goLeft = true;
+	} else if (askedServer) {
+		fromWhichServer = askedServer;
 	}
-
-	let fromWhichServer = "343851676404547585";
 
 	if (usedArrowButton && msg.content.match(/\d{17,20}/g)) {
 		let prevServer = msg.content.match(/\d{17,20}/g)[0];
@@ -212,7 +215,7 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 			color: 0xD4A940,
 			fields: [
 				{
-					name: "-",
+					name: "1-1:",
 					value: ""
 				}
 			]
@@ -222,6 +225,8 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 		let f = 0;
 		let emojiDesc = "Доступные эмоджи:\n" + emServ.name + " `" + emServ.id + "`";
 		let emojiList = [];
+
+		let fieldStart = 1;
 
 		emServ.emojis.forEach(key => {
 			let prefix = "<:";
@@ -238,15 +243,17 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 
 			if (f >= 6) {
 				return;
-			} else if (emListText.length < 999) {
+			} else if (emListText.length < 993) {
+				embed.fields[f].name = fieldStart + "-" + i + ":";
 				embed.fields[f].value = emListText;
 			} else {
 				emojiList = [];
 				emojiList.push(emojiInfo);
-				if (emojiInfo.length < 999) {
+				if (emojiInfo.length < 993) {
+					fieldStart = i;
 					f++;
 					embed.fields[f] = {};
-					embed.fields[f].name = "-";
+					embed.fields[f].name = fieldStart + "-" + i + ":";
 					embed.fields[f].value = emojiInfo;
 				}
 			}

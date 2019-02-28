@@ -25,6 +25,29 @@ export function envelope(msg) {
 		msg.react("✉");
 	}
 }
+export function getGuild(guildName) {
+	if (!guildName) {
+		return null;
+	}
+	if (guildName.match(/^\d+$/g)) {
+		if (client.guilds.get(guildName)) {
+			return guildName;
+		}
+	}
+	let guildId;
+	let guildIdFull;
+	client.guilds.forEach(key => {
+		if (guildName == getSimpleString(key.name)) {
+			guildIdFull = key.id;
+		} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
+			guildId = key.id;
+		}
+	});
+	if (!(guildId || guildIdFull)) {
+		return;
+	}
+	return (guildIdFull) ? guildIdFull : guildId;
+}
 export function getStorage(emojiName, guildName, channel) {
 	if (guildName) {
 		if (guildName.match(/^\d+$/g)) {
