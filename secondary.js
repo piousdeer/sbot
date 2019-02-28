@@ -350,3 +350,14 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		return false;
 	}
 }
+export function checkEmojiListReaction(msgReaction, user, msg, serverArray) {
+	if (msg.author.id == botID && user.id != botID) {
+		let turn = "";
+		if (msgReaction == "⬅") {
+			turn = "-";
+		} else if (msgReaction == "➡") {
+			turn = "+";
+		}
+		c.EmojiList(msg, [turn], false, true, serverArray);
+	}
+}

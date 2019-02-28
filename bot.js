@@ -23,6 +23,8 @@ import * as s from "./secondary";
 import * as c from "./commands";
 import {commandsRegExp, simpleAnswers} from "./aliases";
 
+let serverArray = [];
+
 // что делать в ответ на сообщение
 function processMessage(msg) {
 	let isSentImageHere = false;
@@ -130,8 +132,11 @@ client.on('ready', () => {
 	client.user.setPresence({game: {name: "sb help", type: 0}});
 	// botID = client.user.id;
 
-	// кэширование сообщений для реакций
+	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
+		if (guild.emojis.size) {
+			serverArray.push(guild.id);
+		}
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
 				if (channel.permissionsFor(client.user).has("READ_MESSAGES")) {
@@ -165,6 +170,8 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 		}
 	} else if (msgReaction == "📽" && msg.id == "542389154424553549") {
 		s.setCinemaRole(user, true);
+	} else if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
+		s.checkEmojiListReaction(msgReaction, user, msg, serverArray)
 	} else {
 		s.checkHomestuckReaction(messageReaction, user);
 	}
@@ -175,6 +182,8 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 
 	if (msgReaction == "📽" && msg.id == "542389154424553549") {
 		s.setCinemaRole(user, false);
+	} else if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
+		s.checkEmojiListReaction(msgReaction, user, msg, serverArray)
 	} else {
 		s.checkHomestuckReaction(messageReaction, user);
 	}

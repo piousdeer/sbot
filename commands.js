@@ -177,38 +177,72 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 export function React(msg, args) {
 	s.autoreact(msg, args, false); // функция вынесена, так как к ней нужен доступ и без команды
 }
-export function EmojiList(msg, args) {
-	if (args[0]) {
-		return;
+export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, serverArray) {
+	let goRight = false; 
+	let goLeft = false;
+	if (args[0] == "+") {
+		goRight = true;
+	} else if (args[0] == "-") {
+		goLeft = true;
 	}
 
-	msg.author.send("Доступные эмоджи:")
-		.then(() => {
-			s.envelope(msg);
-		})
-		.catch(error => console.log(error));
-	let sendingTimer = 800;
-	client.guilds.forEach(key => {
-		if (key.emojis.size) {
-			let i = 0;
-			let emojis = key.name + " (`" + key.id + "`):";
-			let emojiList = [];
-			key.emojis.forEach(key => {
-				let prefix = "<:";
-				let postfix = ">";
-				if (key.animated) {
-					prefix = "<a:";
-				}
-				if (++i % 10 == 1) {
-					prefix = "\n" + prefix
-				}
-				emojiList.push(prefix + key.name + ":" + key.id + postfix);
-			});
-			emojis += emojiList.join(" ");
-			setTimeout(() => {msg.author.send(emojis, {split: {char: " ", append: "…\n"}});}, sendingTimer);
-			sendingTimer += 800;
+	let fromWhichServer = "343851676404547585";
+
+	if (usedArrowButton && msg.content.match(/\d{17,20}/g)) {
+		let prevServer = msg.content.match(/\d{17,20}/g)[0];
+		let p = serverArray.indexOf(prevServer);
+		let n;
+		if (goRight) {
+			n = p + 1;
+		} else if (goLeft) {
+			n = p - 1;
 		}
-	});
+		if (n < 0) {
+			n = serverArray.length - 1;
+		} else if (n >= serverArray.length) {
+			n = 0;
+		}
+
+		fromWhichServer = serverArray[n];
+	}
+
+	let emServ = client.guilds.get(fromWhichServer);
+	if (emServ && emServ.emojis.size) {
+		let i = 0;
+		let emojis = "Доступные эмоджи:\n" + emServ.name + " (`" + emServ.id + "`):";
+		let emojiList = [];
+		emServ.emojis.forEach(key => {
+			let prefix = "<:";
+			let postfix = ">";
+			if (key.animated) {
+				prefix = "<a:";
+			}
+			if (++i % 10 == 1) {
+				prefix = "\n" + prefix
+			}
+			emojiList.push(prefix + key.name + ":" + key.id + postfix);
+		});
+		emojis += emojiList.join(" ");
+		if (emojis.length > 2048) {
+			emojis.substring(0, emojis.length) + "…";
+		}
+
+		if (usedArrowButton) {
+			msg.edit(emojis);
+		} else {
+			msg.channel.send(emojis)
+				.then((msg) => {
+					s.envelope(msg);
+					msg.react("⬅")
+						.then(() => {
+							msg.react("➡");
+						})
+						.catch(error => console.log(error));
+				})
+				.catch(error => console.log(error));
+		}
+	}
+
 	return;
 }
 export function Sticker(msg, args) {
