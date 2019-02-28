@@ -208,29 +208,61 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 
 	let emServ = client.guilds.get(fromWhichServer);
 	if (emServ && emServ.emojis.size) {
+		let embed = {
+			color: 0xD4A940,
+			fields: [
+				{
+					name: "-",
+					value: ""
+				}
+			]
+		}
+
 		let i = 0;
-		let emojis = "Доступные эмоджи:\n" + emServ.name + " (`" + emServ.id + "`):";
+		let f = 0;
+		let emojiDesc = "Доступные эмоджи:\n" + emServ.name + " `" + emServ.id + "`";
 		let emojiList = [];
+
 		emServ.emojis.forEach(key => {
 			let prefix = "<:";
-			let postfix = ">";
+			let postfix = ">" + " `" + key.name + "`";
 			if (key.animated) {
 				prefix = "<a:";
 			}
 			if (++i % 10 == 1) {
 				prefix = "\n" + prefix
 			}
-			emojiList.push(prefix + key.name + ":" + key.id + postfix);
+			let emojiInfo = prefix + key.name + ":" + key.id + postfix; 
+			emojiList.push(emojiInfo);
+			let emListText = emojiList.join(" ");
+
+			if (f >= 6) {
+				return;
+			} else if (emListText.length < 999) {
+				embed.fields[f].value = emListText;
+			} else {
+				emojiList = [];
+				emojiList.push(emojiInfo);
+				if (emojiInfo.length < 999) {
+					f++;
+					embed.fields[f] = {};
+					embed.fields[f].name = "-";
+					embed.fields[f].value = emojiInfo;
+				}
+			}
 		});
+
+		/*
 		emojis += emojiList.join(" ");
 		if (emojis.length >= 2000) {
 			emojis.substring(0, emojis.length) + "…";
 		}
+		*/
 
 		if (usedArrowButton) {
-			msg.edit(emojis);
+			msg.edit(emojiDesc, {embed: embed});
 		} else {
-			msg.channel.send(emojis)
+			msg.channel.send(emojiDesc, {embed: embed})
 				.then((msg) => {
 					msg.react("⬅")
 						.then(() => {
