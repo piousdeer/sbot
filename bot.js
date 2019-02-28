@@ -189,6 +189,15 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 	}
 
 });
+client.on('guildCreate', (guild) => {
+	serverArray.push(guild.id);
+});
+client.on('guildDelete', (guild) => {
+	let index = serverArray.indexOf(guild.id);
+	if (index) {
+		serverArray.splice(index, 1);
+	}
+});
 
 // подключение к Дискорду
 const TOKEN = process.env.BOT_TOKEN;
