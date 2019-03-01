@@ -194,7 +194,7 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 	if (usedArrowButton && msg.content.match(/\d{17,20}/g)) {
 		let prevServer = msg.content.match(/\d{17,20}/g)[0];
 		let p = serverArray.indexOf(prevServer);
-		if (p) {
+		if (p > -1) {
 			let n;
 			if (goRight) {
 				n = p + 1;
