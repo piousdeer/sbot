@@ -194,19 +194,21 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 	if (usedArrowButton && msg.content.match(/\d{17,20}/g)) {
 		let prevServer = msg.content.match(/\d{17,20}/g)[0];
 		let p = serverArray.indexOf(prevServer);
-		let n;
-		if (goRight) {
-			n = p + 1;
-		} else if (goLeft) {
-			n = p - 1;
+		if (p) {
+			let n;
+			if (goRight) {
+				n = p + 1;
+			} else if (goLeft) {
+				n = p - 1;
+			}
+			if (n < 0) {
+				n = serverArray.length - 1;
+			} else if (n >= serverArray.length) {
+				n = 0;
+			}
+	
+			fromWhichServer = serverArray[n];
 		}
-		if (n < 0) {
-			n = serverArray.length - 1;
-		} else if (n >= serverArray.length) {
-			n = 0;
-		}
-
-		fromWhichServer = serverArray[n];
 	}
 
 	let emServ = client.guilds.get(fromWhichServer);
