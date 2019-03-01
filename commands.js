@@ -331,11 +331,20 @@ export function Servers(msg) {
 	if (msg.author.id != ownerID) {
 		return;
 	}
-	var servers = "Где меня можно найти:\n";
+	let embed = {
+		color: 0x888888,
+		description: "```"
+	}
+
+	let counter = 0;
 	client.guilds.forEach(key => {
-		servers += ("\n" + key.name + " (`" + key.id + "`)");
+		counter++;
+		embed.description += "\n" + key.id + " | " + key.name;
 	});
-	msg.author.send(servers, {split: {char: "\n"}})
+	embed.description += "```";
+	embed.title = counter + " guilds";
+
+	msg.author.send({embed: embed})
 		.then(() => {
 			s.envelope(msg);
 		})
