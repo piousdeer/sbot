@@ -1,5 +1,5 @@
 import * as s from "./secondary";
-import {client, readyTime, ownerID, botID} from "./bot";
+import {client, readyTime, ownerID, botID, requestsCounter} from "./bot";
 
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const Cheerio = require('cheerio');
@@ -576,4 +576,25 @@ export function SnowflakeTime(msg, args) {
 	if (totalSFTimes) {
 		msg.channel.send(totalSFTimes);
 	}
+}
+export function Stats(msg, args, msgCommandOriginal) {
+	if (!s.isThisBotsChannel(msg)) {
+		msg.react("🤖");
+		return;
+	}
+
+	const statsLines = [
+		"Servers: " + client.guilds.size,
+		"Emojis: " + client.emojis.size,
+		"Users cached: " + client.users.size,
+		"Requests in this session: " + requestsCounter
+	];
+
+	const statsEmbed = {
+		color: 0x888888,
+		title: "Stats",
+		description: statsLines.join("\n")
+	}
+
+	msg.channel.send({embed: statsEmbed});
 }

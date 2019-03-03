@@ -60,6 +60,10 @@ export const commandsRegExp = [
 	{
 		r: /^(sftime)[.!]?$/,
 		f: c.SnowflakeTime
+	},
+	{
+		r: /^(stats|статы|статистика)[.!]?$/,
+		f: c.Stats
 	}
 ]
 export const simpleAnswers = [

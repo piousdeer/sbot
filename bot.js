@@ -24,6 +24,7 @@ import * as c from "./commands";
 import {commandsRegExp, simpleAnswers} from "./aliases";
 
 let serverArray = [];
+export let requestsCounter = 0;
 
 // что делать в ответ на сообщение
 function processMessage(msg) {
@@ -87,6 +88,8 @@ function processMessage(msg) {
 	}
 
 	// если всё ок, продолжаем...
+	requestsCounter++;
+	
 	// отослать текст запроса в логи
 	var serverWhereUserIs = "Direct Messages";
 	if (msg.channel.type == "text") {
