@@ -1,4 +1,4 @@
-import * as c from "./commands";
+import * as c from "./commands"
 
 export const commandsRegExp = [
 	{
