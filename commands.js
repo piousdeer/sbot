@@ -177,7 +177,7 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 export function React(msg, args) {
 	s.autoreact(msg, args, false) // функция вынесена, так как к ней нужен доступ и без команды
 }
-export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, serverArray) {
+export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, visibleServers) {
 	let fromWhichServer = "343851676404547585"
 	let askedServer = s.getGuild(args[0])
 
@@ -193,7 +193,7 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 
 	if (usedArrowButton && msg.content.match(/\d{17,20}/g)) {
 		let prevServer = msg.content.match(/\d{17,20}/g)[0]
-		let p = serverArray.indexOf(prevServer)
+		let p = visibleServers.indexOf(prevServer)
 		if (p > -1) {
 			let n
 			if (goRight) {
@@ -202,12 +202,12 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, server
 				n = p - 1
 			}
 			if (n < 0) {
-				n = serverArray.length - 1
-			} else if (n >= serverArray.length) {
+				n = visibleServers.length - 1
+			} else if (n >= visibleServers.length) {
 				n = 0
 			}
 
-			fromWhichServer = serverArray[n]
+			fromWhichServer = visibleServers[n]
 		}
 	}
 
@@ -327,22 +327,30 @@ export function Sticker(msg, args) {
 
 	s.sendEmojiLinkEmbed(msg, emoji)
 }
-export function Servers(msg) {
-	if (msg.author.id != ownerID) {
-		return
-	}
+export function Servers(msg, args) {
 	let embed = {
 		color: 0x888888,
 		description: "```"
 	}
 
+	let showAllServers = false
+	if (msg.author.id == ownerID && args[0] != "emoji") {
+		showAllServers = true
+	}
+
 	let counter = 0
 	client.guilds.forEach(key => {
-		counter++
-		embed.description += "\n" + key.id + " | " + key.name
+		if (showAllServers || key.emojis.size) {
+			counter++
+			embed.description += "\n" + key.id + " | " + key.name
+		}
 	})
 	embed.description += "```"
 	embed.title = counter + " guilds"
+
+	if (!showAllServers) {
+		embed.title += " with emojis"
+	}
 
 	msg.author.send({embed: embed})
 		.then(() => {

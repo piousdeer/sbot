@@ -373,7 +373,7 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		return false
 	}
 }
-export function checkEmojiListReaction(msgReaction, user, msg, serverArray) {
+export function checkEmojiListReaction(msgReaction, user, msg, visibleServers) {
 	if (msg.author.id == botID && user.id != botID) {
 		let turn = ""
 		if (msgReaction == "⬅") {
@@ -381,6 +381,6 @@ export function checkEmojiListReaction(msgReaction, user, msg, serverArray) {
 		} else if (msgReaction == "➡") {
 			turn = "+"
 		}
-		c.EmojiList(msg, [turn], false, true, serverArray)
+		c.EmojiList(msg, [turn], false, true, visibleServers)
 	}
 }

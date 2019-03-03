@@ -23,7 +23,7 @@ import * as s from "./secondary"
 import * as c from "./commands"
 import {commandsRegExp, simpleAnswers} from "./aliases"
 
-let serverArray = []
+let visibleServers = []
 export let requestsCounter = 0
 
 // что делать в ответ на сообщение
@@ -132,7 +132,7 @@ function actionsForReactions(messageReaction, user) {
 	if (msgReaction == "📽" && msg.id == "542389154424553549") {
 		s.setCinemaRole(user, false)
 	} else if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
-		s.checkEmojiListReaction(msgReaction, user, msg, serverArray)
+		s.checkEmojiListReaction(msgReaction, user, msg, visibleServers)
 	} else {
 		s.checkHomestuckReaction(messageReaction, user)
 	}
@@ -150,7 +150,7 @@ client.on('ready', () => {
 	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
 		if (guild.emojis.size) {
-			serverArray.push(guild.id)
+			visibleServers.push(guild.id)
 		}
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
@@ -191,12 +191,12 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 	actionsForReactions(messageReaction, user)
 })
 client.on('guildCreate', (guild) => {
-	serverArray.push(guild.id)
+	visibleServers.push(guild.id)
 })
 client.on('guildDelete', (guild) => {
-	let index = serverArray.indexOf(guild.id)
+	let index = visibleServers.indexOf(guild.id)
 	if (index) {
-		serverArray.splice(index, 1)
+		visibleServers.splice(index, 1)
 	}
 })
 
