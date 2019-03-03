@@ -202,4 +202,8 @@ client.on('guildDelete', (guild) => {
 
 // подключение к Дискорду
 const TOKEN = process.env.BOT_TOKEN
-client.login(TOKEN)
+// client.login(TOKEN)
+function login() {
+    client.login(TOKEN).catch(() => setTimeout(login, 5000))
+}
+login()
