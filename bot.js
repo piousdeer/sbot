@@ -191,7 +191,9 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 	actionsForReactions(messageReaction, user)
 })
 client.on('guildCreate', (guild) => {
-	visibleServers.push(guild.id)
+	if (guild.emojis.size) {
+		visibleServers.push(guild.id)
+	}
 })
 client.on('guildDelete', (guild) => {
 	let index = visibleServers.indexOf(guild.id)
