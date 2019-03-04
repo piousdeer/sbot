@@ -6,14 +6,14 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 
 // переменные внешней среды
 const TOKEN = process.env.BOT_TOKEN
-export const ownerID = process.env.OWNER_ID
+export const OWNER_ID = process.env.OWNER_ID
 export const IMGUR_ID = process.env.IMGUR_ID	// позже понадобится в secondary.js
 
-if (!(TOKEN && ownerID && IMGUR_ID)) {
+if (!(TOKEN && OWNER_ID && IMGUR_ID)) {
 	console.log("Can't get some env variable!")
-	console.log("TOKEN: " + TOKEN.substring(0, 6) + "...")
-	console.log("ownerID: " + ownerID)
-	console.log("IMGUR_ID: " + IMGUR_ID)
+	console.log("TOKEN: " + (TOKEN ? TOKEN.substring(0, 10) + "..." : "not found"))
+	console.log({OWNER_ID})
+	console.log({IMGUR_ID})
 }
 
 export const readyTime = Date.now()
@@ -28,7 +28,7 @@ export const dateOptions = {
 	hour12: false,
 	timeZone: "Europe/Moscow"
 }
-export let botID
+export let BOT_ID
 
 import * as s from "./secondary"
 import * as c from "./commands"
@@ -83,7 +83,7 @@ function processMessage(msg) {
 	let msglcDivided
 
 	// проверка сообщения на наличие команды
-	if (msglcDivided = msglc.match(new RegExp("^(?:сб|сбот|стилл?бот|sb|sbot|still?bot|<@" + botID + ">)" + ",? (.+)$"))) {
+	if (msglcDivided = msglc.match(new RegExp("^(?:сб|сбот|стилл?бот|sb|sbot|still?bot|<@" + BOT_ID + ">)" + ",? (.+)$"))) {
 		msgCommandOriginal = msgoc.match(/^\S+ (.+)$/)[1]
 		msgCommand = msglcDivided[1]
 	} else if (msg.channel.type != "text") {
@@ -156,7 +156,7 @@ client.on('ready', () => {
 	console.log(client.user.tag + " entered Discord on " + readyTimeString)
 
 	client.user.setPresence({game: {name: "sb help", type: 0}})
-	botID = client.user.id
+	BOT_ID = client.user.id
 
 	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
@@ -181,7 +181,7 @@ client.on('ready', () => {
 
 })
 client.on('message', msg => {
-	if (msg.author.id == botID) return
+	if (msg.author.id == BOT_ID) return
 	setTimeout(processMessage, 100, msg)
 })
 client.on('messageReactionAdd', (messageReaction, user) => {
@@ -190,7 +190,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 
 	if (s.checkReactionForAutoreact(messageReaction, user)) {
 		return
-	} else if (msgReaction == "❌" && [botID, ownerID].includes(msg.author.id) && user.id == ownerID) {
+	} else if (msgReaction == "❌" && [BOT_ID, OWNER_ID].includes(msg.author.id) && user.id == OWNER_ID) {
 		if (msg.channel.id != "526441608250392577") {
 			msg.delete(300)
 		}

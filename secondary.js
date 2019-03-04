@@ -1,5 +1,5 @@
 import * as c from "./commands"
-import {client, botID} from "./bot"
+import {client, BOT_ID} from "./bot"
 
 let timeoutForAutoReact
 let whoNeedsToReactToSomething = {}
@@ -300,7 +300,7 @@ export function checkHomestuckReaction(messageReaction, user) {
 	let msg = messageReaction.message
 	let msgReaction = messageReaction.emoji.name
 
-	if (["⬅", "➡"].includes(msgReaction) && msg.author.id == botID && user.id != botID) {
+	if (["⬅", "➡"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
 		let msg = messageReaction.message
 		let cMatch, eMatch, page_number
 		if (cMatch = msg.content.match(/hs#(\d+)/)) {
@@ -374,7 +374,7 @@ export function checkReactionForAutoreact(messageReaction, user) {
 	}
 }
 export function checkEmojiListReaction(msgReaction, user, msg, visibleServers) {
-	if (msg.author.id == botID && user.id != botID) {
+	if (msg.author.id == BOT_ID && user.id != BOT_ID) {
 		let turn = ""
 		if (msgReaction == "⬅") {
 			turn = "-"

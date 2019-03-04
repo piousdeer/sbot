@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, readyTime, ownerID, botID, requestsCounter} from "./bot"
+import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
 
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 const Cheerio = require('cheerio')
@@ -328,7 +328,7 @@ export function Servers(msg, args) {
 	}
 
 	let showAllServers = false
-	if (msg.author.id == ownerID && args[0] != "emoji") {
+	if (msg.author.id == OWNER_ID && args[0] != "emoji") {
 		showAllServers = true
 	}
 
@@ -374,7 +374,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	}
 }
 export function Invite(msg) {
-	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \nhttps://discordapp.com/api/oauth2/authorize?client_id=" + botID + "&scope=bot&permissions=0")
+	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \nhttps://discordapp.com/api/oauth2/authorize?client_id=" + BOT_ID + "&scope=bot&permissions=0")
 		.then(() => {
 			s.envelope(msg)
 		})
@@ -546,7 +546,7 @@ export function Homestuck(msg, args, msgCommandOriginal, usedArrowButton) {
   xhrHS.send(null)
 }
 export function CinemaPing(msg) {
-	if (![ownerID, "184388744558673920", "378318866524143627", "178833086530846720"].includes(msg.author.id)) {
+	if (![OWNER_ID, "184388744558673920", "378318866524143627", "178833086530846720"].includes(msg.author.id)) {
 		return
 	}
 
