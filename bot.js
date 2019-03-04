@@ -9,6 +9,13 @@ const TOKEN = process.env.BOT_TOKEN
 export const ownerID = process.env.OWNER_ID
 export const IMGUR_ID = process.env.IMGUR_ID	// позже понадобится в secondary.js
 
+if (!(TOKEN && ownerID && IMGUR_ID)) {
+	console.log("Can't get some env variable!")
+	console.log("TOKEN: " + TOKEN.substring(0, 6) + "...")
+	console.log("ownerID: " + ownerID)
+	console.log("IMGUR_ID: " + IMGUR_ID)
+}
+
 export const readyTime = Date.now()
 export const dateOptions = {
 	weekday: "long",
