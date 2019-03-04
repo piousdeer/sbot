@@ -42,7 +42,7 @@ export function Help(msg) {
 			}
 		],
 		image: {
-			url: "https://cdn.discordapp.com/attachments/519609441109147655/548249010100764683/sbotupload.png"
+			url: "https://i.imgur.com/kus289H.png"
 		}
 	}
 
