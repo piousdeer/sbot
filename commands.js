@@ -158,13 +158,7 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 		imageTags = tagsSplit[1].toLowerCase().replace(/^\s+/g, "").split(/[,;\s]+/)
 	}
 	imageTags.unshift("screenshot", "minecraft")
-	let imageTagsText = ""
-	for (let i in imageTags) {
-		imageTagsText += '\"' + imageTags[i] + '\", '
-	}
-	if (imageTagsText) {
-		imageTagsText = imageTagsText.slice(0, -2)
-	}
+	let imageTagsText = imageTags.map(x=>'"'+x+'"').join(', ')
 
 	let imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "' + msg.author.username + '",\n\t\t"big": true,\n\t\t"tags": ['+ imageTagsText +']\n\t},\n```'
 
