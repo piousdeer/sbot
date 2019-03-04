@@ -1,7 +1,7 @@
 import * as s from "./secondary"
 import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
 
-import { XMLHttpRequest } from 'xmlhttprequest'
+import { XMLHttpRequest } from "xmlhttprequest"
 import Cheerio from "cheerio"
 
 import {translatedTags} from "./aliases"
