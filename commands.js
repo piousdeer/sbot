@@ -1,8 +1,8 @@
 import * as s from "./secondary"
 import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
 
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
-const Cheerio = require('cheerio')
+import { XMLHttpRequest } from 'xmlhttprequest'
+import Cheerio from "cheerio"
 
 import {translatedTags} from "./aliases"
 

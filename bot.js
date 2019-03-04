@@ -1,8 +1,10 @@
 // подключаем модули
 require('http').createServer().listen(3000)
-const Discord = require("discord.js")
+import Discord from "discord.js"
 export const client = new Discord.Client()
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
+
+// переместить в secondary.js вместе с отправкой на Имгур
+import { XMLHttpRequest } from "xmlhttprequest" 
 
 // переменные внешней среды
 const TOKEN = process.env.BOT_TOKEN
