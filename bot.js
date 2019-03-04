@@ -4,6 +4,11 @@ const Discord = require("discord.js")
 export const client = new Discord.Client()
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 
+// переменные внешней среды
+const TOKEN = process.env.BOT_TOKEN
+export const ownerID = process.env.OWNER_ID
+export const IMGUR_ID = process.env.IMGUR_ID	// позже понадобится в secondary.js
+
 export const readyTime = Date.now()
 export const dateOptions = {
 	weekday: "long",
@@ -16,7 +21,6 @@ export const dateOptions = {
 	hour12: false,
 	timeZone: "Europe/Moscow"
 }
-export const ownerID = "172075054912372737"
 export let botID
 
 import * as s from "./secondary"
@@ -35,7 +39,7 @@ function processMessage(msg) {
 		msg.attachments.forEach(att => {
 			let xhrImgur = new XMLHttpRequest()
 			xhrImgur.open("POST", "https://api.imgur.com/3/image")
-			xhrImgur.setRequestHeader("Authorization", "Client-ID 734f878d1bebba9")
+			xhrImgur.setRequestHeader("Authorization", "Client-ID " + IMGUR_ID)
 			xhrImgur.onload = function() {
 				let imgurData = JSON.parse(xhrImgur.responseText).data
 				if (!imgurData.error) {
@@ -203,8 +207,6 @@ client.on('guildDelete', (guild) => {
 })
 
 // подключение к Дискорду
-const TOKEN = process.env.BOT_TOKEN
-// client.login(TOKEN)
 function login() {
     client.login(TOKEN).catch(() => setTimeout(login, 5000))
 }
