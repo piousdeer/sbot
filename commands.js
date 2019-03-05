@@ -3,6 +3,7 @@ import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
 
 import { XMLHttpRequest } from "xmlhttprequest"
 import Cheerio from "cheerio"
+import Intl from "intl"
 
 import {translatedTags} from "./aliases"
 
@@ -632,7 +633,7 @@ export function When(msg, args, msgCommandOriginal) {
 	} else if (days == epochStart + 1) {
 		whenEmbed.description = "Завтра"
 	} else {
-		whenEmbed.description = new Date(days * 86400 * 1000).toLocaleString("en-GB", dateOptions)
+		whenEmbed.description = new Intl.DateTimeFormat("ru", dateOptions).format(new Date(days*86400*1000))
 	}
 
 	msg.channel.send({embed: whenEmbed})
