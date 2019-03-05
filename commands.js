@@ -35,7 +35,7 @@ export function Help(msg) {
 			},
 			{
 				name: "когда [что-то случится]",
-				value: "Узнай, когда это случится!."
+				value: "Узнай, когда это случится!"
 			},
 			{
 				name: "имг [теги через пробел]",
@@ -584,7 +584,7 @@ export function SnowflakeTime(msg, args) {
 		msg.channel.send(totalSFTimes)
 	}
 }
-export function Stats(msg, args, msgCommandOriginal) {
+export function Stats(msg) {
 	if (!s.isThisBotsChannel(msg)) {
 		msg.react("🤖")
 		return
