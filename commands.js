@@ -600,3 +600,40 @@ export function Stats(msg, args, msgCommandOriginal) {
 
 	msg.channel.send({embed: statsEmbed})
 }
+export function When(msg, args, msgCommandOriginal) {
+	if (!s.isThisBotsChannel(msg)) {
+		msg.react("🤖")
+		return
+	}
+	if (!args[0]) {
+		return
+	}
+
+	let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/\?+$/, "")
+	let question = questionOriginal.toLowerCase()
+
+	let epochStart = 17999
+	let T = 47574
+	let epochEnd = 65573
+
+	let days = Math.floor(Math.pow(((s.hashCode(question) % T) / T), 6) * T) + epochStart
+	if (question.match(/(железн(ая|ой|ую) двер(ь|и)|конец света|армагеддон|апокалипсис)/)) {
+		days = epochEnd
+	}
+
+	let whenEmbed = {
+		title: "Когда " + questionOriginal + "?",
+	}
+
+	let dateOptions = {year: "numeric", month: "long", day: "numeric"}
+
+	if (days == epochStart) {
+		whenEmbed.description = "Сегодня"
+	} else if (days == epochStart + 1) {
+		whenEmbed.description = "Завтра"
+	} else {
+		whenEmbed.description = new Date(days * 86400 * 1000).toLocaleString("en-GB", dateOptions)
+	}
+
+	msg.channel.send({embed: whenEmbed})
+}

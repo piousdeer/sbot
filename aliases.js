@@ -64,6 +64,10 @@ export const commandsRegExp = [
 	{
 		r: /^(stats|статы|статистика)[.!]?$/,
 		f: c.Stats
+	},
+	{
+		r: /^(when|когда)[.!]?$/,
+		f: c.When
 	}
 ]
 export const simpleAnswers = [
