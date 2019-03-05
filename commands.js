@@ -609,8 +609,8 @@ export function When(msg, args, msgCommandOriginal) {
 		return
 	}
 
-	let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/\?+$/, "")
-	let question = questionOriginal.toLowerCase()
+	let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
+	let question = questionOriginal.toLowerCase().replace(/ё/g, "е")
 
 	let epochStart = 17999
 	let T = 47574
