@@ -690,7 +690,7 @@ export function IronDoor(msg, args) {
 	let embed = {
 		author: {
 			name: "Железная Дверь говорит:",
-			icon_url: "https://i.imgur.com/uYYZijx.png"
+			icon_url: "https://i.imgur.com/P8IAywM.png"
 		}
 	}
 	embed.description = s.getRandomElem(possibleAnswers)
