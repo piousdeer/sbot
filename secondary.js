@@ -1,7 +1,7 @@
 import * as c from "./commands"
 import {client, BOT_ID} from "./bot"
 
-import { XMLHttpRequest } from "xmlhttprequest"
+import got from 'got'
 
 let timeoutForAutoReact
 let whoNeedsToReactToSomething = {}
@@ -386,7 +386,7 @@ export function checkEmojiListReaction(msgReaction, user, msg, visibleServers) {
 		c.EmojiList(msg, [turn], false, true, visibleServers)
 	}
 }
-export function sendAttachmentToImgur(msg, att) {
+export async function sendAttachmentToImgur(msg, att) {
 	const IMGUR_ID = process.env.IMGUR_ID
 
 	if (!IMGUR_ID) {
@@ -394,29 +394,32 @@ export function sendAttachmentToImgur(msg, att) {
 		return
 	}
 
-	let xhrImgur = new XMLHttpRequest()
-	xhrImgur.open("POST", "https://api.imgur.com/3/image")
-	xhrImgur.setRequestHeader("Authorization", "Client-ID " + IMGUR_ID)
-	xhrImgur.onload = function() {
-		let imgurData = JSON.parse(xhrImgur.responseText).data
-		if (!imgurData.error) {
-			if (msg.content) {
-				let ogURLParts = att.url.split("/")
-				let ogImgName = ogURLParts[ogURLParts.length - 1]
-				let imageDate = ""
-				if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
-					imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
-				}
-				c.Send(msg, false, "sbot " + imgurData.link + " " + msg.content, att.url, imgurData.id, imageDate)
-			} else {
-				msg.react("📜")
-				msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.")
+	let response = await got.post("https://api.imgur.com/3/image", {
+		headers: {
+			"Authorization": `Client-ID ${IMGUR_ID}`
+		},
+		body: {type: "URL", image: att.url},
+		json: true
+	})
+
+	let imgurData = response.body.data
+
+	if (!imgurData.error) {
+		if (msg.content) {
+			let ogURLParts = att.url.split("/")
+			let ogImgName = ogURLParts[ogURLParts.length - 1]
+			let imageDate = ""
+			if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
+				imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
 			}
+			c.Send(msg, false, `sbot ${imgurData.link} ${msg.content}`, att.url, imgurData.id, imageDate)
 		} else {
-			c.Send(msg, false, "sbot " + att.url + " " + msg.content)
+			msg.react("📜")
+			msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.")
 		}
+	} else {
+		c.Send(msg, false, `sbot ${att.url} ${msg.content}`)
 	}
-	xhrImgur.send(att.url)
 }
 export function hashCode(str) {
     var hash = 0;
