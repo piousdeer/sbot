@@ -4,6 +4,7 @@ import Discord from "discord.js"
 export const client = new Discord.Client()
 
 // переменные внешней среды
+require('dotenv').config()
 const TOKEN = process.env.BOT_TOKEN
 export const OWNER_ID = process.env.OWNER_ID
 
