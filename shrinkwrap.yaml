@@ -1,6 +1,7 @@
 dependencies:
   cheerio: 1.0.0-rc.2
   discord.js: 11.4.2
+  dotenv: 6.2.0
   esm: 3.2.11
   got: 9.6.0
   intl: 1.2.5
@@ -140,6 +141,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Lgd2XcJ/NjEw+7tFvfKxOzCYKZsdct5lczQ2ZaQY8Djz7pfAD3Gbp8ySJWtreII/vDlMVmxwa6pHmdxIYgttDg==
+  /dotenv/6.2.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
   /duplexer3/0.1.4:
     dev: false
     resolution:
@@ -356,6 +363,7 @@ shrinkwrapVersion: 3
 specifiers:
   cheerio: ^1.0.0-rc.2
   discord.js: ^11.4.2
+  dotenv: ^6.2.0
   esm: ^3.2.4
   got: ^9.6.0
   intl: ^1.2.5
