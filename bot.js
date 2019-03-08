@@ -142,7 +142,7 @@ client.on('ready', () => {
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
 				if (channel.permissionsFor(client.user).has("READ_MESSAGES")) {
-					channel.fetchMessages({limit: 50})
+					channel.fetchMessages({limit: 20})
 						.then(() => {})
 						.catch(error => console.log(error))
 				}
