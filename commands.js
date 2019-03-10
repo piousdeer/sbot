@@ -148,9 +148,6 @@ export async function Send(msg, args, msgCommandOriginal) {
 	}
 
 	let startLink = imageParamsArray[1]
-	if (args[0]) {
-		startLink = args[0]
-	}
 
 	let imgurParams
 	let discordLink = ""
@@ -172,6 +169,10 @@ export async function Send(msg, args, msgCommandOriginal) {
 				return
 			}
 		}
+	} else {
+		try {
+			imageID = imageLink.match(/\/\/i\.imgur\.com\/(.+)\./)[1]
+		} catch (err) {}
 	}
 
 	let imageDate = ""
@@ -181,6 +182,8 @@ export async function Send(msg, args, msgCommandOriginal) {
 		if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
 			imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
 		}
+
+		discordLink = `<${discordLink}>\n`
 	}
 
 
@@ -196,7 +199,7 @@ export async function Send(msg, args, msgCommandOriginal) {
 
 	let imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "' + msg.author.username + '",\n\t\t"big": true,\n\t\t"tags": ['+ imageTagsText +']\n\t},\n```'
 
-	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + "<" + discordLink + ">\n" + imageLink + "\n" + imageJSON)
+	client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + discordLink + imageLink + "\n" + imageJSON)
 		.then(() => {
 			msg.react("📮")
 		})
