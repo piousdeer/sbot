@@ -386,7 +386,7 @@ export function checkEmojiListReaction(msgReaction, user, msg, visibleServers) {
 		c.EmojiList(msg, [turn], false, true, visibleServers)
 	}
 }
-export async function sendAttachmentToImgur(msg, att) {
+export async function sendAttachmentToImgur(msg, attURL) {
 	const IMGUR_ID = process.env.IMGUR_ID
 
 	if (!IMGUR_ID) {
@@ -398,7 +398,7 @@ export async function sendAttachmentToImgur(msg, att) {
 			headers: {
 				"Authorization": `Client-ID ${IMGUR_ID}`
 			},
-			body: {type: "URL", image: att.url},
+			body: {type: "URL", image: attURL},
 			json: true
 		})
 
@@ -408,13 +408,13 @@ export async function sendAttachmentToImgur(msg, att) {
 		}
 
 		if (imgurData && !imgurData.error) {
-			let ogURLParts = att.url.split("/")
+			let ogURLParts = attURL.split("/")
 			let ogImgName = ogURLParts[ogURLParts.length - 1]
 			let imageDate = ""
 			if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
 				imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
 			}
-			c.Send(msg, false, `sbot ${imgurData.link} ${msg.content}`, att.url, imgurData.id, imageDate)
+			c.Send(msg, false, `sbot ${imgurData.link} ${msg.content}`, attURL, imgurData.id, imageDate)
 		}
 	} else {
 		msg.react("📜")

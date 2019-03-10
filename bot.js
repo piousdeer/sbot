@@ -42,7 +42,7 @@ function processMessage(msg) {
 	// если юзер отправил в лс картинку-аттачмент
 	if (msg.channel.type == "dm") {
 		msg.attachments.forEach(att => {
-			s.sendAttachmentToImgur(msg, att)
+			s.sendAttachmentToImgur(msg, att.url)
 			isSentImageHere = true
 		})
 	}
