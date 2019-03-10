@@ -343,10 +343,10 @@ export function Servers(msg, args) {
 		}
 	})
 	embed.description += "```"
-	embed.title = counter + " guilds"
+	embed.title = counter + " серверов"
 
 	if (!showAllServers) {
-		embed.title += " with emojis"
+		embed.title += " с эмоджи"
 	}
 
 	msg.author.send({embed: embed})
@@ -586,10 +586,10 @@ export function Stats(msg) {
 	}
 
 	const statsLines = [
-		"Servers: " + client.guilds.size,
-		"Emojis: " + client.emojis.size,
-		"Users cached: " + client.users.size,
-		"Requests in this session: " + requestsCounter
+		"Серверов: " + client.guilds.size,
+		"Эмоджи: " + client.emojis.size,
+		"Юзеров в кэше: " + client.users.size,
+		"Запросов за эту сессию: " + requestsCounter
 	]
 
 	const statsEmbed = {
