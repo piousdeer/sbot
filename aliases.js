@@ -66,11 +66,11 @@ export const commandsRegExp = [
 		f: c.Stats
 	},
 	{
-		r: /^(when|когда)[.!]?$/,
+		r: /^(когда)[.!]?$/,
 		f: c.When
 	},
 	{
-		r: /^(irondoor|железнаядверь|жд)[.!]?$/,
+		r: /^(железнаядверь|жд)[.!]?$/,
 		f: c.IronDoor
 	}
 ]

@@ -34,8 +34,12 @@ export function Help(msg) {
 				value: "Почитать [комикс](https://www.homestuck.com/story)."
 			},
 			{
-				name: "когда [что-то случится]",
+				name: "когда <что-то случится>",
 				value: "Узнай, когда это случится!"
+			},
+			{
+				name: "жд <вопрос с ответом да/нет>",
+				value: "Обратиться к мудрости [Железной Двери](https://randomforum.ru/threads/6469/)."
 			},
 			{
 				name: "имг [теги через пробел]",
@@ -660,16 +664,20 @@ export function When(msg, args, msgCommandOriginal) {
 	}
 
 	let dateOptions = {year: "numeric", month: "long", day: "numeric"}
+	let dateText
 
 	if (days == epochStart) {
-		whenEmbed.description = "Сегодня"
+		dateText = "Сегодня."
 	} else if (days == epochStart + 1) {
-		whenEmbed.description = "Завтра"
+		dateText = "Завтра."
 	} else if (days > epochEnd - 1000 && days < epochEnd) {
-		whenEmbed.description = "Никогда"
+		dateText = "Никогда."
+	} else if (question == "когда") {
+		dateText = "Тогда."
 	} else {
-		whenEmbed.description = new Intl.DateTimeFormat("ru", dateOptions).format(new Date(days*86400*1000))
+		dateText = new Intl.DateTimeFormat("ru", dateOptions).format(new Date(days*86400*1000))
 	}
+	whenEmbed.description = "🗓 " + dateText
 
 	msg.channel.send({embed: whenEmbed})
 }
