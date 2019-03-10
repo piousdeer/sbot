@@ -391,21 +391,23 @@ export async function sendAttachmentToImgur(msg, att) {
 
 	if (!IMGUR_ID) {
 		console.log("Error! No IMGUR_ID here!")
-		return
 	}
 
-	let response = await got.post("https://api.imgur.com/3/image", {
-		headers: {
-			"Authorization": `Client-ID ${IMGUR_ID}`
-		},
-		body: {type: "URL", image: att.url},
-		json: true
-	})
+	if (msg.content) {
+		let response = await got.post("https://api.imgur.com/3/image", {
+			headers: {
+				"Authorization": `Client-ID ${IMGUR_ID}`
+			},
+			body: {type: "URL", image: att.url},
+			json: true
+		})
 
-	let imgurData = response.body.data
+		let imgurData
+		if (response) {
+			imgurData = response.body.data
+		}
 
-	if (!imgurData.error) {
-		if (msg.content) {
+		if (imgurData && !imgurData.error) {
 			let ogURLParts = att.url.split("/")
 			let ogImgName = ogURLParts[ogURLParts.length - 1]
 			let imageDate = ""
@@ -413,12 +415,10 @@ export async function sendAttachmentToImgur(msg, att) {
 				imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
 			}
 			c.Send(msg, false, `sbot ${imgurData.link} ${msg.content}`, att.url, imgurData.id, imageDate)
-		} else {
-			msg.react("📜")
-			msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.")
 		}
 	} else {
-		c.Send(msg, false, `sbot ${att.url} ${msg.content}`)
+		msg.react("📜")
+		msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.")
 	}
 }
 export function hashCode(str) {
