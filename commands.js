@@ -594,7 +594,7 @@ export function Stats(msg) {
 
 	const statsEmbed = {
 		color: 0x888888,
-		title: "Stats",
+		title: "Статистика",
 		description: statsLines.join("\n")
 	}
 
@@ -613,8 +613,8 @@ export function When(msg, args, msgCommandOriginal) {
 	let question = questionOriginal.toLowerCase().replace(/ё/g, "е")
 
 	let epochStart = 17999
-	let T = 47574
 	let epochEnd = 65573
+	let T = epochEnd - epochStart
 
 	let days = Math.floor(Math.pow(((s.hashCode(question) % T) / T), 6) * T) + epochStart
 	if (question.match(/(железн(ая|ой|ую) двер(ь|и)|конец света|армагеддон|апокалипсис)/)) {
@@ -631,6 +631,8 @@ export function When(msg, args, msgCommandOriginal) {
 		whenEmbed.description = "Сегодня"
 	} else if (days == epochStart + 1) {
 		whenEmbed.description = "Завтра"
+	} else if (days > epochEnd - 1000 && days < epochEnd) {
+		whenEmbed.description = "Никогда"
 	} else {
 		whenEmbed.description = new Intl.DateTimeFormat("ru", dateOptions).format(new Date(days*86400*1000))
 	}
