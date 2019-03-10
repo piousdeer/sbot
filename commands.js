@@ -138,11 +138,7 @@ export function Tags(msg, args) {
 		})
 		.catch(error => console.log(error))
 }
-export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageDate) {
-	if (!discordLink) discordLink = ""
-	if (!imageID) imageID = ""
-	if (!imageDate) imageDate = ""
-
+export async function Send(msg, args, msgCommandOriginal) {
 	let imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/)
 
 	if (!imageParamsArray) {
@@ -151,7 +147,42 @@ export function Send(msg, args, msgCommandOriginal, discordLink, imageID, imageD
 		return
 	}
 
-	let imageLink = imageParamsArray[1]
+	let startLink = imageParamsArray[1]
+	if (args[0]) {
+		startLink = args[0]
+	}
+
+	let imgurParams
+	let discordLink = ""
+
+	let imageLink = startLink
+	let imageID = ""
+
+	if (!imageLink.includes("//i.imgur.com/")) {
+		try {
+			imgurParams = await s.sendAttachmentToImgur(imageLink)
+			if (imgurParams) {
+				discordLink = startLink
+				imageLink = imgurParams[0]
+				imageID = imgurParams[1]
+			}
+		} catch (err) {
+			if (err.statusCode === 400) {
+				msg.channel.send("Похоже, что ссылка не понравилась Имгуру.")
+				return
+			}
+		}
+	}
+
+	let imageDate = ""
+	if (discordLink) {
+		let ogURLParts = discordLink.split("/")
+		let ogImgName = ogURLParts[ogURLParts.length - 1]
+		if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
+			imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
+		}
+	}
+
 
 	let tagsSplit = imageParamsArray[2].split(/(?:tags|т[еаэ]ги):/i, 2)
 	let imageTitle = tagsSplit[0].replace(/\s+$/g, "")
