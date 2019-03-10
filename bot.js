@@ -37,6 +37,18 @@ export let requestsCounter = 0
 
 // что делать в ответ на сообщение
 function processMessage(msg) {
+	// если юзер отправил в лс картинку-аттачмент
+	let isSentImageHere = false
+	if (msg.channel.type == "dm") {
+		msg.attachments.forEach(att => {
+			c.Send(msg, null, `send ${att.url} ${msg.content}`)
+			isSentImageHere = true
+		})
+	}
+	if (isSentImageHere) {
+		return
+	}
+
 	// обработка сообщения
 	let msgoc = msg.content.replace(/\n/g, " ").replace(/ +/g, " ")
 	let msglc = msgoc.toLowerCase().replace(/ё/g, "е")
@@ -52,18 +64,6 @@ function processMessage(msg) {
 		msgCommandOriginal = msgoc
 		msgCommand = msglc
 	} else {
-		return
-	}
-
-	// если юзер отправил в лс картинку-аттачмент
-	let isSentImageHere = false
-	if (msg.channel.type == "dm") {
-		msg.attachments.forEach(att => {
-			c.Send(msg, null, `send ${att.url} ${msgCommandOriginal}`)
-			isSentImageHere = true
-		})
-	}
-	if (isSentImageHere) {
 		return
 	}
 
