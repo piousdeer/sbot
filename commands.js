@@ -123,7 +123,6 @@ export async function Img(msg, args) {
 			}
 		})
 	} catch (err) {
-		console.log(err)
 		await msg.react("343057042862243840")
 	}
 }
