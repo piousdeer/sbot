@@ -68,32 +68,12 @@ export function Ping(msg) {
 		})
 		.catch(error => console.log(error))
 }
+const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 export async function Img(msg, args) {
 	// do not spam by pictures
 	if (!s.isThisBotsChannel(msg) && msg.channel.id != "519609441109147655") {
 		msg.react("🤖")
 		return
-	}
-
-	let typeOfImage = ".png"
-
-	// TODO: use got.options.query instead
-	for (let i = 0; i < args.length; i++) {
-		for (let key in translatedTags) {
-			if (args[i] == "gif") typeOfImage = ".gif"
-
-			if (args[i].match(/^[!]/)) {
-				args[i] = "-" + args[i].substr(1)
-			}
-
-			if (args[i].match(new RegExp("^(" + translatedTags[key] + ")[.!,]?$"))) {
-				args[i] = key
-				break
-			} else if (args[i].match(new RegExp("^[-](" + translatedTags[key] + ")[.!,]?$"))) {
-				args[i] = "-" + key
-				break
-			}
-		}
 	}
 
 	let argsText = ""
@@ -104,9 +84,10 @@ export async function Img(msg, args) {
 	}
 
 	try {
-		let { body: imageInfo } = await got(`https://chaoscraft.ml/files/gallery/random/${argsText}`, { json: true })
-		if (imageInfo.error) throw Error(imageInfo.body.error)
+		let { body: imageInfo } = await got(`${imgDatabaseURL}random/${argsText}`, { json: true })
+		if (imageInfo.error) throw Error(imageInfo.error)
 	
+		let imageExtension = imageInfo.tags.includes("gif") ? "gif" : "png"
 		await msg.channel.send({
 			embed: {
 				color: 0x7486C2,
@@ -118,7 +99,7 @@ export async function Img(msg, args) {
 				description: `Теги: ${imageInfo.tags.join(", ")}`
 					+ (imageInfo.date ? `\nДата: ${imageInfo.date}` : ""),
 				image: {
-					url: `https://i.imgur.com/${imageInfo.id}${typeOfImage}`
+					url: `https://i.imgur.com/${imageInfo.id}.${imageExtension}`
 				}
 			}
 		})
@@ -414,7 +395,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	}
 }
 export function Invite(msg) {
-	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \nhttps://discordapp.com/api/oauth2/authorize?client_id=" + BOT_ID + "&scope=bot&permissions=0")
+	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \n<https://discordapp.com/api/oauth2/authorize?client_id=" + BOT_ID + "&scope=bot&permissions=0>")
 		.then(() => {
 			s.envelope(msg)
 		})
