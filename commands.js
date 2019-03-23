@@ -5,8 +5,6 @@ import got from 'got'
 import Cheerio from "cheerio"
 import Intl from "intl"
 
-import {translatedTags} from "./aliases"
-
 export function Help(msg) {
 	if (!s.isThisBotsChannel(msg)) {
 		msg.react("🤖")
