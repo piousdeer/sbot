@@ -57,7 +57,7 @@ function processMessage(msg) {
 	let msglcDivided
 
 	// проверка сообщения на наличие команды
-	if (msglcDivided = msglc.match(new RegExp("^(?:сб|сбот|стилл?бот|sb|sbot|still?bot|<@" + BOT_ID + ">)" + ",? (.+)$"))) {
+	if (msglcDivided = msglc.match(new RegExp("^(?:[сc][бb6]|сбот|стилл?бот|sb|sbot|still?bot|<@" + BOT_ID + ">)" + ",? (.+)$"))) {
 		msgCommandOriginal = msgoc.match(/^\S+ (.+)$/)[1]
 		msgCommand = msglcDivided[1]
 	} else if (msg.channel.type != "text") {
