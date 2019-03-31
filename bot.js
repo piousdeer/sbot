@@ -68,9 +68,11 @@ function processMessage(msg) {
 	}
 
 	// only allowed RC channels!
+	/*
 	if (msg.channel.type == "text" && msg.channel.guild.id == "110107304413638656" && !(["519609441109147655","521683316899053596","334369998866874369", "541594001992581122"].includes(msg.channel.id))) {
 		 return
 	}
+	*/
 
 	// если всё ок, продолжаем...
 	requestsCounter++

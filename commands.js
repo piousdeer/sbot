@@ -191,6 +191,11 @@ export function React(msg, args) {
 	s.autoreact(msg, args, false) // функция вынесена, так как к ней нужен доступ и без команды
 }
 export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, visibleServers) {
+	if (!s.isThisBotsChannel(msg)) {
+		msg.react("🤖")
+		return
+	}
+
 	let fromWhichServer = "343851676404547585"
 	let askedServer = s.getGuild(args[0])
 
@@ -596,11 +601,6 @@ export function SnowflakeTime(msg, args) {
 	}
 }
 export function Stats(msg) {
-	if (!s.isThisBotsChannel(msg)) {
-		msg.react("🤖")
-		return
-	}
-
 	const statsLines = [
 		"Серверов: " + client.guilds.size,
 		"Эмоджи: " + client.emojis.size,
@@ -617,10 +617,6 @@ export function Stats(msg) {
 	msg.channel.send({embed: statsEmbed})
 }
 export function When(msg, args, msgCommandOriginal) {
-	if (!s.isThisBotsChannel(msg)) {
-		msg.react("🤖")
-		return
-	}
 	if (!args[0]) {
 		return
 	}
@@ -660,10 +656,6 @@ export function When(msg, args, msgCommandOriginal) {
 	msg.channel.send({embed: whenEmbed})
 }
 export function IronDoor(msg, args) {
-	if (!s.isThisBotsChannel(msg)) {
-		msg.react("🤖")
-		return
-	}
 	if (!args[0]) {
 		return
 	}
