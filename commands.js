@@ -304,11 +304,12 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, visibl
 	return
 }
 export function Sticker(msg, args) {
-	// do not spam by pictures
+	/*
 	if (!s.isThisBotsChannel(msg)) {
 		msg.react("🤖")
 		return
 	}
+	*/
 
 	if (!args[0]) {
 		msg.react("📜")
