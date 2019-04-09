@@ -116,7 +116,7 @@ function actionsForReactions(messageReaction, user) {
 	let msg = messageReaction.message
 	let msgReaction = messageReaction.emoji.name
 
-	if (msgReaction == "📽" && msg.id == "542389154424553549") {
+	if (msgReaction == "📽" && msg.id == "565292786514133012") {
 		s.setCinemaRole(user, false)
 	} else if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
 		s.checkEmojiListReaction(msgReaction, user, msg, visibleServers)

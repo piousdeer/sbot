@@ -322,16 +322,16 @@ export function checkHomestuckReaction(messageReaction, user) {
 	}
 }
 export function setCinemaRole(user, doesUserNeedRole) {
-	client.guilds.get("110107304413638656").fetchMember(user.id)
+	client.guilds.get("540145900526501899").fetchMember(user.id)
 		.then((member) => {
 			if (doesUserNeedRole) {
 				console.log(member.user.tag + " asked to add them Cinema role.")
-				member.addRole("542396782878130206")
+				member.addRole("565291444705689612")
 					.then(() => {})
 					.catch(error => console.log(error))
 			} else {
 				console.log(member.user.tag + " asked to remove them Cinema role.")
-				member.removeRole("542396782878130206")
+				member.removeRole("565291444705689612")
 					.then(() => {})
 					.catch(error => console.log(error))
 			}
