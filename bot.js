@@ -112,12 +112,12 @@ function processMessage(msg) {
 	args.unshift(cmd)
 	s.autoreact(msg, args, true)
 }
-function actionsForReactions(messageReaction, user) {
+function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
 	let msgReaction = messageReaction.emoji.name
 
 	if (msgReaction == "📽" && msg.id == "565292786514133012") {
-		s.setCinemaRole(user, false)
+		s.setCinemaRole(user, wasReactionAdded)
 	} else if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
 		s.checkEmojiListReaction(msgReaction, user, msg, visibleServers)
 	} else {
@@ -175,11 +175,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 			msg.delete(300)
 		}
 	} else {
-		actionsForReactions(messageReaction, user)
+		actionsForReactions(messageReaction, user, true)
 	}
 })
 client.on('messageReactionRemove', (messageReaction, user) => {
-	actionsForReactions(messageReaction, user)
+	actionsForReactions(messageReaction, user, false)
 })
 client.on('guildCreate', (guild) => {
 	if (guild.emojis.size) {
