@@ -578,9 +578,10 @@ export function CinemaPing(msg) {
 			message.reactions.get("📽").fetchUsers()
 				.then((users) => {
 					users.forEach(user => {
-						cinemaPing += "<@" + user.id + ">\n"
+						if (user.presence.status != "offline") {
+							cinemaPing += "<@" + user.id + ">\n"
+						}
 					})
-					cinemaPing += "Приглашаем вас на сегодняшний сеанс!"
 					msg.channel.send(cinemaPing)
 				})
 				.catch(error => console.log(error))
