@@ -53,10 +53,12 @@ export const commandsRegExp = [
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
 		f: c.Homestuck
 	},
+	/*
 	{
 		r: /^(кинопинг|cinemaping)[.!]?$/,
 		f: c.CinemaPing
 	},
+	*/
 	{
 		r: /^(sftime)[.!]?$/,
 		f: c.SnowflakeTime

@@ -567,6 +567,7 @@ export async function Homestuck(msg, args, msgCommandOriginal, usedArrowButton) 
 		}
 	}
 }
+/*
 export function CinemaPing(msg) {
 	if (![OWNER_ID, "184388744558673920", "378318866524143627", "178833086530846720"].includes(msg.author.id)) {
 		return
@@ -588,6 +589,7 @@ export function CinemaPing(msg) {
 		})
 		.catch(error => console.log(error))
 }
+*/
 export function SnowflakeTime(msg, args) {
 	let totalSFTimes = ""
 	args.forEach(arg => {
