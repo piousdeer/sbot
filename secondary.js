@@ -325,6 +325,8 @@ export function setCinemaRole(user, doesUserNeedRole, emojiCode) {
 	let roleID
 	if (emojiCode == "📽") roleID = "565291444705689612"
 	if (emojiCode == "⛩") roleID = "577130367304204288"
+	if (emojiCode == "🎮") roleID = "577143343281340427"
+	
 
 	client.guilds.get("540145900526501899").fetchMember(user.id)
 		.then((member) => {
