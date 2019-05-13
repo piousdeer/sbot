@@ -709,3 +709,29 @@ export function IronDoor(msg, args) {
 
 	msg.channel.send({embed: embed})
 }
+export function Three(msg, args) {
+	if (!args[0]) {
+		return
+	}
+
+	let emojiName = s.getEmojiName(args[0])
+	let guildName
+	let guildCheck
+
+	if (guildCheck = emojiName.match(/^([^:]+)(?::(\S+))$/)) {
+		emojiName = guildCheck[1]
+		guildName = guildCheck[2]
+	}
+
+	let emoji = s.findEmoji(emojiName, guildName)
+
+	let prefix = "<:"
+	let postfix = ">"
+	if (emoji.animated) {
+		prefix = "<a:"
+	}
+
+	let e = prefix + emoji.name + ":" + emoji.id + postfix
+	
+	msg.channel.send(`${e} ${e} ${e}`)
+}

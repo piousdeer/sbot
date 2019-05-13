@@ -74,6 +74,10 @@ export const commandsRegExp = [
 	{
 		r: /^(железнаядверь|жд)[.!]?$/,
 		f: c.IronDoor
+	},
+	{
+		r: /^(3|з)[.!]?$/,
+		f: c.Three
 	}
 ]
 export const simpleAnswers = [
