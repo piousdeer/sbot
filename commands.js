@@ -709,8 +709,19 @@ export function IronDoor(msg, args) {
 
 	msg.channel.send({embed: embed})
 }
-export function Three(msg, args) {
+export function Three(msg, args, msgCommandOriginal) {
 	if (!args[0]) {
+		return
+	}
+
+	let num = parseInt(msgCommandOriginal.split(" ")[0])
+
+	if (!num) {
+		return
+	} else if (num > 7) {
+		num = 7
+	} else if (num < 1) {
+		msg.channel.send("No emoji for you!")
 		return
 	}
 
@@ -726,12 +737,12 @@ export function Three(msg, args) {
 	let emoji = s.findEmoji(emojiName, guildName)
 
 	let prefix = "<:"
-	let postfix = ">"
+	let postfix = "> "
 	if (emoji.animated) {
 		prefix = "<a:"
 	}
 
 	let e = prefix + emoji.name + ":" + emoji.id + postfix
 	
-	msg.channel.send(`${e} ${e} ${e}`)
+	msg.channel.send(e.repeat(num))
 }
