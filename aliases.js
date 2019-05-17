@@ -76,7 +76,7 @@ export const commandsRegExp = [
 		f: c.IronDoor
 	},
 	{
-		r: /^(\d)[.!]?$/,
+		r: /^-?(\d)[.!]?$/,
 		f: c.Three
 	}
 ]

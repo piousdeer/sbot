@@ -716,7 +716,7 @@ export function Three(msg, args, msgCommandOriginal) {
 
 	let num = parseInt(msgCommandOriginal.split(" ")[0])
 
-	if (!num) {
+	if (!num && num !== 0) {
 		return
 	} else if (num > 7) {
 		num = 7
