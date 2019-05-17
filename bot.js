@@ -193,6 +193,24 @@ client.on('guildDelete', (guild) => {
 	}
 })
 
+client.on('guildMemberAdd', member => {
+	if (member.guild.id == "540145900526501899") {
+		let welconeLines = [
+			`Какой-то ПЕК-НЕК ${member} зашёл к нам на чай! <:peckneck:574889131826479104>`,
+			`Добро пожаловать в наш филиал #творчества, ${member}! <a:metaThinking:552849453493649412>`,
+			`${member}, какова цель вашего визита? Покажите визу <:tanyaVisa:579028733306863617>`
+		]
+		let channel = client.channels.get("540145900979355658")
+		channel.send(s.getRandomElem(welconeLines) + `\nРоль для киношек можно получить тут - <#565292229657100289>`)
+	}
+})
+client.on('guildMemberRemove', member => {
+	if (member.guild.id == "540145900526501899") {
+		let channel = client.channels.get("540145900979355658")
+		channel.send(`<:F_:552885803550769162> ${member}`);
+	}
+})
+
 // подключение к Дискорду
 function login() {
     client.login(TOKEN).catch(() => setTimeout(login, 5000))
