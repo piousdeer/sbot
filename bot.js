@@ -151,9 +151,9 @@ client.on('ready', () => {
 	})
 
 	// кэширование реакций кинотеатра
-	let cinema = client.channels.get("541594001992581122")
+	let cinema = client.channels.get("565292229657100289")
 	if (cinema) {
-		cinema.fetchMessage("542389154424553549")
+		cinema.fetchMessage("565292786514133012")
 			.then(() => {})
 			.catch(error => console.log(error))
 	}
