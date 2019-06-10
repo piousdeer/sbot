@@ -64,6 +64,13 @@ function processMessage(msg) {
 		msgCommandOriginal = msgoc
 		msgCommand = msglc
 	} else {
+		if (msg.guild.id == "540145900526501899" && msgoc.includes("<:vote:587648714726965258>")) {
+			msg.react(s.findEmoji("540543141649055769"))
+				.then(() => {
+					msg.react(s.findEmoji("540543158560358421"))
+				})
+				.catch(error => console.log(error))
+		}
 		return
 	}
 
