@@ -214,7 +214,7 @@ client.on('guildMemberAdd', member => {
 client.on('guildMemberRemove', member => {
 	if (member.guild.id == "540145900526501899") {
 		let channel = client.channels.get("540145900979355658")
-		channel.send(`<:F_:552885803550769162> ${member}`);
+		channel.send(`<:F_:552885803550769162> ${member.user.tag}`);
 	}
 })
 
