@@ -158,6 +158,10 @@ client.on('ready', () => {
 		})
 	})
 
+	visibleServers = visibleServers.sort((a, b) => {
+		return parseInt(a) - parseInt(b);
+	});
+
 	// кэширование реакций кинотеатра
 	let cinema = client.channels.get("565292229657100289")
 	if (cinema) {

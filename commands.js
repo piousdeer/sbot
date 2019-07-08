@@ -196,7 +196,7 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, visibl
 		return
 	}
 
-	let fromWhichServer = "343851676404547585"
+	let fromWhichServer = "540145900526501899"
 	let askedServer = s.getGuild(args[0])
 
 	let goRight = false
