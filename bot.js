@@ -56,8 +56,8 @@ function processMessage(msg) {
 	}
 
 	// обработка сообщения
-	let msgoc = msg.content.replace(/\n/g, " ").replace(/ +/g, " ")
-	let msglc = msgoc.toLowerCase().replace(/ё/g, "е")
+	let msgoc = msg.cleanContent.replace(/\n/g, " ").replace(/ +/g, " ")
+	let msglc = msg.content.replace(/\n/g, " ").replace(/ +/g, " ").toLowerCase().replace(/ё/g, "е")
 	let msgCommandOriginal
 	let msgCommand
 	let msglcDivided
