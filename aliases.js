@@ -2,7 +2,7 @@ import * as c from "./commands"
 
 export const commandsRegExp = [
 	{
-		r: /^(х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
+		r: /^(рудз|х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
 		f: c.Help
 	},
 	{
@@ -46,25 +46,15 @@ export const commandsRegExp = [
 		f: c.Invite
 	},
 	{
-		r: /^(ап(тайм)?|up(time)?)[.!]?$/,
-		f: c.Uptime
-	},
-	{
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
 		f: c.Homestuck
 	},
-	/*
-	{
-		r: /^(кинопинг|cinemaping)[.!]?$/,
-		f: c.CinemaPing
-	},
-	*/
 	{
 		r: /^(sftime)[.!]?$/,
 		f: c.SnowflakeTime
 	},
 	{
-		r: /^(stats|статы|статистика)[.!]?$/,
+		r: /^(stats|статы|статистика|гз|ап(тайм)?|up(time)?)[.!]?$/,
 		f: c.Stats
 	},
 	{

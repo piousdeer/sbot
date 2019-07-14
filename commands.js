@@ -405,33 +405,6 @@ export function Invite(msg) {
 		})
 		.catch(error => console.log(error))
 }
-export function Uptime(msg) {
-
-	let diff = Date.now() - readyTime
-	let tarr = [1000, 60, 60, 24]
-	for (let i in tarr) {
-		let x = tarr[i]
-		tarr[i] = diff % x
-		diff = (diff - tarr[i]) / x
-	}
-	tarr.push(diff)
-	tarr.shift()
-	let warr = [
-		['секунду', 'секунды', 'секунд'],
-		['минуту', 'минуты', 'минут'],
-		['час', 'часа', 'часов'],
-		['день', 'дня', 'дней'],
-	]
-	let sarr = []
-	for (let i = tarr.length - 1; i >= 0; i--) {
-		if (!tarr[i]) {
-			continue
-		}
-		sarr.push(tarr[i] + ' ' + s.pluralize(tarr[i], warr[i]))
-	}
-
-	msg.channel.send("Я работаю уже " + sarr.join(', ') + '.')
-}
 export async function Homestuck(msg, args, msgCommandOriginal, usedArrowButton) {
 	if (!s.isThisBotsChannel(msg)) {
 		msg.react("🤖")
@@ -567,29 +540,6 @@ export async function Homestuck(msg, args, msgCommandOriginal, usedArrowButton) 
 		}
 	}
 }
-/*
-export function CinemaPing(msg) {
-	if (![OWNER_ID, "184388744558673920", "378318866524143627", "178833086530846720"].includes(msg.author.id)) {
-		return
-	}
-
-	let cinemaPing = ""
-	client.channels.get("541594001992581122").fetchMessage("542389154424553549")
-		.then((message) => {
-			message.reactions.get("📽").fetchUsers()
-				.then((users) => {
-					users.forEach(user => {
-						if (user.presence.status != "offline") {
-							cinemaPing += "<@" + user.id + ">\n"
-						}
-					})
-					msg.channel.send(cinemaPing)
-				})
-				.catch(error => console.log(error))
-		})
-		.catch(error => console.log(error))
-}
-*/
 export function SnowflakeTime(msg, args) {
 	let totalSFTimes = ""
 	args.forEach(arg => {
@@ -605,10 +555,35 @@ export function SnowflakeTime(msg, args) {
 	}
 }
 export function Stats(msg) {
+	let diff = Date.now() - readyTime
+	let tarr = [1000, 60, 60, 24]
+	for (let i in tarr) {
+		let x = tarr[i]
+		tarr[i] = diff % x
+		diff = (diff - tarr[i]) / x
+	}
+	tarr.push(diff)
+	tarr.shift()
+	let warr = [
+		['секунду', 'секунды', 'секунд'],
+		['минуту', 'минуты', 'минут'],
+		['час', 'часа', 'часов'],
+		['день', 'дня', 'дней'],
+	]
+	let sarr = []
+	for (let i = tarr.length - 1; i >= 0; i--) {
+		if (!tarr[i]) {
+			continue
+		}
+		sarr.push(tarr[i] + ' ' + s.pluralize(tarr[i], warr[i]))
+	}
+	let uptimeResult = "Я работаю уже " + sarr.join(', ') + '.'
+
 	const statsLines = [
+		uptimeResult,
+		"",
 		"Серверов: " + client.guilds.size,
 		"Эмоджи: " + client.emojis.size,
-		"Юзеров в кэше: " + client.users.size,
 		"Запросов за эту сессию: " + requestsCounter
 	]
 

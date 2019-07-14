@@ -49,6 +49,12 @@ function processMessage(msg) {
 		return
 	}
 
+	// swear checking
+	let swearRegexp = /((^|[^а-яё])(([аов]|[су](?!трах)|(пр|[дзвпн])[аеёиыяюео]|(р[ао]|в)[сз]|[оа]т)?(ху[йеяюиё]|др(оч|ач(?!л))|п[ие]д[аои](?![нлф])|трах(?!е[яюией]))|([её]|йо)б|муд[аеёиыяюо]|(вы|у)?[бм]л(я|э(?![кс]))|([её]|йо)пт)|[ьъоаеёу]([её]|йо)б|[оеёс]ху[йеяюиё]|п[иеёюй]з[жд])/i
+	if (swearRegexp.test(msg.content) && msg.guild.id == "540145900526501899") {
+		msg.react(client.emojis.get("526751382011772929"));
+	}
+
 	// обработка сообщения
 	let msgoc = msg.content.replace(/\n/g, " ").replace(/ +/g, " ")
 	let msglc = msgoc.toLowerCase().replace(/ё/g, "е")
@@ -73,13 +79,6 @@ function processMessage(msg) {
 		}
 		return
 	}
-
-	// only allowed RC channels!
-	/*
-	if (msg.channel.type == "text" && msg.channel.guild.id == "110107304413638656" && !(["519609441109147655","521683316899053596","334369998866874369", "541594001992581122"].includes(msg.channel.id))) {
-		 return
-	}
-	*/
 
 	// если всё ок, продолжаем...
 	requestsCounter++
@@ -207,13 +206,13 @@ client.on('guildDelete', (guild) => {
 
 client.on('guildMemberAdd', member => {
 	if (member.guild.id == "540145900526501899") {
-		let welconeLines = [
+		let welcomeLines = [
 			`Какой-то ПЕК-НЕК ${member} зашёл к нам на чай! <:peckneck:574889131826479104>`,
 			`Добро пожаловать в наш филиал #творчества, ${member}! <a:metaThinking:552849453493649412>`,
 			`${member}, какова цель вашего визита? Покажите визу <:tanyaVisa:579028733306863617>`
 		]
 		let channel = client.channels.get("540145900979355658")
-		channel.send(s.getRandomElem(welconeLines) + `\nРоль для киношек можно получить тут - <#565292229657100289>`)
+		channel.send(s.getRandomElem(welcomeLines) + `\nРоль для киношек можно получить тут - <#565292229657100289>`)
 	}
 })
 client.on('guildMemberRemove', member => {
