@@ -68,6 +68,10 @@ export const commandsRegExp = [
 	{
 		r: /^-?(\d)[.!]?$/,
 		f: c.Three
+	},
+	{
+		r: /^(rtfm|man|docs?)[.!]?$/,
+		f: c.RTFM
 	}
 ]
 export const simpleAnswers = [

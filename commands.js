@@ -721,3 +721,52 @@ export function Three(msg, args, msgCommandOriginal) {
 	
 	msg.channel.send(e.repeat(num))
 }
+export async function RTFM(msg, args, msgCommandOriginal) {
+	if (!args[0] || !args[1]) {
+		return
+	}
+
+	let lang = args[0]
+	let query = msgCommandOriginal.split(" ")[2]
+
+	let [, docsClass, docsMethod] = query.match(/^(\w+)(?:\.([\w\.]+))?/)
+	docsClass = docsClass.charAt(0).toUpperCase() + docsClass.slice(1);
+
+	let link
+
+	if (["js", "javascript", "node", "nodejs", "discord.js"].includes(lang)) {
+		link = `https://discord.js.org/#/docs/main/stable/class/${docsClass}`
+		if (docsMethod) link += `?scrollTo=${docsMethod}`
+	} else if (["py", "python", "discord.py"].includes(lang)) {
+		if (docsClass.toLowerCase() == "commands") {
+			link = `https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands`
+		} else if (docsClass.toLowerCase() == "tasks") {
+			link = `https://discordpy.readthedocs.io/en/latest/ext/tasks/index.html#discord.ext.tasks`
+		} else {
+			link = `https://discordpy.readthedocs.io/en/latest/api.html#discord.${docsClass}`
+		}
+		if (docsMethod) link += `.${docsMethod}`
+	} else if (["java", "jda"].includes(lang)) {
+		let queryParts = query.toLowerCase().split(".")
+		if (!["annotations", "bot", "client", "webhook"].includes(queryParts[0])) {
+			queryParts.unshift("core", "events")
+		}
+		link = `https://ci.dv8tion.net/job/JDA/javadoc/net/dv8tion/jda/${queryParts.join("/")}/package-summary.html`
+	}
+
+	try {
+		await got(link).then(response => {
+			let linkPartsPy = link.split("#")
+			if (linkPartsPy[1]) {
+				if (!response.body.includes(`id=\"${linkPartsPy[1]}\"`)) {
+					throw "NotFoundError"
+				}
+			} 
+
+			msg.channel.send(`Вот ссылка на документацию: \n${link}`)
+		})
+	} catch (err) {
+		msg.channel.send(`Документации на такое нет...`)
+	}
+	
+}
