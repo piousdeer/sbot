@@ -212,7 +212,16 @@ client.on('guildMemberAdd', member => {
 			`${member}, какова цель вашего визита? Покажите визу <:tanyaVisa:579028733306863617>`
 		]
 		let channel = client.channels.get("540145900979355658")
-		channel.send(s.getRandomElem(welcomeLines) + `\nРоль для киношек можно получить тут - <#565292229657100289>`)
+		let welcomeRandom = s.getRandomElem(welcomeLines)
+		if (member.user.bot) {
+			member.addRole("600294051962421258")
+				.then(() => {})
+				.catch(error => console.log(error))
+			channel.send(welcomeRandom + `\nБоты живут тут - <#600294780144189481>`)
+		} else {
+			channel.send(welcomeRandom + `\nРоль для киношек можно получить тут - <#565292229657100289>`)
+		}
+		
 	}
 })
 client.on('guildMemberRemove', member => {
