@@ -108,23 +108,6 @@ export async function Img(msg, args) {
 		await msg.react("343057042862243840")
 	}
 }
-/*
-export function Tags(msg, args) {
-	if (args[0]) {
-		return
-	}
-
-	let tags = "Доступные теги:\n\n"
-	for (let key in translatedTags) {
-		tags += ("`" + key + "` ")
-	}
-	msg.author.send(tags)
-		.then(() => {
-			s.envelope(msg)
-		})
-		.catch(error => console.log(error))
-}
-*/
 export async function Send(msg, args, msgCommandOriginal) {
 	let imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/)
 
@@ -283,13 +266,6 @@ export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, visibl
 				}
 			}
 		})
-
-		/*
-		emojis += emojiList.join(" ")
-		if (emojis.length >= 2000) {
-			emojis.substring(0, emojis.length) + "…"
-		}
-		*/
 
 		if (usedArrowButton) {
 			msg.edit(emojiDesc, {embed: embed})

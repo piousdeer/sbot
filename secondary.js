@@ -264,11 +264,6 @@ export function sendUserAvatarEmbed(msg, user) {
 	let avatarURLFixed = isAvaGif ? avaTemp + "?size=2048" : avaTemp
 
 	msg.channel.send({embed: {title: "Avatar", description: user.tag, image: {url: avatarURLFixed}}})
-	// msg.channel.send({embed: {title: "Avatar", description: user.tag, image: {url: avaTemp}}});
-
-	// if (isAvaGif) {
-	// 	msg.channel.send("В полном размере:\n<" + avaTemp + ">")
-	// }
 }
 let botsChannels = [
 	{

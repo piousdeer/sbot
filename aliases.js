@@ -13,12 +13,6 @@ export const commandsRegExp = [
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
 		f: c.Img
 	},
-	/*
-	{
-		r: /^(т[еэ]ги|tags)[.!]?$/,
-		f: c.Tags
-	},
-	*/
 	{
 		r: /^(отправ(ит)?ь|предложи(ть)?|пришли|прислать|send)$/,
 		f: c.Send
