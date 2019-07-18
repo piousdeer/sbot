@@ -747,11 +747,19 @@ export async function RTFM(msg, args, msgCommandOriginal) {
 		}
 		if (docsMethod) link += `.${docsMethod}`
 	} else if (["java", "jda"].includes(lang)) {
-		let queryParts = query.toLowerCase().split(".")
-		if (!["annotations", "bot", "client", "webhook"].includes(queryParts[0])) {
+		let queryParts = query.split(".")
+		if ( !["annotations", "bot", "core", "client", "webhook"].includes(queryParts[0]) ) {
 			queryParts.unshift("core", "events")
 		}
-		link = `https://ci.dv8tion.net/job/JDA/javadoc/net/dv8tion/jda/${queryParts.join("/")}/package-summary.html`
+		let possibleEvent = queryParts[queryParts.length - 1]
+		if ( !(possibleEvent[0] == possibleEvent[0].toUpperCase() || possibleEvent.toLowerCase().endsWith("event")) ) {
+			queryParts.push("package-summary")
+		}
+		for (let i = 0; i < queryParts.length - 2; i++) {
+			queryParts[i] = queryParts[i].toLowerCase()
+		}
+
+		link = `https://ci.dv8tion.net/job/JDA/javadoc/net/dv8tion/jda/${queryParts.join("/")}.html`
 	}
 
 	try {
