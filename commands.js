@@ -40,6 +40,10 @@ export function Help(msg) {
 				value: "Обратиться к мудрости [Железной Двери](https://randomforum.ru/threads/6469/)."
 			},
 			{
+				name: "man <js|py|jda> <название класса/метода/события>",
+				value: "Почитать документацию по разработке ботов."
+			},
+			{
 				name: "имг [теги через пробел]",
 				value: "Рандомная пикча из [Галереи](https://stilltest.tk/gallery/)."
 			},
