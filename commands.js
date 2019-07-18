@@ -18,7 +18,7 @@ export function Help(msg) {
 	]
 	const helpEmbed = {
 		color: 0x7486C2,
-		title: "Привет, меня зовут СтиллБот.",
+		title: "Привет, меня зовут СтиллБот <:tuturuMetal:601419582837751810>",
 		description: helpLines.join("\n"),
 		fields: [
 			{
