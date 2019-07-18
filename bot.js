@@ -158,14 +158,6 @@ client.on('ready', () => {
 		return parseInt(a) - parseInt(b);
 	});
 
-	// кэширование реакций кинотеатра
-	let cinema = client.channels.get("565292229657100289")
-	if (cinema) {
-		cinema.fetchMessage("565292786514133012")
-			.then(() => {})
-			.catch(error => console.log(error))
-	}
-
 })
 client.on('message', msg => {
 	if (msg.author.id == BOT_ID) return
