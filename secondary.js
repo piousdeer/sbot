@@ -270,12 +270,26 @@ export function sendUserAvatarEmbed(msg, user) {
 	// 	msg.channel.send("В полном размере:\n<" + avaTemp + ">")
 	// }
 }
-export function isThisBotsChannel(msg) {
-	if (msg.channel.type == "text" && msg.channel.guild.id == "110107304413638656" && msg.channel.id != "334369998866874369") {
-		return false
-	} else {
-		return true
+let botsChannels = [
+	{
+		g: "110107304413638656",
+		c: "334369998866874369"
+	},
+	{
+		g: "540145900526501899",
+		c: "600294780144189481"
 	}
+]
+export function isThisBotsChannel(msg) {
+	let c = msg.channel
+	if (c.type == "text") {
+		for (let i = 0; i < botsChannels.length; i++) {
+			if (c.guild.id == botsChannels[i].g && c.id != botsChannels[i].c) {
+				return false
+			}
+		}
+	}
+	return true
 }
 export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText) {
 	let embed = {embed: comic_embed}
