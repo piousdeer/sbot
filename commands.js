@@ -747,14 +747,19 @@ export async function RTFM(msg, args, msgCommandOriginal) {
 	try {
 		await got(link).then(response => {
 			let linkPartsPy = link.split("#")
-			if (args[0] == "py" && linkPartsPy[1]) {
-				if (!response.body.includes(`id=\"${linkPartsPy[1]}\"`)) {
-					throw "NotFoundError"
-				}
+			if (lang == "py" && linkPartsPy[1]) {
+				if (!response.body.includes(`id=\"${linkPartsPy[1]}\"`)) throw "NotFoundError"
 			} 
-
-			msg.channel.send(`📜 <${link}>`)
 		})
+		if (lang == "js") {
+			await got("https://raw.githubusercontent.com/discordjs/discord.js/docs/stable.json").then(response => {
+				if (!response.body.includes(`"path":"src/structures"}},{"name":"${docsClass}"`)) throw "NotFoundError"
+				if (docsMethod) {
+					if (!response.body.includes(`"path":"src/structures"}},{"name":"${docsMethod}"`)) throw "NotFoundError"
+				}
+			})
+		}
+		msg.channel.send(`📜 <${link}>`)
 	} catch (err) {
 		msg.channel.send(`Документации на такое нет...`)
 	}
