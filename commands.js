@@ -424,8 +424,8 @@ export async function Homestuck(msg, args, msgCommandOriginal, usedArrowButton) 
 	}
 
 	let page_link = 'https://www.homestuck.com/story/' + page_number
-  let comic_number = "hs#" + page_number
-  let got_error_already = false
+	let comic_number = "hs#" + page_number
+	let got_error_already = false
 	let embed_color = 0x249E28
 
 	let comic_embed = {
