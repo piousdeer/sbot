@@ -723,6 +723,7 @@ export function Three(msg, args, msgCommandOriginal) {
 }
 export async function RTFM(msg, args, msgCommandOriginal) {
 	if (!args[0] || !args[1]) {
+		msg.channel.send("Укажите в команде, какие доки вам нужны (js, py, jda) и какой метод/событие ищите.")
 		return
 	}
 
