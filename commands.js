@@ -770,7 +770,7 @@ export async function RTFM(msg, args, msgCommandOriginal) {
 	try {
 		await got(link).then(response => {
 			let linkPartsPy = link.split("#")
-			if (linkPartsPy[1]) {
+			if (args[0] == "py" && linkPartsPy[1]) {
 				if (!response.body.includes(`id=\"${linkPartsPy[1]}\"`)) {
 					throw "NotFoundError"
 				}
