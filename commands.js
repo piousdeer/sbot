@@ -734,7 +734,7 @@ export async function RTFM(msg, args, msgCommandOriginal) {
 	let query = msgCommandOriginal.split(" ")[2]
 
 	let [, docsClass, docsMethod] = query.match(/^(\w+)(?:\.([\w\.]+))?/)
-	docsClass = docsClass.charAt(0).toUpperCase() + docsClass.slice(1);
+	docsClass = docsClass[0].toUpperCase() + docsClass.slice(1);
 
 	let link
 
@@ -756,10 +756,12 @@ export async function RTFM(msg, args, msgCommandOriginal) {
 			queryParts.unshift("core", "events")
 		}
 		let possibleEvent = queryParts[queryParts.length - 1]
-		if ( !(possibleEvent[0] == possibleEvent[0].toUpperCase() || possibleEvent.toLowerCase().endsWith("event")) ) {
+		if (possibleEvent[0] == possibleEvent[0].toUpperCase() || possibleEvent.toLowerCase().endsWith("event")) {
+			queryParts[queryParts.length - 1] = possibleEvent[0].toUpperCase() + possibleEvent.slice(1);
+		} else {
 			queryParts.push("package-summary")
 		}
-		for (let i = 0; i < queryParts.length - 2; i++) {
+		for (let i = 0; i < queryParts.length - 1; i++) {
 			queryParts[i] = queryParts[i].toLowerCase()
 		}
 
