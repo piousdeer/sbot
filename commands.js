@@ -108,6 +108,7 @@ export async function Img(msg, args) {
 		await msg.react("343057042862243840")
 	}
 }
+/*
 export function Tags(msg, args) {
 	if (args[0]) {
 		return
@@ -123,6 +124,7 @@ export function Tags(msg, args) {
 		})
 		.catch(error => console.log(error))
 }
+*/
 export async function Send(msg, args, msgCommandOriginal) {
 	let imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/)
 
