@@ -776,7 +776,7 @@ export async function RTFM(msg, args, msgCommandOriginal) {
 				}
 			} 
 
-			msg.channel.send(`📜 ${link}`)
+			msg.channel.send(`📜 <${link}>`)
 		})
 	} catch (err) {
 		msg.channel.send(`Документации на такое нет...`)
