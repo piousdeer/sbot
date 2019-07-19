@@ -49,12 +49,6 @@ function processMessage(msg) {
 		return
 	}
 
-	// swear checking
-	let swearRegexp = /((^|[^а-яё])(([аов]|[су](?!трах)|(пр|[дзвпн])[аеёиыяюео]|(р[ао]|в)[сз]|[оа]т)?(ху[йеяюиё]|др(оч|ач(?!л))|п[ие]д[аои](?![нлф])|трах(?!е[яюией]))|([её]|йо)б|муд[аеёиыяюо]|(вы|у)?[бм]л(я|э(?![кс]))|([её]|йо)пт)|[ьъоаеёу]([её]|йо)б|[оеёс]ху[йеяюиё]|п[иеёюй]з[жд])/i
-	if (swearRegexp.test(msg.content) && msg.channel.type == "text" && msg.guild.id == "540145900526501899") {
-		msg.react(client.emojis.get("526751382011772929"));
-	}
-
 	// обработка сообщения
 	let msgoc = msg.cleanContent.replace(/\n/g, " ").replace(/ +/g, " ")
 	let msglc = msg.content.replace(/\n/g, " ").replace(/ +/g, " ").toLowerCase().replace(/ё/g, "е")
