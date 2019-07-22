@@ -328,7 +328,7 @@ export function Sticker(msg, args) {
 export function Servers(msg, args) {
 	let embed = {
 		color: 0x888888,
-		description: "```"
+		description: ""
 	}
 
 	let showAllServers = false
@@ -336,14 +336,18 @@ export function Servers(msg, args) {
 		showAllServers = true
 	}
 
+	let serversArray = []
 	let counter = 0
 	client.guilds.forEach(key => {
 		if (showAllServers || key.emojis.size) {
 			counter++
-			embed.description += "\n" + key.id + " | " + key.name
+			serversArray.push(key.id + " | " + key.name)
 		}
 	})
-	embed.description += "```"
+	serversArray.sort((a, b) => {
+		return Number(a.split(" | ")[0]) - Number(b.split(" | ")[0])
+	})
+	embed.description += `\`\`\`${serversArray.join("\n")}\`\`\``
 	embed.title = counter + " серверов"
 
 	if (!showAllServers) {
