@@ -4,6 +4,8 @@ import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
 import got from 'got'
 import Cheerio from "cheerio"
 import Intl from "intl"
+import jimp from "jimp"
+import skmeans from "skmeans"
 
 export function Help(msg) {
 	if (!s.isThisBotsChannel(msg)) {
@@ -360,6 +362,52 @@ export function Servers(msg, args) {
 		})
 		.catch(error => console.log(error))
 }
+function rgb2hsv([r,g,b]) {
+	var computedH = 0;
+	var computedS = 0;
+	var computedV = 0;
+
+	r=r/255; g=g/255; b=b/255;
+	var minRGB = Math.min(r,Math.min(g,b));
+	var maxRGB = Math.max(r,Math.max(g,b));
+   
+	// Black-gray-white
+	if (minRGB==maxRGB) {
+	 computedV = minRGB;
+	 return [0,0,computedV];
+	}
+   
+	// Colors other than black-gray-white:
+	var d = (r==minRGB) ? g-b : ((b==minRGB) ? r-g : b-r);
+	var h = (r==minRGB) ? 3 : ((b==minRGB) ? 1 : 5);
+	computedH = 60*(h - d/(maxRGB - minRGB));
+	computedS = (maxRGB - minRGB)/maxRGB;
+	computedV = maxRGB;
+	return [computedH,computedS,computedV];
+}
+
+function hsv2rgb([h, s, v]) {
+    h = h / 360
+    var r, g, b, i, f, p, q, t;
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    return [
+        Math.round(r * 255),
+        Math.round(g * 255),
+        Math.round(b * 255)
+    ];
+}
 export function Avatar(msg, args, msgCommandOriginal) {
 	// do not spam by pictures
 	if (!s.isThisBotsChannel(msg)) {
@@ -381,7 +429,47 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	let isAvaGif = (avaTempRE[2] == "gif") ? true : false
 	let avatarURLFixed = isAvaGif ? avaTemp + "?size=2048" : avaTemp
 
-	msg.channel.send({embed: {title: "Avatar", description: user.tag, image: {url: avatarURLFixed}}})
+	// k-means clusterization part
+	let link = avatarURLFixed
+
+	let dataset = []
+	let startTime = Date.now()
+	
+	try {
+		jimp.read(link)
+			.then(image => {
+				if (image.bitmap.width > 128) {
+					image.resize(128,jimp.AUTO)
+				}
+				
+
+				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
+					dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
+
+					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
+						let diff = Date.now() - startTime
+
+						let centroids = skmeans(dataset, 10, null, 100).centroids
+						let hsvColors = []
+						for (let i = 0; i < centroids.length; i++) {
+							hsvColors.push(rgb2hsv(centroids[i]))
+						}
+						hsvColors.sort((a, b) => b[1]*b[2]*b[2] - a[1]*a[2]*a[2])
+
+						let colorRGB = hsv2rgb(hsvColors[0])
+						let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
+
+						msg.channel.send({embed: {color: color, description: user.tag, image: {url: link}, footer: {text: `Обработано за ${diff/1000} сек`}}})
+					}
+				})
+			})
+			.catch(err => {
+				console.log(err)
+				msg.channel.send("Что-то пошло не так...")
+			})
+	} catch (err) {
+		console.log(err)
+	}
 }
 export function Invite(msg) {
 	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \n<https://discordapp.com/api/oauth2/authorize?client_id=" + BOT_ID + "&scope=bot&permissions=0>")
