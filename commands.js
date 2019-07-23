@@ -454,7 +454,13 @@ export function Avatar(msg, args, msgCommandOriginal) {
 						for (let i = 0; i < centroids.length; i++) {
 							hsvColors.push(rgb2hsv(centroids[i]))
 						}
-						hsvColors.sort((a, b) => b[1]*b[2]*b[2] - a[1]*a[2]*a[2])
+						hsvColors.sort((a, b) => {
+							if (a[1] || b[1]) {
+								return b[1]*b[2]*b[2] - a[1]*a[2]*a[2]
+							} else {
+								return b[2] - a[2]
+							}
+						})
 
 						let colorRGB = hsv2rgb(hsvColors[0])
 						let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
