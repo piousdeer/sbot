@@ -459,7 +459,16 @@ export function Avatar(msg, args, msgCommandOriginal) {
 						let colorRGB = hsv2rgb(hsvColors[0])
 						let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
 
-						msg.channel.send({embed: {color: color, description: user.tag, image: {url: link}, footer: {text: `Обработано за ${diff/1000} сек`}}})
+						msg.channel.send({embed: {
+							color: color, 
+							description: user.tag, 
+							image: {
+								url: link
+							}, 
+							footer: {
+								text: `Обработано за ${diff/1000} сек`
+							}
+						}})
 					}
 				})
 			})
