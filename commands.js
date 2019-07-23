@@ -369,17 +369,19 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	let user
 	if (args[0]) {
 		user = s.findUserToGetAvatar(s.getSimpleString(msgCommandOriginal.match(/\S+ (.+)/)[1]))
-		if (user) {
-			if (user.avatar) {
-				s.sendUserAvatarEmbed(msg, user)
-			}
-		} else {
+		if (!(user && user.avatar)) {
 			msg.react("343057042862243840")
+			return
 		}
 	} else {
 		user = msg.author
-		s.sendUserAvatarEmbed(msg, user)
 	}
+	let avaTemp = user.avatarURL
+	let avaTempRE = avaTemp.match(/^((?:.*)\.(\w+))/)
+	let isAvaGif = (avaTempRE[2] == "gif") ? true : false
+	let avatarURLFixed = isAvaGif ? avaTemp + "?size=2048" : avaTemp
+
+	msg.channel.send({embed: {title: "Avatar", description: user.tag, image: {url: avatarURLFixed}}})
 }
 export function Invite(msg) {
 	msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \n<https://discordapp.com/api/oauth2/authorize?client_id=" + BOT_ID + "&scope=bot&permissions=0>")

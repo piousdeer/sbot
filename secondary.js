@@ -255,16 +255,6 @@ export function sendEmojiLinkEmbed(msg, emoji) {
 		msg.channel.send({embed: {title: "Emoji", description: ("<:" + emoji.name + ":" + emoji.id + "> – " + emoji.name), image: {url: ("https://cdn.discordapp.com/emojis/" + emoji.id + ".png")}}})
 	}
 }
-export function sendUserAvatarEmbed(msg, user) {
-	let avaTemp = user.avatarURL
-	// console.log(avaTemp);
-	let avaTempRE = avaTemp.match(/^((?:.*)\.(\w+))/)
-
-	let isAvaGif = (avaTempRE[2] == "gif") ? true : false
-	let avatarURLFixed = isAvaGif ? avaTemp + "?size=2048" : avaTemp
-
-	msg.channel.send({embed: {title: "Avatar", description: user.tag, image: {url: avatarURLFixed}}})
-}
 let botsChannels = [
 	{
 		g: "110107304413638656",
