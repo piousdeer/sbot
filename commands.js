@@ -449,7 +449,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
 						let diff = Date.now() - startTime
 
-						let centroids = skmeans(dataset, 10, null, 100).centroids
+						let centroids = skmeans(dataset, 10, "kmpp", 100).centroids
 						let hsvColors = []
 						for (let i = 0; i < centroids.length; i++) {
 							hsvColors.push(rgb2hsv(centroids[i]))
