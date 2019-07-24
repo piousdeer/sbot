@@ -430,7 +430,6 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	let link = user.avatarURL.split("?size=")[0] + "?size=128"
 
 	let dataset = []
-	let startTime = Date.now()
 	
 	try {
 		jimp.read(link)
@@ -439,6 +438,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 					image.resize(128,jimp.AUTO)
 				}
 				
+				let startTime = Date.now()
 
 				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
 					dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
