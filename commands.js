@@ -424,13 +424,10 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	} else {
 		user = msg.author
 	}
-	let avaTemp = user.avatarURL
-	let avaTempRE = avaTemp.match(/^((?:.*)\.(\w+))/)
-	let isAvaGif = (avaTempRE[2] == "gif") ? true : false
-	let avatarURLFixed = isAvaGif ? avaTemp + "?size=2048" : avaTemp
+	let fullSizeLink = user.avatarURL.split("?size=")[0] + "?size=2048"
 
 	// k-means clusterization part
-	let link = avatarURLFixed
+	let link = user.avatarURL.split("?size=")[0] + "?size=128"
 
 	let dataset = []
 	let startTime = Date.now()
@@ -465,7 +462,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 							color: color, 
 							description: user.tag, 
 							image: {
-								url: link
+								url: fullSizeLink
 							}, 
 							footer: {
 								text: `Обработано за ${diff/1000} сек`
