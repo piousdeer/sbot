@@ -422,13 +422,15 @@ export function Avatar(msg, args, msgCommandOriginal) {
 		user = client.users.get(BOT_ID)
 	} else if (args[0]) {
 		user = s.findUserToGetAvatar(s.getSimpleString(msgCommandOriginal.match(/\S+ (.+)/)[1]))
-		if (!(user && user.avatar)) {
-			msg.react("343057042862243840")
-			return
-		}
 	} else {
 		user = msg.author
 	}
+
+	if (!(user && user.avatar)) {
+		msg.react("343057042862243840")
+		return
+	}
+
 	let fullSizeLink = user.avatarURL.split("?size=")[0] + "?size=2048"
 
 	// k-means clusterization part
