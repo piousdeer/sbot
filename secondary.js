@@ -138,6 +138,14 @@ export function findUserToGetAvatar(username) {
 	let isDisplayNameCanBeSuitable = false
 	let result
 
+	if (username.split("#")[1]) {
+		client.users.forEach(u => {
+			if (username == u.tag.toLowerCase()) {
+				result = u
+			}
+		})
+	}
+
 	client.guilds.forEach(guild => {
 		let usersCounter = 0
 		guild.members.forEach(member => {
