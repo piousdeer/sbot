@@ -1,5 +1,5 @@
 import * as c from "./commands"
-import {client, BOT_ID} from "./bot"
+import {client, BOT_ID, dateOptions} from "./bot"
 
 import got from 'got'
 
@@ -7,6 +7,13 @@ let timeoutForAutoReact
 let whoNeedsToReactToSomething = {}
 let whichGuildThisUserMeans = {}
 
+export function sentLog(msg) {
+	let serverWhereUserIs = "via direct message"
+	if (msg.channel.type == "text") {
+		serverWhereUserIs = msg.channel.guild.id
+	}
+	console.log(`[${(new Date).toLocaleString("ru", dateOptions)}] ${serverWhereUserIs}: ${msg.author.tag} | ${msg.cleanContent}`)
+}
 export function escapeRegExp(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
