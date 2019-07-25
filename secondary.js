@@ -194,7 +194,7 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 			if (isCommandCanBeAnEmoji) {
 				msg.react(getRandomElem(emojiError))
 			} else {
-				msg.react("343057042862243840")
+				msg.react("604015450304806952")
 			}
 			return
 		}
@@ -229,7 +229,7 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 			if (isCommandCanBeAnEmoji) {
 				msg.react(getRandomElem(emojiError))
 			} else {
-				msg.react("343057042862243840")
+				msg.react("604015450304806952")
 			}
 			return
 		}

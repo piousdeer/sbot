@@ -107,7 +107,7 @@ export async function Img(msg, args) {
 			}
 		})
 	} catch (err) {
-		await msg.react("343057042862243840")
+		await msg.react("604015450304806952")
 	}
 }
 export async function Send(msg, args, msgCommandOriginal) {
@@ -321,7 +321,7 @@ export function Sticker(msg, args) {
 	emoji = s.findEmoji(emojiName, guildName, msg.channel)
 
 	if (!emoji) {
-		msg.react("343057042862243840")
+		msg.react("604015450304806952")
 		return
 	}
 
@@ -420,13 +420,13 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 		user = client.users.get(BOT_ID)
 	} else if (args[0]) {
-		user = s.findUserToGetAvatar(s.getSimpleString(msgCommandOriginal.match(/\S+ (.+)/)[1]))
+		user = s.findUserToGetAvatar(s.getSimpleString(msg.content.replace(/\n/g, " ").replace(/ +/g, " ").match(/\S+ \S+ (.+)/)[1]))
 	} else {
 		user = msg.author
 	}
 
 	if (!(user && user.avatar)) {
-		msg.react("343057042862243840")
+		msg.react("604015450304806952")
 		return
 	}
 
