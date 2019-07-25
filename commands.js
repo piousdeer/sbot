@@ -415,7 +415,12 @@ export function Avatar(msg, args, msgCommandOriginal) {
 		return
 	}
 	let user
-	if (args[0]) {
+	if (args[0] == "random") {
+		let users = client.users.array()
+		user = users[Math.floor(Math.random() * users.length)]
+	} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
+		user = client.users.get(BOT_ID)
+	} else if (args[0]) {
 		user = s.findUserToGetAvatar(s.getSimpleString(msgCommandOriginal.match(/\S+ (.+)/)[1]))
 		if (!(user && user.avatar)) {
 			msg.react("343057042862243840")
