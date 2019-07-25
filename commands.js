@@ -416,8 +416,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	}
 	let user
 	if (args[0] == "random") {
-		let users = client.users.array()
-		user = users[Math.floor(Math.random() * users.length)]
+		user = client.users.random()
 	} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 		user = client.users.get(BOT_ID)
 	} else if (args[0]) {
