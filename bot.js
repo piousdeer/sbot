@@ -65,28 +65,12 @@ function processMessage(msg) {
 		msgCommandOriginal = msgoc
 		msgCommand = msglc
 	} else {
-		if (msgoc.startsWith("<:vote:587648714726965258>")) {
-			msg.react(s.findEmoji("540543141649055769"))
-				.then(() => {
-					msg.react(s.findEmoji("540543158560358421"))
-				})
-				.catch(error => console.log(error))
-		}
 		return
 	}
 
 	// если всё ок, продолжаем...
 	requestsCounter++
 	s.sentLog(msg)
-
-	// отослать текст запроса в логи
-	/*
-	let serverWhereUserIs = "via direct message"
-	if (msg.channel.type == "text") {
-		serverWhereUserIs = msg.channel.guild.id
-	}
-	console.log(`[${(new Date).toLocaleString("ru", dateOptions)}] ${serverWhereUserIs}: ${msg.author.tag} | ${msg.cleanContent}`)
-	*/
 
 	// поделить запрос на "основную команду" и аргументы
 	let args = msgCommand.split(" ")
