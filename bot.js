@@ -1,5 +1,5 @@
 // подключаем модули
-require('http').createServer().listen(3000)
+// require('http').createServer().listen(3000)
 import Discord from "discord.js"
 export const client = new Discord.Client()
 
