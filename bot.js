@@ -15,13 +15,9 @@ if (!(TOKEN && OWNER_ID)) {
 }
 
 export const readyTime = Date.now()
-export const dateOptions = {
-	year: "numeric",
-	month: "short",
-	day: "numeric",
+const timeOptions = {
 	hour: "2-digit",
 	minute: "2-digit",
-	second: "2-digit",
 	hour12: false,
 	timeZone: "Europe/Moscow"
 }
@@ -36,6 +32,11 @@ export let requestsCounter = 0
 
 // что делать в ответ на сообщение
 function processMessage(msg) {
+	let dateOptions = {
+		month: "2-digit",
+		day: "2-digit"
+	}
+
 	// если юзер отправил в лс картинку-аттачмент
 	let isSentImageHere = false
 	if (msg.channel.type == "dm") {
@@ -46,7 +47,7 @@ function processMessage(msg) {
 	}
 	if (isSentImageHere) {
 		requestsCounter++
-		s.sentLog(msg)
+		s.sentLog(msg, msg.cleanContent, Object.assign(dateOptions, timeOptions))
 		return
 	}
 
@@ -70,7 +71,7 @@ function processMessage(msg) {
 
 	// если всё ок, продолжаем...
 	requestsCounter++
-	s.sentLog(msg)
+	s.sentLog(msg, msgCommandOriginal, Object.assign(dateOptions, timeOptions))
 
 	// поделить запрос на "основную команду" и аргументы
 	let args = msgCommand.split(" ")
@@ -114,7 +115,14 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 // действия непосредственно после запуска бота
 client.on('ready', () => {
 
-	let readyTimeString = new Date(readyTime).toLocaleString("ru", dateOptions)
+	let dateOptions = {
+		weekday: "long",
+		year: "numeric",
+		month: "short",
+		day: "numeric"
+	}
+
+	let readyTimeString = new Date(readyTime).toLocaleString("ru", Object.assign(dateOptions, timeOptions))
 	console.log(client.user.tag + " entered Discord on " + readyTimeString)
 
 	client.user.setPresence({game: {name: "sb help", type: 0}})
