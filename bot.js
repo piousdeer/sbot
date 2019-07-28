@@ -123,7 +123,7 @@ client.on('ready', () => {
 	}
 
 	let readyTimeString = new Date(readyTime).toLocaleString("ru", Object.assign(dateOptions, timeOptions))
-	console.log(client.user.tag + " entered Discord on " + readyTimeString)
+	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
 	client.user.setPresence({game: {name: "sb help", type: 0}})
 	BOT_ID = client.user.id
