@@ -471,7 +471,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 								url: fullSizeLink
 							}, 
 							footer: {
-								text: `Обработано за ${diff/1000} сек`
+								text: `Обработано за ${(diff/1000).toFixed(3)} сек`
 							}
 						}})
 					}
