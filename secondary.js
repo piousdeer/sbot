@@ -1,5 +1,4 @@
-import * as c from "./commands"
-import {client, BOT_ID} from "./bot"
+import {client} from "./bot"
 
 import got from 'got'
 
@@ -269,29 +268,6 @@ export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText
 			.catch(error => console.log(error))
 	}
 }
-export function checkHomestuckReaction(messageReaction, user) {
-	let msg = messageReaction.message
-	let msgReaction = messageReaction.emoji.name
-
-	if (["⬅", "➡"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
-		let msg = messageReaction.message
-		let cMatch, eMatch, page_number
-		if (cMatch = msg.content.match(/hs#(\d+)/)) {
-			page_number = Number(cMatch[1])
-		} else if (msg.embeds[0] && (eMatch = msg.embeds[0].author.name.match(/hs#(\d+)/))) {
-			page_number = Number(eMatch[1])
-		}
-
-		if (page_number) {
-			if (msgReaction == "➡") {
-				c.Homestuck(msg, [page_number + 1], null, true)
-			} else if (msgReaction == "⬅") {
-				c.Homestuck(msg, [page_number - 1], null, true)
-			}
-		}
-
-	}
-}
 export function setCinemaRole(user, doesUserNeedRole, emojiCode) {
 	let roleID
 	if (emojiCode == "📽") roleID = "565291444705689612"
@@ -350,17 +326,6 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		return true
 	} else {
 		return false
-	}
-}
-export function checkEmojiListReaction(msgReaction, user, msg, visibleServers) {
-	if (msg.author.id == BOT_ID && user.id != BOT_ID) {
-		let turn = ""
-		if (msgReaction == "⬅") {
-			turn = "-"
-		} else if (msgReaction == "➡") {
-			turn = "+"
-		}
-		c.EmojiList(msg, [turn], false, true, visibleServers)
 	}
 }
 export async function sendAttachmentToImgur(attURL) {

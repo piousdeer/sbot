@@ -155,9 +155,39 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msgReaction = messageReaction.emoji.name
 
 	if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
-		s.checkEmojiListReaction(msgReaction, user, msg, visibleServers)
+		// check emojilist reaction
+		if (msg.author.id == BOT_ID && user.id != BOT_ID) {
+			let turn = ""
+			if (msgReaction == "⬅") {
+				turn = "-"
+			} else if (msgReaction == "➡") {
+				turn = "+"
+			}
+			c.EmojiList(msg, [turn], false, true, visibleServers)
+		}
 	} else {
-		s.checkHomestuckReaction(messageReaction, user)
+		// check homestuck reaction
+		let msg = messageReaction.message
+		let msgReaction = messageReaction.emoji.name
+	
+		if (["⬅", "➡"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
+			let msg = messageReaction.message
+			let cMatch, eMatch, page_number
+			if (cMatch = msg.content.match(/hs#(\d+)/)) {
+				page_number = Number(cMatch[1])
+			} else if (msg.embeds[0] && (eMatch = msg.embeds[0].author.name.match(/hs#(\d+)/))) {
+				page_number = Number(eMatch[1])
+			}
+	
+			if (page_number) {
+				if (msgReaction == "➡") {
+					c.Homestuck(msg, [page_number + 1], null, true)
+				} else if (msgReaction == "⬅") {
+					c.Homestuck(msg, [page_number - 1], null, true)
+				}
+			}
+	
+		}
 	}
 }
 client.on('messageReactionAdd', (messageReaction, user) => {
