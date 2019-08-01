@@ -172,7 +172,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	
 		if (["⬅", "➡"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
 			let msg = messageReaction.message
-			let cMatch, eMatch, page_number
+			let cMatch, eMatch, page_number, page_to_go
 			if (cMatch = msg.content.match(/hs#(\d+)/)) {
 				page_number = Number(cMatch[1])
 			} else if (msg.embeds[0] && (eMatch = msg.embeds[0].author.name.match(/hs#(\d+)/))) {
@@ -181,10 +181,11 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	
 			if (page_number) {
 				if (msgReaction == "➡") {
-					commandsRegExp.Homestuck.f(msg, [page_number + 1], null, true)
+					page_to_go = page_number + 1
 				} else if (msgReaction == "⬅") {
-					commandsRegExp.Homestuck.f(msg, [page_number - 1], null, true)
+					page_to_go = page_number - 1
 				}
+				commandsRegExp.Homestuck.f(msg, [page_to_go], null, true)
 			}
 	
 		}
