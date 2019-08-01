@@ -1,6 +1,6 @@
 import {client} from "./bot"
 
-import got from 'got'
+import got from "got"
 
 let timeoutForAutoReact
 let whoNeedsToReactToSomething = {}

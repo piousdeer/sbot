@@ -1,7 +1,7 @@
 import * as s from "./secondary"
 import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
 
-import got from 'got'
+import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
 import jimp from "jimp"
