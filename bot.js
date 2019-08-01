@@ -82,9 +82,9 @@ function processMessage(msg) {
 	let cmd = args.shift()
 
 	// ищем команду в регулярках
-	for (let i of commandsRegExp) {
-		if (cmd.match(i.r)) {
-			i.f(msg, args, msgCommandOriginal)
+	for (let i in commandsRegExp) {
+		if (cmd.match(commandsRegExp[i].r)) {
+			commandsRegExp[i].f(msg, args, msgCommandOriginal)
 			return
 		}
 	}
