@@ -686,6 +686,10 @@ export function When(msg, args, msgCommandOriginal) {
 	if (!args[0]) {
 		return
 	}
+	if (!s.isThisBotsChannel(msg)) {
+		msg.react("🤖")
+		return
+	}
 
 	let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
 	let question = questionOriginal.toLowerCase().replace(/ё/g, "е")
@@ -723,6 +727,10 @@ export function When(msg, args, msgCommandOriginal) {
 }
 export function IronDoor(msg, args) {
 	if (!args[0]) {
+		return
+	}
+	if (!s.isThisBotsChannel(msg)) {
+		msg.react("🤖")
 		return
 	}
 
