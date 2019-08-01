@@ -28,7 +28,7 @@ import * as s from "./secondary"
 import * as c from "./commands"
 import {commandsRegExp, simpleAnswers} from "./aliases"
 
-let visibleServers = []
+export let visibleServers = []
 export let requestsCounter = 0
 
 // что делать в ответ на сообщение
@@ -163,7 +163,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 			} else if (msgReaction == "➡") {
 				turn = "+"
 			}
-			c.EmojiList(msg, [turn], false, true, visibleServers)
+			c.EmojiList(msg, [turn], false, true)
 		}
 	} else {
 		// check homestuck reaction

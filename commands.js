@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter} from "./bot"
+import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
 
 import got from "got"
 import Cheerio from "cheerio"
@@ -180,7 +180,7 @@ export async function Send(msg, args, msgCommandOriginal) {
 export function React(msg, args) {
 	s.autoreact(msg, args, false) // функция вынесена, так как к ней нужен доступ и без команды
 }
-export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton, visibleServers) {
+export function EmojiList(msg, args, msgCommandOriginal, usedArrowButton) {
 	if (!s.isThisBotsChannel(msg)) {
 		msg.react("🤖")
 		return
