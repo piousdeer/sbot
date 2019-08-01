@@ -71,13 +71,13 @@ export function Ping(msg) {
 		})
 		.catch(error => console.log(error))
 }
-const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 export async function Img(msg, args) {
 	// do not spam by pictures
 	if (!s.isThisBotsChannel(msg) && msg.channel.id != "519609441109147655") {
 		msg.react("🤖")
 		return
 	}
+	const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 
 	let argsText = ""
 
