@@ -53,19 +53,20 @@ function processMessage(msg) {
 	}
 
 	// обработка сообщения
-	let msgoc = msg.cleanContent.replace(/\s+/g, " ")
-	let msglc = msg.content.replace(/\s+/g, " ").toLowerCase().replace(/ё/g, "е")
+	let componentsOriginal = msg.cleanContent.split(/\s+/)
+	let components = s.getSimpleString(msg.content).split(/\s+/)
 	let msgCommandOriginal
 	let msgCommand
-	let msglcDivided
 
 	// проверка сообщения на наличие команды
-	if (msglcDivided = msglc.match(BOT_PREFIX)) {
-		msgCommandOriginal = msgoc.match(/^\S+ (.+)$/)[1]
-		msgCommand = msglcDivided[1]
+	if (components[0].match(BOT_PREFIX) && components.length > 1) {
+		componentsOriginal.shift()
+		msgCommandOriginal = componentsOriginal.join(" ")
+		components.shift()
+		msgCommand = components.join(" ")
 	} else if (msg.channel.type != "text") {
-		msgCommandOriginal = msgoc
-		msgCommand = msglc
+		msgCommandOriginal = msg.cleanContent.replace(/\s+/g, " ")
+		msgCommand = s.getSimpleString(msg.content)
 	} else {
 		return
 	}
@@ -128,7 +129,7 @@ client.on('ready', () => {
 
 	client.user.setPresence({game: {name: "sb help", type: 0}})
 	BOT_ID = client.user.id
-	BOT_PREFIX = new RegExp(`^(?:[сcs][бb6]|сбот|стилл?бот|sbot|still?bot|<@\!?${BOT_ID}>),? (.+)$`)
+	BOT_PREFIX = new RegExp(`^(?:[сcs][бb6]|сбот|стилл?бот|sbot|still?bot|<@\!?${BOT_ID}>),?$`)
 
 	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
