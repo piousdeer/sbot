@@ -105,16 +105,6 @@ function processMessage(msg) {
 	args.unshift(cmd)
 	s.autoreact(msg, args, true)
 }
-function actionsForReactions(messageReaction, user, wasReactionAdded) {
-	let msg = messageReaction.message
-	let msgReaction = messageReaction.emoji.name
-
-	if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
-		s.checkEmojiListReaction(msgReaction, user, msg, visibleServers)
-	} else {
-		s.checkHomestuckReaction(messageReaction, user)
-	}
-}
 
 // действия непосредственно после запуска бота
 client.on('ready', () => {
@@ -160,6 +150,16 @@ client.on('message', msg => {
 	// processMessage(msg)
 	setTimeout(processMessage, 50, msg)
 })
+function actionsForReactions(messageReaction, user, wasReactionAdded) {
+	let msg = messageReaction.message
+	let msgReaction = messageReaction.emoji.name
+
+	if (msg.content.startsWith("Доступные эмоджи:") && ["⬅", "➡"].includes(msgReaction)) {
+		s.checkEmojiListReaction(msgReaction, user, msg, visibleServers)
+	} else {
+		s.checkHomestuckReaction(messageReaction, user)
+	}
+}
 client.on('messageReactionAdd', (messageReaction, user) => {
 	let msg = messageReaction.message
 	let msgReaction = messageReaction.emoji.name
@@ -188,7 +188,6 @@ client.on('guildDelete', (guild) => {
 		visibleServers.splice(index, 1)
 	}
 })
-
 client.on('guildMemberAdd', member => {
 	if (member.guild.id == "540145900526501899") {
 		let welcomeLines = [
