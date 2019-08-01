@@ -692,7 +692,7 @@ export function When(msg, args, msgCommandOriginal) {
 	}
 
 	let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
-	let question = questionOriginal.toLowerCase().replace(/ё/g, "е")
+	let question = s.getSimpleString(questionOriginal)
 
 	let epochStart = 17999
 	let epochEnd = 65573
