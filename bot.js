@@ -74,7 +74,7 @@ function processMessage(msg) {
 	s.sentLog(msg, msgCommandOriginal, Object.assign(dateOptions, timeOptions))
 
 	// поделить запрос на "основную команду" и аргументы
-	let args = msgCommand.split(" ")
+	let args = msgCommand.split(/\s+/)
 	let cmd = args.shift()
 
 	// ищем команду в регулярках
