@@ -22,6 +22,7 @@ const timeOptions = {
 	timeZone: "Europe/Moscow"
 }
 export let BOT_ID
+let BOT_PREFIX
 
 import * as s from "./secondary"
 import * as c from "./commands"
@@ -59,7 +60,7 @@ function processMessage(msg) {
 	let msglcDivided
 
 	// проверка сообщения на наличие команды
-	if (msglcDivided = msglc.match(new RegExp("^(?:[сc][бb6]|сбот|стилл?бот|sb|sbot|still?bot|<@" + BOT_ID + ">)" + ",? (.+)$"))) {
+	if (msglcDivided = msglc.match(BOT_PREFIX)) {
 		msgCommandOriginal = msgoc.match(/^\S+ (.+)$/)[1]
 		msgCommand = msglcDivided[1]
 	} else if (msg.channel.type != "text") {
@@ -127,6 +128,7 @@ client.on('ready', () => {
 
 	client.user.setPresence({game: {name: "sb help", type: 0}})
 	BOT_ID = client.user.id
+	BOT_PREFIX = new RegExp(`^(?:[сcs][бb6]|сбот|стилл?бот|sbot|still?bot|<@\!?${BOT_ID}>),? (.+)$`)
 
 	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
