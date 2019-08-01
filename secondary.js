@@ -17,7 +17,7 @@ export function getRandomElem(arr) {
 	return arr[Math.floor(arr.length*Math.random())]
 }
 export function getSimpleString(str) {
-	return str.replace(/\s+/g, " ").toLowerCase().replace(/ё/g, "е").replace(/ /g, "_")
+	return str.replace(/\s+/g, " ").toLowerCase().replace(/ё/g, "е")
 }
 export function pluralize(n, arr) {
 	// by PLAYER_CHAR
@@ -182,71 +182,32 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 
 	let emojiName
 	let guildName
-	let messageId = args[1]
 
 	let guildCheck
 
-	emojiName = getEmojiName(args[0])
+	emojiName = getEmojiName(args.join(" "))
 
 	let emojiError = ["👋", "😶", "🤔", "351002389991653378", "358952906248028160", "357960229259837440", "520641845634531328"]
 
-	if (guildCheck = emojiName.match(/^([^:]+)(?::(\S+))$/)) {
+	if (guildCheck = emojiName.match(/^([^:]+)(?::([\S\s]+))$/)) {
 		emojiName = guildCheck[1]
 		guildName = guildCheck[2]
 	}
 
-	if (messageId) {
-		let emoji = findEmoji(emojiName, guildName, msg.channel)
-
-		if (!emoji) {
-			if (isCommandCanBeAnEmoji) {
-				msg.react(getRandomElem(emojiError))
-			} else {
-				msg.react("604015450304806952")
-			}
-			return
+	if (!findEmoji(emojiName, guildName, msg.channel)) {
+		if (isCommandCanBeAnEmoji) {
+			msg.react(getRandomElem(emojiError))
+		} else {
+			msg.react("604015450304806952")
 		}
-
-		let wrongChannels = 0
-
-		client.channels.forEach(key => {
-			if (key.type == "text") {
-				key.fetchMessage(messageId)
-					.then(messageToReact => {
-						messageToReact.react(emoji)
-						msg.react("⏳")
-						let removeReactionTimeout = setTimeout(() => messageToReact.reactions.get(emoji.name + ":" + emoji.id).remove(client.user), 25000)
-						messageToReact.awaitReactions((reaction, user) => {
-							if (user.id == msg.author.id && reaction.emoji.id == emoji.id) {
-								messageToReact.reactions.get(emoji.name + ":" + emoji.id).remove(client.user)
-								clearTimeout(removeReactionTimeout)
-							}
-						}, { time: 25000 })
-					})
-					.catch(() => {
-						if (++wrongChannels == client.channels.size) {
-							msg.react("🤷")
-						}
-					})
-			} else {
-				wrongChannels++
-			}
-		})
-	} else {
-		if (!findEmoji(emojiName, guildName, msg.channel)) {
-			if (isCommandCanBeAnEmoji) {
-				msg.react(getRandomElem(emojiError))
-			} else {
-				msg.react("604015450304806952")
-			}
-			return
-		}
-
-		msg.react("👌")
-
-		whoNeedsToReactToSomething[msg.author.id] = emojiName
-		whichGuildThisUserMeans[msg.author.id] = guildName
+		return
 	}
+
+	msg.react("👌")
+
+	whoNeedsToReactToSomething[msg.author.id] = emojiName
+	whichGuildThisUserMeans[msg.author.id] = guildName
+	
 	deleteUserMessage(msg)
 }
 export function deleteUserMessage(msg) {
