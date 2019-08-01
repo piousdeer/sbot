@@ -238,10 +238,10 @@ let botsChannels = [
 	}
 ]
 export function isThisBotsChannel(msg) {
-	let c = msg.channel
-	if (c.type == "text") {
+	let ch = msg.channel
+	if (ch.type == "text") {
 		for (let i = 0; i < botsChannels.length; i++) {
-			if (c.guild.id == botsChannels[i].g && c.id != botsChannels[i].c) {
+			if (ch.guild.id == botsChannels[i].g && ch.id != botsChannels[i].c) {
 				return false
 			}
 		}
