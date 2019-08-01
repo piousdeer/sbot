@@ -420,7 +420,7 @@ export function Avatar(msg, args, msgCommandOriginal) {
 	} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 		user = client.users.get(BOT_ID)
 	} else if (args[0]) {
-		user = s.findUserToGetAvatar(s.getSimpleString(msg.content.replace(/\n/g, " ").replace(/ +/g, " ").match(/\S+ \S+ (.+)/)[1]))
+		user = s.findUserToGetAvatar(s.getSimpleString(msg.content.replace(/\s+/g, " ").match(/\S+ \S+ (.+)/)[1]))
 	} else {
 		user = msg.author
 	}

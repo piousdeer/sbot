@@ -17,7 +17,7 @@ export function getRandomElem(arr) {
 	return arr[Math.floor(arr.length*Math.random())]
 }
 export function getSimpleString(str) {
-	return str.replace(/\n/g, " ").replace(/ +/g, " ").toLowerCase().replace(/ё/g, "е").replace(/ /g, "_")
+	return str.replace(/\s+/g, " ").toLowerCase().replace(/ё/g, "е").replace(/ /g, "_")
 }
 export function pluralize(n, arr) {
 	// by PLAYER_CHAR
