@@ -44,7 +44,7 @@ function processMessage(msg) {
 	let isSentImageHere = false
 	if (msg.channel.type == "dm") {
 		msg.attachments.forEach(att => {
-			c.Send(msg, null, `send ${att.url} ${msg.content}`)
+			commandsRegExp.Send.f(msg, null, `send ${att.url} ${msg.content}`)
 			isSentImageHere = true
 		})
 	}
@@ -163,7 +163,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 			} else if (msgReaction == "➡") {
 				turn = "+"
 			}
-			c.EmojiList(msg, [turn], false, true)
+			commandsRegExp.EmojiList.f(msg, [turn], false, true)
 		}
 	} else {
 		// check homestuck reaction
@@ -181,9 +181,9 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	
 			if (page_number) {
 				if (msgReaction == "➡") {
-					c.Homestuck(msg, [page_number + 1], null, true)
+					commandsRegExp.Homestuck.f(msg, [page_number + 1], null, true)
 				} else if (msgReaction == "⬅") {
-					c.Homestuck(msg, [page_number - 1], null, true)
+					commandsRegExp.Homestuck.f(msg, [page_number - 1], null, true)
 				}
 			}
 	
