@@ -33,6 +33,8 @@ export let requestsCounter = 0
 
 // что делать в ответ на сообщение
 function processMessage(msg) {
+
+	// для логов
 	let dateOptions = {
 		month: "2-digit",
 		day: "2-digit"
@@ -117,6 +119,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 // действия непосредственно после запуска бота
 client.on('ready', () => {
 
+	// для логов
 	let dateOptions = {
 		weekday: "long",
 		year: "numeric",
