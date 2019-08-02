@@ -358,7 +358,7 @@ export const commands = {
 			}
 		
 			let showAllServers = false
-			if (msg.author.id == OWNER_ID && args[0] != "emoji") {
+			if (msg.author.id == OWNER_ID && args[0] == "all") {
 				showAllServers = true
 			}
 		
