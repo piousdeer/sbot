@@ -25,7 +25,7 @@ export let BOT_ID
 export let BOT_PREFIX
 
 import * as s from "./secondary"
-import {commandsRegExp} from "./commands"
+import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
 
 export let visibleServers = []
@@ -44,7 +44,7 @@ function processMessage(msg) {
 	let isSentImageHere = false
 	if (msg.channel.type == "dm") {
 		msg.attachments.forEach(att => {
-			commandsRegExp.Send.f(msg, null, `send ${att.url} ${msg.content}`)
+			commands.Send.f(msg, null, `send ${att.url} ${msg.content}`)
 			isSentImageHere = true
 		})
 	}
@@ -82,9 +82,9 @@ function processMessage(msg) {
 	let cmd = args.shift()
 
 	// ищем команду в регулярках
-	for (let i in commandsRegExp) {
-		if (cmd.match(commandsRegExp[i].r)) {
-			commandsRegExp[i].f(msg, args, msgCommandOriginal)
+	for (let i in commands) {
+		if (cmd.match(commands[i].r)) {
+			commands[i].f(msg, args, msgCommandOriginal)
 			return
 		}
 	}
@@ -163,7 +163,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 			} else if (msgReaction == "➡") {
 				turn = "+"
 			}
-			commandsRegExp.EmojiList.f(msg, [turn], false, true)
+			commands.EmojiList.f(msg, [turn], false, true)
 		}
 	} else {
 		// check homestuck reaction
@@ -185,7 +185,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 				} else if (msgReaction == "⬅") {
 					page_to_go = page_number - 1
 				}
-				commandsRegExp.Homestuck.f(msg, [page_to_go], null, true)
+				commands.Homestuck.f(msg, [page_to_go], null, true)
 			}
 	
 		}

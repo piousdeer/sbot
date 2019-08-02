@@ -7,7 +7,7 @@ import Intl from "intl"
 import jimp from "jimp"
 import skmeans from "skmeans"
 
-export const commandsRegExp = {
+export const commands = {
 	Help: {
 		r: /^(рудз|х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
 		f (msg) {
