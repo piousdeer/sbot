@@ -118,58 +118,55 @@ export function getEmojiName(emojiText) {
 	}
 }
 export function findUserToGetAvatar(username) {
-	// проверка на айди
-	if (username.match(/^\d+$/g)) {
-		if (client.users.get(username)) {
-			return client.users.get(username)
-		}
-	}
-
-	// проверка на призывалку
-	let usernameId = username.match(/<@\!?(\d+)>/)
-	if (usernameId) {
-		if (client.users.get(usernameId[1])) {
-			return client.users.get(usernameId[1])
-		}
-	}
-
-	let isDisplayNameSuitable = false
-	let isDisplayNameCanBeSuitable = false
 	let result
-
-	if (username.split("#")[1]) {
+	let usernameId
+	// проверка на айди
+	if (username.match(/^\d+$/g) && client.users.get(username)) {
+		result = client.users.get(username)
+	// проверка на призывалку
+	} else if (usernameId = username.match(/<@\!?(\d+)>/)) {
+		let userGotById = client.users.get(usernameId[1])
+		if (userGotById) {
+			result = userGotById
+		}
+	// проверка на тег
+	} else if (username.split("#")[1]) {
 		client.users.forEach(u => {
 			if (username == u.tag.toLowerCase()) {
 				result = u
 			}
 		})
-	}
+	} else {
+		let isDisplayNameSuitable = false
+		let isDisplayNameCanBeSuitable = false
 
-	client.guilds.forEach(guild => {
-		guild.members.forEach(member => {
-			if (member.user.avatar) {
-				if (username == getSimpleString(member.displayName)) {
-					result = member.user
-					isDisplayNameSuitable = true
-				} else if (getSimpleString(member.displayName).match(new RegExp("^(" + escapeRegExp(username) + ")"))) {
-					if (!isDisplayNameSuitable) {
+		client.guilds.forEach(guild => {
+			guild.members.forEach(member => {
+				if (member.user.avatar) {
+					if (username == getSimpleString(member.displayName)) {
 						result = member.user
-						isDisplayNameCanBeSuitable = true
-					}
-				} else if (member.nickname) {
-					if (username == getSimpleString(member.user.username)) {
-						if (!isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+						isDisplayNameSuitable = true
+					} else if (getSimpleString(member.displayName).match(new RegExp("^(" + escapeRegExp(username) + ")"))) {
+						if (!isDisplayNameSuitable) {
 							result = member.user
+							isDisplayNameCanBeSuitable = true
 						}
-					} else if (getSimpleString(member.user.username).match(new RegExp("^(" + escapeRegExp(username) + ")"))) {
-						if (!result && !isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
-							result = member.user
+					} else if (member.nickname) {
+						if (username == getSimpleString(member.user.username)) {
+							if (!isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+								result = member.user
+							}
+						} else if (getSimpleString(member.user.username).match(new RegExp("^(" + escapeRegExp(username) + ")"))) {
+							if (!result && !isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+								result = member.user
+							}
 						}
 					}
 				}
-			}
-		})
-	})
+			})
+		})		
+	}
+
 	return result
 }
 export function autoreact(msg, args, isCommandCanBeAnEmoji) {
