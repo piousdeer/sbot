@@ -65,9 +65,9 @@ function processMessage(msg) {
 		msgCommandOriginal = msg.cleanContent.replace(/\s+/g, " ")
 		msgCommand = s.getSimpleString(msg.content)
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
-			let url = components[0]
-			components.shift()
-			commands.Send.f(msg, null, `send ${url} ${components.join(" ")}`)
+			let url = componentsOriginal[0]
+			componentsOriginal.shift()
+			commands.Send.f(msg, null, `send ${url} ${componentsOriginal.join(" ")}`)
 			return
 		}
 	} else {
