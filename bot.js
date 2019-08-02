@@ -25,7 +25,7 @@ export let BOT_ID
 export let BOT_PREFIX
 
 import * as s from "./secondary"
-import {commandsRegExp, simpleAnswers} from "./aliases"
+import {commandsRegExp, simpleAnswers} from "./commands"
 
 export let visibleServers = []
 export let requestsCounter = 0
