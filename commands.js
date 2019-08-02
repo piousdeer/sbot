@@ -614,17 +614,22 @@ export const commands = {
 	SnowflakeTime: {
 		r: /^(sftime)[.!]?$/,
 		f (msg, args) {
-			let totalSFTimes = ""
+			let totalSFTimes = []
 			args.forEach(arg => {
 				if (arg.match(/\d{17,20}/)) {
 					let totalMatches = arg.match(/\d{17,20}/g)
 					for (let i in totalMatches) {
-						totalSFTimes += s.dateStr(s.sfTime(Number(totalMatches[i]))) + "\n"
+						let d = new Date(1420070400000 + Number(totalMatches[i]) / 4194304)
+						if (!d.toJSON) {
+							d = new Date(d)
+						}
+						d.setHours(d.getHours() + 3)
+						totalSFTimes.push(`${d.toJSON().split(".")[0].replace(/T/, ' ')} МСК`)
 					}
 				}
 			})
 			if (totalSFTimes) {
-				msg.channel.send(totalSFTimes)
+				msg.channel.send(totalSFTimes.join("\n"))
 			}
 		}
 	},

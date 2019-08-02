@@ -252,16 +252,6 @@ export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText
 			.catch(error => console.log(error))
 	}
 }
-export function sfTime(s) {
-    return new Date(1420070400000 + s / 4194304)
-}
-export function dateStr(d) {
-    if (!d.toJSON) {
-        d = new Date(d)
-    }
-    d.setHours(d.getHours() + 3)
-    return d.toJSON().split(".")[0].replace(/T/, ' ') + ' МСК'
-}
 export function checkReactionForAutoreact(messageReaction, user) {
 	if (whoNeedsToReactToSomething[user.id]) {
 		let currentUser = client.users.get(user.id)
