@@ -133,7 +133,6 @@ export function findUserToGetAvatar(username) {
 		}
 	}
 
-	let guildsCounter = 0
 	let isDisplayNameSuitable = false
 	let isDisplayNameCanBeSuitable = false
 	let result
@@ -147,7 +146,6 @@ export function findUserToGetAvatar(username) {
 	}
 
 	client.guilds.forEach(guild => {
-		let usersCounter = 0
 		guild.members.forEach(member => {
 			if (member.user.avatar) {
 				if (username == getSimpleString(member.displayName)) {
