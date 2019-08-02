@@ -400,7 +400,57 @@ export const commands = {
 			} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 				user = client.users.get(BOT_ID)
 			} else if (args[0]) {
-				user = s.findUserToGetAvatar(s.getSimpleString(msg.content.replace(/\s+/g, " ").match(/\S+ \S+ (.+)/)[1]))
+				let username = s.getSimpleString(msg.content.replace(/\s+/g, " ").match(/\S+ \S+ (.+)/)[1])
+				let result
+				let usernameId
+				// проверка на айди
+				if (username.match(/^\d+$/g) && client.users.get(username)) {
+					result = client.users.get(username)
+				// проверка на призывалку
+				} else if (usernameId = username.match(/<@\!?(\d+)>/)) {
+					let userGotById = client.users.get(usernameId[1])
+					if (userGotById) {
+						result = userGotById
+					}
+				// проверка на тег
+				} else if (username.split("#")[1]) {
+					client.users.forEach(u => {
+						if (username == u.tag.toLowerCase()) {
+							result = u
+						}
+					})
+				} else {
+					let isDisplayNameSuitable = false
+					let isDisplayNameCanBeSuitable = false
+			
+					client.guilds.forEach(guild => {
+						guild.members.forEach(member => {
+							if (member.user.avatar) {
+								if (username == s.getSimpleString(member.displayName)) {
+									result = member.user
+									isDisplayNameSuitable = true
+								} else if (s.getSimpleString(member.displayName).match(new RegExp("^(" + s.escapeRegExp(username) + ")"))) {
+									if (!isDisplayNameSuitable) {
+										result = member.user
+										isDisplayNameCanBeSuitable = true
+									}
+								} else if (member.nickname) {
+									if (username == s.getSimpleString(member.user.username)) {
+										if (!isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+											result = member.user
+										}
+									} else if (s.getSimpleString(member.user.username).match(new RegExp("^(" + s.escapeRegExp(username) + ")"))) {
+										if (!result && !isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+											result = member.user
+										}
+									}
+								}
+							}
+						})
+					})		
+				}
+			
+				user = result
 			} else {
 				user = msg.author
 			}
