@@ -320,33 +320,32 @@ export const commands = {
 		
 			let emoji
 		
-			if (args[0].match(/^\d+$/g)) {
-				if (client.emojis.get(args[0])) {
-					emoji = client.emojis.get(args[0])
-					s.sendEmojiLinkEmbed(msg, emoji)
-					s.deleteUserMessage(msg)
-					return
+			if (args[0].match(/^\d+$/g) && client.emojis.get(args[0])) {
+				emoji = client.emojis.get(args[0])
+			} else {
+				let emojiName = s.getEmojiName(args[0])
+				let guildName
+				let guildCheck
+				if (guildCheck = emojiName.match(/^([^:]+)(?::(\S+))$/)) {
+					emojiName = guildCheck[1]
+					guildName = guildCheck[2]
 				}
+				emoji = s.findEmoji(emojiName, guildName, msg.channel)
 			}
-		
-			let emojiName = s.getEmojiName(args[0])
-		
-			let guildName
-			let guildCheck
-		
-			if (guildCheck = emojiName.match(/^([^:]+)(?::(\S+))$/)) {
-				emojiName = guildCheck[1]
-				guildName = guildCheck[2]
-			}
-		
-			emoji = s.findEmoji(emojiName, guildName, msg.channel)
 		
 			if (!emoji) {
 				msg.react("604015450304806952")
 				return
 			}
 		
-			s.sendEmojiLinkEmbed(msg, emoji)
+			msg.channel.send({
+				embed: {
+					description: `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}> – ${emoji.name}`, 
+					image: {
+						url: `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? "gif" : "png"}`
+					}
+				}
+			})
 		}
 	},
 	Servers: {

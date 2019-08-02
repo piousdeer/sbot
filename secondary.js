@@ -220,16 +220,6 @@ export function deleteUserMessage(msg) {
 		}
 	}
 }
-export function sendEmojiLinkEmbed(msg, emoji) {
-	msg.channel.send({
-		embed: {
-			description: `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}> – ${emoji.name}`, 
-			image: {
-				url: `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? "gif" : "png"}`
-			}
-		}
-	})
-}
 export function isThisBotsChannel(msg) {
 	let ch = msg.channel
 	if (ch.type == "text") {
