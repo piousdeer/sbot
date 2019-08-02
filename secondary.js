@@ -259,29 +259,6 @@ export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText
 			.catch(error => console.log(error))
 	}
 }
-export function setCinemaRole(user, doesUserNeedRole, emojiCode) {
-	let roleID
-	if (emojiCode == "📽") roleID = "565291444705689612"
-	if (emojiCode == "⛩") roleID = "577130367304204288"
-	if (emojiCode == "🎮") roleID = "577143343281340427"
-	
-
-	client.guilds.get("540145900526501899").fetchMember(user.id)
-		.then((member) => {
-			if (doesUserNeedRole) {
-				console.log(member.user.tag + " asked to add them " + emojiCode + " role.")
-				member.addRole(roleID)
-					.then(() => {})
-					.catch(error => console.log(error))
-			} else {
-				console.log(member.user.tag + " asked to remove them " + emojiCode + " role.")
-				member.removeRole(roleID)
-					.then(() => {})
-					.catch(error => console.log(error))
-			}
-		})
-		.catch(error => console.log(error))
-}
 export function sfTime(s) {
     return new Date(1420070400000 + s / 4194304)
 }
