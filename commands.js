@@ -450,9 +450,6 @@ export const commands = {
 									description: user.tag, 
 									image: {
 										url: fullSizeLink
-									}, 
-									footer: {
-										text: `Обработано за ${(diff/1000).toFixed(3)} сек`
 									}
 								}})
 							}
