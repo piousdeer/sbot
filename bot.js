@@ -39,7 +39,7 @@ function processMessage(msg) {
 	let isSentImageHere = false
 	if (msg.channel.type == "dm") {
 		msg.attachments.forEach(att => {
-			commands.Send.f(msg, null, `send ${att.url} ${msg.content}`)
+			commands.Send.f(msg, null, `send ${att.url} ${msg.clearContent.replace(/\s+/g, " ")}`)
 			isSentImageHere = true
 		})
 	}
