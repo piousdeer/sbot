@@ -1,4 +1,5 @@
 import {client} from "./bot"
+import {botsChannels} from "./config"
 
 import got from "got"
 
@@ -226,16 +227,6 @@ export function sendEmojiLinkEmbed(msg, emoji) {
 		msg.channel.send({embed: {title: "Emoji", description: ("<:" + emoji.name + ":" + emoji.id + "> – " + emoji.name), image: {url: ("https://cdn.discordapp.com/emojis/" + emoji.id + ".png")}}})
 	}
 }
-let botsChannels = [
-	{
-		g: "110107304413638656",
-		c: "334369998866874369"
-	},
-	{
-		g: "540145900526501899",
-		c: "600294780144189481"
-	}
-]
 export function isThisBotsChannel(msg) {
 	let ch = msg.channel
 	if (ch.type == "text") {

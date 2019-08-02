@@ -1,5 +1,6 @@
 import * as s from "./secondary"
 import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
+import {imgDatabaseURL} from "./config"
 
 import got from "got"
 import Cheerio from "cheerio"
@@ -86,7 +87,6 @@ export const commands = {
 				msg.react("🤖")
 				return
 			}
-			const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 		
 			let argsText = ""
 		

@@ -14,16 +14,12 @@ if (!(TOKEN && OWNER_ID)) {
 }
 
 export const readyTime = Date.now()
-export const timeOptions = {
-	hour: "2-digit",
-	minute: "2-digit",
-	hour12: false,
-	timeZone: "Europe/Moscow"
-}
+
 export let BOT_ID
 export let BOT_PREFIX
 
 import * as s from "./secondary"
+import {timeOptions} from "./config"
 import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
 
