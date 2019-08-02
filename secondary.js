@@ -221,11 +221,14 @@ export function deleteUserMessage(msg) {
 	}
 }
 export function sendEmojiLinkEmbed(msg, emoji) {
-	if (emoji.animated) {
-		msg.channel.send({embed: {title: "Emoji", description: ("<a:" + emoji.name + ":" + emoji.id + "> – " + emoji.name), image: {url: ("https://cdn.discordapp.com/emojis/" + emoji.id + ".gif")}}})
-	} else {
-		msg.channel.send({embed: {title: "Emoji", description: ("<:" + emoji.name + ":" + emoji.id + "> – " + emoji.name), image: {url: ("https://cdn.discordapp.com/emojis/" + emoji.id + ".png")}}})
-	}
+	msg.channel.send({
+		embed: {
+			description: `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}> – ${emoji.name}`, 
+			image: {
+				url: `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? "gif" : "png"}`
+			}
+		}
+	})
 }
 export function isThisBotsChannel(msg) {
 	let ch = msg.channel
