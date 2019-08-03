@@ -33,25 +33,24 @@ export function envelope(msg) {
 export function getGuild(guildName) {
 	if (!guildName) {
 		return null
-	}
-	if (guildName.match(/^\d+$/g)) {
-		if (client.guilds.get(guildName)) {
-			return guildName
+	} else if (guildName.match(/^\d+$/g) && client.guilds.get(guildName)) {
+		return guildName
+	} else {
+		let guildId
+		let guildIdFull
+		client.guilds.forEach(key => {
+			if (guildName == getSimpleString(key.name)) {
+				guildIdFull = key.id
+			} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
+				guildId = key.id
+			}
+		})
+		if (guildId || guildIdFull) {
+			return (guildIdFull) ? guildIdFull : guildId
+		} else {
+			return null
 		}
 	}
-	let guildId
-	let guildIdFull
-	client.guilds.forEach(key => {
-		if (guildName == getSimpleString(key.name)) {
-			guildIdFull = key.id
-		} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
-			guildId = key.id
-		}
-	})
-	if (!(guildId || guildIdFull)) {
-		return
-	}
-	return (guildIdFull) ? guildIdFull : guildId
 }
 export function getStorage(emojiName, guildName, channel) {
 	if (guildName) {
