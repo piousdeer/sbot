@@ -170,18 +170,38 @@ export const commands = {
 				discordLink = `<${discordLink}>\n`
 			}
 		
-		
-			let tagsSplit = imageParamsArray[2].split(/(?:tags|т[еаэ]ги):/i, 2)
-			let imageTitle = tagsSplit[0].replace(/\s+$/g, "")
-		
+
+			let dateRE = /\d{4}[-_\.\/\\]\d{2}[-_\.\/\\]\d{2}/i
+			let takenByRE = /(?:(?:скрин(?:шот)? )?снято?|takenby|from)\s*:?\s*(\S+)/i
+			let tagsRE = /(?:tags|т[еаэ]ги)(?:\s+)?:?/i
+			
+			let imageNote = imageParamsArray[2]
+			let customDate = ""
+			let takenBy, imageTitle, tagsRaw
+			
+			try {
+				let dateMatch = imageNote.match(dateRE)
+				imageNote = imageNote.split(dateMatch[0]).join(" ")
+				customDate = dateMatch[0].trim()
+			} catch (err) {}
+
+			try {
+				let takenByMatch = imageNote.match(takenByRE)
+				imageNote = imageNote.split(takenByMatch[0]).join(" ")
+				takenBy = takenByMatch[1].trim()
+			} catch (err) {}
+
+			imageTitle = imageNote.split(tagsRE)[0].trim()
+			tagsRaw = imageNote.split(tagsRE)[1].trim()
+
 			let imageTags = []
-			if (tagsSplit[1]) {
-				imageTags = tagsSplit[1].toLowerCase().replace(/^\s+/g, "").split(/[,;\s]+/)
+			if (tagsRaw) {
+				imageTags = tagsRaw.toLowerCase().replace(/^\s+/g, "").split(/[,;\s]+/)
 			}
 			imageTags.unshift("screenshot", "minecraft")
 			let imageTagsText = imageTags.map(x=>'"'+x+'"').join(', ')
 		
-			let imageJSON = '```json\n\t"' + imageID + '": {\n\t\t"title": "' + imageTitle + '",\n\t\t"date": "' + imageDate + '",\n\t\t"takenBy": "' + msg.author.username + '",\n\t\t"big": true,\n\t\t"tags": ['+ imageTagsText +']\n\t},\n```'
+			let imageJSON = `\`\`\`json\n\t"${imageID}": {\n\t\t"title": "${imageTitle}",\n\t\t"date": "${(imageDate) ? imageDate : customDate}",\n\t\t"takenBy": "${(takenBy) ? takenBy : msg.author.username}",\n\t\t"big": true,\n\t\t"tags": [${imageTagsText}]\n\t},\n\`\`\``
 		
 			client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + discordLink + imageLink + "\n" + imageJSON)
 				.then(() => {
