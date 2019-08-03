@@ -330,7 +330,7 @@ export const commands = {
 					emojiName = guildCheck[1]
 					guildName = guildCheck[2]
 				}
-				emoji = s.findEmoji(emojiName, guildName, msg.channel)
+				emoji = s.findEmoji(emojiName, guildName)
 			}
 		
 			if (!emoji) {

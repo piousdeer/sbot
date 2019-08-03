@@ -52,7 +52,7 @@ export function getGuild(guildName) {
 		}
 	}
 }
-export function getStorage(emojiName, guildName, channel) {
+export function getStorage(emojiName, guildName) {
 	if (!guildName) { 
 		return client
 	} else if (guildName.match(/^\d+$/g) && client.guilds.get(guildName)) {
@@ -79,7 +79,7 @@ export function getStorage(emojiName, guildName, channel) {
 		}
 	}
 }
-export function findEmoji(emojiName, guildName, channel) {
+export function findEmoji(emojiName, guildName) {
 	let emoji
 	let emojiFull
 
@@ -90,7 +90,7 @@ export function findEmoji(emojiName, guildName, channel) {
 		}
 	}
 
-	let storage = getStorage(emojiName, guildName, channel)
+	let storage = getStorage(emojiName, guildName)
 
 	if (!storage) {
 		return
@@ -134,7 +134,7 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 		guildName = guildCheck[2]
 	}
 
-	if (!findEmoji(emojiName, guildName, msg.channel)) {
+	if (!findEmoji(emojiName, guildName)) {
 		if (isCommandCanBeAnEmoji) {
 			msg.react(getRandomElem(emojiError))
 		} else {
