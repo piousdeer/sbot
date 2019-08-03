@@ -30,7 +30,7 @@ export function envelope(msg) {
 		msg.react("✉")
 	}
 }
-export function getGuild(guildName) {
+export function getGuild(guildName, emojiName) {
 	if (!guildName) {
 		return null
 	} else if (guildName.match(/^\d+$/g) && client.guilds.get(guildName)) {
@@ -42,34 +42,16 @@ export function getGuild(guildName) {
 			if (guildName == getSimpleString(key.name)) {
 				guildIdFull = key.id
 			} else if (getSimpleString(key.name).startsWith(guildName)) {
-				guildId = key.id
-			}
-		})
-		if (guildId || guildIdFull) {
-			return (guildIdFull) ? guildIdFull : guildId
-		} else {
-			return null
-		}
-	}
-}
-export function getStorage(guildName, emojiName) {
-	if (!guildName) {
-		return null
-	} else if (guildName.match(/^\d+$/g) && client.guilds.get(guildName)) {
-		return guildName
-	} else {
-		let guildId
-		let guildIdFull
-		client.guilds.forEach(key => {
-			if (guildName == getSimpleString(key.name)) {
-				guildIdFull = key.id
-			} else if (getSimpleString(key.name).startsWith(guildName)) {
-				let currentGuildId = key.id
-				client.guilds.get(key.id).emojis.forEach(key => {
-					if (key.name.toLowerCase().startsWith(emojiName)) {
-						guildId = currentGuildId
-					}
-				})
+				if (emojiName) {
+					let currentGuildId = key.id
+					client.guilds.get(key.id).emojis.forEach(key => {
+						if (key.name.toLowerCase().startsWith(emojiName)) {
+							guildId = currentGuildId
+						}
+					})
+				} else {
+					guildId = key.id
+				}
 			}
 		})
 		if (guildId || guildIdFull) {
@@ -90,7 +72,7 @@ export function findEmoji(emojiName, guildName) {
 		}
 	}
 
-	let storage = client.guilds.get(getStorage(guildName, emojiName))
+	let storage = client.guilds.get(getGuild(guildName, emojiName))
 
 	if (!storage) {
 		storage = client
