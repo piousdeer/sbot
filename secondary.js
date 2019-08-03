@@ -84,9 +84,9 @@ export function findEmoji(emojiName, guildName) {
 	let emojiFull
 
 	if (emojiName.match(/^\d+$/g)) {
-		if (client.emojis.get(emojiName)) {
-			emoji = client.emojis.get(emojiName)
-			return emoji
+		let emojiGotById = client.emojis.get(emojiName)
+		if (emojiGotById) {
+			return emojiGotById
 		}
 	}
 
