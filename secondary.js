@@ -7,11 +7,10 @@ let timeoutForAutoReact
 let whoNeedsToReactToSomething = {}
 let whichGuildThisUserMeans = {}
 
+// general methods
+
 export function sentLog(msg, text, options) {
 	console.log(`${(new Date).toLocaleString("ru", options)} <${msg.author.tag}> ${text}`)
-}
-export function escapeRegExp(str) {
-	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
 export function getRandomElem(arr) {
 	return arr[Math.floor(arr.length*Math.random())]
@@ -30,6 +29,30 @@ export function envelope(msg) {
 		msg.react("✉")
 	}
 }
+export function deleteUserMessage(msg) {
+	if (msg.channel.type == "text") { // если бот не начал "беседовать" с юзером
+		let bot_permissions = msg.channel.permissionsFor(client.user)
+		if (bot_permissions.has("MANAGE_MESSAGES")) {
+			msg.delete(10000)
+				.then(() => {})
+				.catch(error => console.log(error))
+		}
+	}
+}
+export function isThisBotsChannel(msg) {
+	let ch = msg.channel
+	if (ch.type == "text") {
+		for (let i = 0; i < botsChannels.length; i++) {
+			if (ch.guild.id == botsChannels[i].g && ch.id != botsChannels[i].c) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// emoji methods
+
 export function getGuild(guildName, emojiName) {
 	let guildId
 	if (!guildName) {
@@ -93,6 +116,9 @@ export function getEmojiName(emojiText) {
 		return emojiText
 	}
 }
+
+// reaction methods
+
 export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 	if (!args[0]) {
 		msg.react("📜")
@@ -129,48 +155,6 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 	
 	deleteUserMessage(msg)
 }
-export function deleteUserMessage(msg) {
-	if (msg.channel.type == "text") { // если бот не начал "беседовать" с юзером
-		let bot_permissions = msg.channel.permissionsFor(client.user)
-		if (bot_permissions.has("MANAGE_MESSAGES")) {
-			msg.delete(10000)
-				.then(() => {})
-				.catch(error => console.log(error))
-		}
-	}
-}
-export function isThisBotsChannel(msg) {
-	let ch = msg.channel
-	if (ch.type == "text") {
-		for (let i = 0; i < botsChannels.length; i++) {
-			if (ch.guild.id == botsChannels[i].g && ch.id != botsChannels[i].c) {
-				return false
-			}
-		}
-	}
-	return true
-}
-export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText) {
-	let embed = {embed: comic_embed}
-	if (usedArrowButton) {
-		if (contentText) {
-			msg.edit(contentText, embed)
-		} else {
-			msg.edit(embed)
-		}
-	} else {
-		let contentToSend = (contentText) ? contentText : embed
-		msg.channel.send(contentToSend)
-			.then((msg) => {
-				msg.react("⬅")
-					.then(() => {
-						msg.react("➡")
-					})
-					.catch(error => console.log(error))
-			})
-			.catch(error => console.log(error))
-	}
-}
 export function checkReactionForAutoreact(messageReaction, user) {
 	if (whoNeedsToReactToSomething[user.id]) {
 		let currentUser = client.users.get(user.id)
@@ -198,6 +182,30 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		return false
 	}
 }
+export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText) {
+	let embed = {embed: comic_embed}
+	if (usedArrowButton) {
+		if (contentText) {
+			msg.edit(contentText, embed)
+		} else {
+			msg.edit(embed)
+		}
+	} else {
+		let contentToSend = (contentText) ? contentText : embed
+		msg.channel.send(contentToSend)
+			.then((msg) => {
+				msg.react("⬅")
+					.then(() => {
+						msg.react("➡")
+					})
+					.catch(error => console.log(error))
+			})
+			.catch(error => console.log(error))
+	}
+}
+
+// special methods
+
 export async function sendAttachmentToImgur(attURL) {
 	const IMGUR_ID = process.env.IMGUR_ID
 
