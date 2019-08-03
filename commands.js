@@ -429,7 +429,7 @@ export const commands = {
 								if (username == s.getSimpleString(member.displayName)) {
 									result = member.user
 									isDisplayNameSuitable = true
-								} else if (s.getSimpleString(member.displayName).match(new RegExp("^(" + s.escapeRegExp(username) + ")"))) {
+								} else if (s.getSimpleString(member.displayName).startsWith(username)) {
 									if (!isDisplayNameSuitable) {
 										result = member.user
 										isDisplayNameCanBeSuitable = true
@@ -439,7 +439,7 @@ export const commands = {
 										if (!isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
 											result = member.user
 										}
-									} else if (s.getSimpleString(member.user.username).match(new RegExp("^(" + s.escapeRegExp(username) + ")"))) {
+									} else if (s.getSimpleString(member.user.username).startsWith(username)) {
 										if (!result && !isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
 											result = member.user
 										}

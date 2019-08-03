@@ -41,7 +41,7 @@ export function getGuild(guildName) {
 		client.guilds.forEach(key => {
 			if (guildName == getSimpleString(key.name)) {
 				guildIdFull = key.id
-			} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
+			} else if (getSimpleString(key.name).startsWith(guildName)) {
 				guildId = key.id
 			}
 		})
@@ -63,10 +63,10 @@ export function getStorage(emojiName, guildName, channel) {
 		client.guilds.forEach(key => {
 			if (guildName == getSimpleString(key.name)) {
 				guildIdFull = key.id
-			} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
+			} else if (getSimpleString(key.name).startsWith(guildName)) {
 				let currentGuildId = key.id
 				client.guilds.get(key.id).emojis.forEach(key => {
-					if (key.name.toLowerCase().match(new RegExp("^(" + escapeRegExp(emojiName) + ")"))) {
+					if (key.name.toLowerCase().startsWith(emojiName)) {
 						guildId = currentGuildId
 					}
 				})
@@ -99,7 +99,7 @@ export function findEmoji(emojiName, guildName, channel) {
 	storage.emojis.forEach(key => {
 		if (emojiName == key.name.toLowerCase()) {
 			emojiFull = key
-		} else if (key.name.toLowerCase().match(new RegExp("^(" + escapeRegExp(emojiName) + ")"))) {
+		} else if (key.name.toLowerCase().startsWith(emojiName)) {
 			emoji = key
 		}
 	})
