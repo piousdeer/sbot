@@ -52,8 +52,8 @@ export function getGuild(guildName) {
 		}
 	}
 }
-export function getStorage(emojiName, guildName) {
-	if (!guildName) { 
+export function getStorage(guildName, emojiName) {
+	if (!guildName) {
 		return null
 	} else if (guildName.match(/^\d+$/g) && client.guilds.get(guildName)) {
 		return guildName
@@ -90,7 +90,7 @@ export function findEmoji(emojiName, guildName) {
 		}
 	}
 
-	let storage = client.guilds.get(getStorage(emojiName, guildName))
+	let storage = client.guilds.get(getStorage(guildName, emojiName))
 
 	if (!storage) {
 		storage = client
