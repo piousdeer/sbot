@@ -72,10 +72,10 @@ export function getStorage(emojiName, guildName, channel) {
 					})
 				}
 			})
-			if (!(guildId || guildIdFull)) {
-				return client
-			} else {
+			if (guildId || guildIdFull) {
 				return (guildIdFull) ? client.guilds.get(guildIdFull) : client.guilds.get(guildId)
+			} else {
+				return client
 			}
 		}
 	} else {
