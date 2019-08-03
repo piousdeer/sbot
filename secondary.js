@@ -31,12 +31,12 @@ export function envelope(msg) {
 	}
 }
 export function getGuild(guildName, emojiName) {
+	let guildId
 	if (!guildName) {
-		return null
+		guildId = null
 	} else if (guildName.match(/^\d+$/g) && client.guilds.get(guildName)) {
-		return guildName
+		guildId = guildName
 	} else {
-		let guildId
 		let guildIdFound = false
 		client.guilds.forEach(key => {
 			if (guildName == getSimpleString(key.name)) {
@@ -55,8 +55,8 @@ export function getGuild(guildName, emojiName) {
 				}
 			}
 		})
-		return guildId
 	}
+	return guildId
 }
 export function findEmoji(emojiName, guildName) {
 	let emoji
