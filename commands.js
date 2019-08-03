@@ -204,7 +204,7 @@ export const commands = {
 				return
 			}
 		
-			let fromWhichServer = "540145900526501899"
+			let fromWhichServer = client.guilds.get("540145900526501899")
 			let askedServer = s.getGuild(args[0])
 		
 			let goRight = false
@@ -233,11 +233,11 @@ export const commands = {
 						n = 0
 					}
 		
-					fromWhichServer = visibleServers[n]
+					fromWhichServer = client.guilds.get(visibleServers[n])
 				}
 			}
 		
-			let emServ = client.guilds.get(fromWhichServer)
+			let emServ = fromWhichServer
 			if (emServ && emServ.emojis.size) {
 				let embed = {
 					color: 0xD4A940,

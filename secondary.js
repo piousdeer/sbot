@@ -56,7 +56,7 @@ export function getGuild(guildName, emojiName) {
 			}
 		})
 	}
-	return guildId
+	return client.guilds.get(guildId)
 }
 export function findEmoji(emojiName, guildName) {
 	let emoji
@@ -69,7 +69,7 @@ export function findEmoji(emojiName, guildName) {
 		}
 	}
 
-	let storage = client.guilds.get(getGuild(guildName, emojiName))
+	let storage = getGuild(guildName, emojiName)
 
 	if (!storage) {
 		storage = client
