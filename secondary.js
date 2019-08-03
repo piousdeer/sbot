@@ -59,25 +59,26 @@ export function getStorage(emojiName, guildName, channel) {
 			if (client.guilds.get(guildName)) {
 				return client.guilds.get(guildName)
 			}
-		}
-		let guildId
-		let guildIdFull
-		client.guilds.forEach(key => {
-			if (guildName == getSimpleString(key.name)) {
-				guildIdFull = key.id
-			} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
-				let currentGuildId = key.id
-				client.guilds.get(key.id).emojis.forEach(key => {
-					if (key.name.toLowerCase().match(new RegExp("^(" + escapeRegExp(emojiName) + ")"))) {
-						guildId = currentGuildId
-					}
-				})
+		} else {
+			let guildId
+			let guildIdFull
+			client.guilds.forEach(key => {
+				if (guildName == getSimpleString(key.name)) {
+					guildIdFull = key.id
+				} else if (getSimpleString(key.name).match(new RegExp("^(" + escapeRegExp(guildName) + ")"))) {
+					let currentGuildId = key.id
+					client.guilds.get(key.id).emojis.forEach(key => {
+						if (key.name.toLowerCase().match(new RegExp("^(" + escapeRegExp(emojiName) + ")"))) {
+							guildId = currentGuildId
+						}
+					})
+				}
+			})
+			if (!(guildId || guildIdFull)) {
+				return client
 			}
-		})
-		if (!(guildId || guildIdFull)) {
-			return client
+			return (guildIdFull) ? client.guilds.get(guildIdFull) : client.guilds.get(guildId)
 		}
-		return (guildIdFull) ? client.guilds.get(guildIdFull) : client.guilds.get(guildId)
 	} else {
 		return client
 	}
