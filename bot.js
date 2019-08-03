@@ -50,7 +50,7 @@ function processMessage(msg) {
 	}
 
 	// обработка сообщения
-	let componentsOriginal = msg.cleanContent.split(/\s+/)
+	let componentsOriginal = msg.content.split(/\s+/)
 	let components = s.getSimpleString(msg.content).split(/\s+/)
 	let msgCommandOriginal
 	let msgCommand
@@ -62,7 +62,7 @@ function processMessage(msg) {
 		components.shift()
 		msgCommand = components.join(" ")
 	} else if (msg.channel.type != "text") {
-		msgCommandOriginal = msg.cleanContent.replace(/\s+/g, " ")
+		msgCommandOriginal = msg.content.replace(/\s+/g, " ")
 		msgCommand = s.getSimpleString(msg.content)
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
 			let url = componentsOriginal[0]
@@ -76,7 +76,7 @@ function processMessage(msg) {
 
 	// если всё ок, продолжаем...
 	requestsCounter++
-	s.sentLog(msg, msgCommandOriginal, Object.assign(dateOptions, timeOptions))
+	s.sentLog(msg, msg.cleanContent.replace(/\s+/g, " "), Object.assign(dateOptions, timeOptions))
 
 	// поделить запрос на "основную команду" и аргументы
 	let args = msgCommand.split(/\s+/)

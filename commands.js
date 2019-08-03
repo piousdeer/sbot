@@ -400,7 +400,7 @@ export const commands = {
 			} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 				user = client.users.get(BOT_ID)
 			} else if (args[0]) {
-				let username = s.getSimpleString(msg.content.replace(/\s+/g, " ").match(/\S+ \S+ (.+)/)[1])
+				let username = s.getSimpleString(msgCommandOriginal.match(/\S+ (.+)/)[1])
 				let result
 				let usernameId
 				// проверка на айди
