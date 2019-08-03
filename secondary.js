@@ -37,11 +37,12 @@ export function getGuild(guildName, emojiName) {
 		return guildName
 	} else {
 		let guildId
-		let guildIdFull
+		let guildIdFound = false
 		client.guilds.forEach(key => {
 			if (guildName == getSimpleString(key.name)) {
-				guildIdFull = key.id
-			} else if (getSimpleString(key.name).startsWith(guildName)) {
+				guildId = key.id
+				guildIdFound = true
+			} else if (!guildIdFound && getSimpleString(key.name).startsWith(guildName)) {
 				if (emojiName) {
 					let currentGuildId = key.id
 					client.guilds.get(key.id).emojis.forEach(key => {
@@ -54,11 +55,7 @@ export function getGuild(guildName, emojiName) {
 				}
 			}
 		})
-		if (guildId || guildIdFull) {
-			return (guildIdFull) ? guildIdFull : guildId
-		} else {
-			return null
-		}
+		return guildId
 	}
 }
 export function findEmoji(emojiName, guildName) {
