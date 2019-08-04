@@ -198,7 +198,17 @@ export const commands = {
 			if (tagsRaw) {
 				imageTags = tagsRaw.toLowerCase().replace(/^\s+/g, "").split(/[,;\s]+/)
 			}
+			let tagsToClean = []
+			for (let i in imageTags) {
+				let minusMatch = imageTags[i].match(/^-(.+)/)
+				if (minusMatch) {
+					tagsToClean.push(minusMatch[1])
+				}
+			}
 			imageTags.unshift("screenshot", "minecraft")
+			for (let i in tagsToClean) {
+				s.removeElementsByValue(imageTags, tagsToClean[i], `-${tagsToClean[i]}`)
+			}
 			let imageTagsText = imageTags.map(x=>'"'+x+'"').join(', ')
 		
 			let imageJSON = `\`\`\`json\n\t"${imageID}": {\n\t\t"title": "${imageTitle}",\n\t\t"date": "${(imageDate) ? imageDate : customDate}",\n\t\t"takenBy": "${(takenBy) ? takenBy : msg.author.username}",\n\t\t"big": true,\n\t\t"tags": [${imageTagsText}]\n\t},\n\`\`\``
