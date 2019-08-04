@@ -289,3 +289,6 @@ export function hsv2rgb([h, s, v]) {
         Math.round(b * 255)
     ];
 }
+export function trimPunc(str) {
+	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(]*$/)[1]
+}
