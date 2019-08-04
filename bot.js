@@ -1,8 +1,6 @@
-// подключаем модули
 import Discord from "discord.js"
 export const client = new Discord.Client()
 
-// переменные внешней среды
 import dotenv from "dotenv"
 dotenv.config()
 const TOKEN = process.env.BOT_TOKEN
@@ -27,7 +25,6 @@ import {simpleAnswers} from "./simpleAnswers"
 export let visibleServers = []
 export let requestsCounter = 0
 
-// что делать в ответ на сообщение
 function processMessage(msg) {
 
 	// для логов
@@ -107,8 +104,6 @@ function processMessage(msg) {
 	args.unshift(cmd)
 	s.autoreact(msg, args, true)
 }
-
-// действия непосредственно после запуска бота
 client.on('ready', () => {
 
 	// для логов
@@ -248,7 +243,6 @@ client.on('guildMemberRemove', member => {
 	}
 })
 
-// подключение к Дискорду
 function login() {
     client.login(TOKEN).catch(() => setTimeout(login, 5000))
 }
