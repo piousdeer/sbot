@@ -182,17 +182,17 @@ export const commands = {
 			try {
 				let dateMatch = imageNote.match(dateRE)
 				imageNote = imageNote.split(dateMatch[0]).join(" ")
-				customDate = dateMatch[0].trim()
+				customDate = dateMatch[0].trim().replace(/[_\.\/\\]/g, "-")
 			} catch (err) {}
 
 			try {
 				let takenByMatch = imageNote.match(takenByRE)
 				imageNote = imageNote.split(takenByMatch[0]).join(" ")
-				takenBy = takenByMatch[1].trim()
+				takenBy = s.trimPunc(takenByMatch[1])
 			} catch (err) {}
 
-			imageTitle = imageNote.split(tagsRE)[0].trim()
-			tagsRaw = imageNote.split(tagsRE)[1].trim()
+			imageTitle = s.trimPunc(imageNote.split(tagsRE)[0])
+			tagsRaw = s.trimPunc(imageNote.split(tagsRE)[1])
 
 			let imageTags = []
 			if (tagsRaw) {
