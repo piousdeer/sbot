@@ -300,5 +300,5 @@ export function hsv2rgb([h, s, v]) {
     ];
 }
 export function trimPunc(str) {
-	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(]*$/)[1]
+	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(\)]*$/)[1]
 }
