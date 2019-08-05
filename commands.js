@@ -191,8 +191,11 @@ export const commands = {
 				takenBy = s.trimPunc(takenByMatch[1])
 			} catch (err) {}
 
+			try {
+				tagsRaw = s.trimPunc(imageNote.split(tagsRE)[1])
+			} catch (err) {}
+
 			imageTitle = s.trimPunc(imageNote.split(tagsRE)[0])
-			tagsRaw = s.trimPunc(imageNote.split(tagsRE)[1])
 
 			let imageTags = []
 			if (tagsRaw) {
