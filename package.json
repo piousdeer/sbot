@@ -1,6 +1,6 @@
 {
   "name": "sbot",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "scripts": {
     "start": "ts-node -r esm bot.js"
   },
