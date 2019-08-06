@@ -82,7 +82,7 @@ function processMessage(msg) {
 	for (let i in commands) {
 		if (cmd.match(commands[i].r)) {
 			if (commands[i].v && !s.isThisBotsChannel(msg)) {
-				msg.react(client.emojis.get("608267904139657216"))
+				msg.react("#⃣")
 					.then(() => {
 						msg.react("🤖")
 					})
