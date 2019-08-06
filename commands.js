@@ -11,6 +11,7 @@ import skmeans from "skmeans"
 export const commands = {
 	Help: {
 		r: /^(рудз|х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
+		v: true,
 		f (msg) {
 			if (!s.isThisBotsChannel(msg)) {
 				msg.react("🤖")
@@ -81,6 +82,7 @@ export const commands = {
 	},
 	Img: {
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
+		v: true,
 		async f (msg, args) {
 			// do not spam by pictures
 			if (!s.isThisBotsChannel(msg) && msg.channel.id != "519609441109147655") {
@@ -231,6 +233,7 @@ export const commands = {
 	},
 	EmojiList: {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
+		v: true,
 		f (msg, args, msgCommandOriginal, usedArrowButton) {
 			if (!s.isThisBotsChannel(msg)) {
 				msg.react("🤖")
@@ -340,6 +343,7 @@ export const commands = {
 	},
 	Sticker: {
 		r: /^(с(тикер)?|sticker|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
+		v: true,
 		f (msg, args) {
 			if (!s.isThisBotsChannel(msg)) {
 				msg.react("🤖")
@@ -421,6 +425,7 @@ export const commands = {
 	},
 	Avatar: {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
+		v: true,
 		f (msg, args, msgCommandOriginal) {
 			// do not spam by pictures
 			if (!s.isThisBotsChannel(msg)) {
@@ -558,6 +563,7 @@ export const commands = {
 	},
 	Homestuck: {
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
+		v: true,
 		async f (msg, args, msgCommandOriginal, usedArrowButton) {
 			if (!s.isThisBotsChannel(msg)) {
 				msg.react("🤖")
@@ -762,6 +768,7 @@ export const commands = {
 	},
 	When: {
 		r: /^(когда)[.!]?$/,
+		v: true,
 		f (msg, args, msgCommandOriginal) {
 			if (!args[0]) {
 				return
@@ -808,6 +815,7 @@ export const commands = {
 	},
 	IronDoor: {
 		r: /^(железнаядверь|жд)[.!]?$/,
+		v: true,
 		f (msg, args) {
 			if (!args[0]) {
 				return
