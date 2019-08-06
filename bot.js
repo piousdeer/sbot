@@ -81,7 +81,15 @@ function processMessage(msg) {
 	// ищем команду в регулярках
 	for (let i in commands) {
 		if (cmd.match(commands[i].r)) {
-			commands[i].f(msg, args, msgCommandOriginal)
+			if (commands[i].v && !s.isThisBotsChannel(msg)) {
+				msg.react(client.emojis.get("608267904139657216"))
+					.then(() => {
+						msg.react("🤖")
+					})
+					.catch(error => console.log(error))
+			} else {
+				commands[i].f(msg, args, msgCommandOriginal)
+			}
 			return
 		}
 	}
