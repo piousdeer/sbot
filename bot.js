@@ -98,7 +98,7 @@ function processMessage(msg) {
 	for (let i of simpleAnswers) {
 		if (msgCommand.match(i.r)) {
 			if (i.e) {
-				msg.react(i.e)
+				msg.react(s.getRandomElem(i.e))
 			} else if (i.t) {
 				msg.channel.send(s.getRandomElem(i.t))
 			}
