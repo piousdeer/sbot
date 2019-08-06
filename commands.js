@@ -13,11 +13,6 @@ export const commands = {
 		r: /^(рудз|х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
 		v: true,
 		f (msg) {
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
-				return
-			}
-		
 			const helpLines = [
 				"Чтобы спросить что-либо, обратись ко мне по имени и введи команду.",
 				"Например: `сбот имг креатив намия` (в лс можно без обращения)",
@@ -84,12 +79,6 @@ export const commands = {
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
 		v: true,
 		async f (msg, args) {
-			// do not spam by pictures
-			if (!s.isThisBotsChannel(msg) && msg.channel.id != "519609441109147655") {
-				msg.react("🤖")
-				return
-			}
-		
 			let argsText = ""
 		
 			if (args.length > 0) {
@@ -235,11 +224,6 @@ export const commands = {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
 		v: true,
 		f (msg, args, msgCommandOriginal, usedArrowButton) {
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
-				return
-			}
-		
 			let fromWhichServer = client.guilds.get("540145900526501899")
 			let askedServer = s.getGuild(args[0])
 		
@@ -345,11 +329,6 @@ export const commands = {
 		r: /^(с(тикер)?|sticker|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
 		v: true,
 		f (msg, args) {
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
-				return
-			}
-		
 			if (!args[0]) {
 				msg.react("📜")
 				return
@@ -427,11 +406,6 @@ export const commands = {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
 		v: true,
 		f (msg, args, msgCommandOriginal) {
-			// do not spam by pictures
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
-				return
-			}
 			let user
 			if (args[0] == "random") {
 				user = client.users.filter(u => u.avatar).random()
@@ -565,11 +539,6 @@ export const commands = {
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
 		v: true,
 		async f (msg, args, msgCommandOriginal, usedArrowButton) {
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
-				return
-			}
-		
 			let page_number
 		
 			if (args[0]) {
@@ -773,10 +742,6 @@ export const commands = {
 			if (!args[0]) {
 				return
 			}
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
-				return
-			}
 		
 			let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
 			let question = s.getSimpleString(questionOriginal)
@@ -818,10 +783,6 @@ export const commands = {
 		v: true,
 		f (msg, args) {
 			if (!args[0]) {
-				return
-			}
-			if (!s.isThisBotsChannel(msg)) {
-				msg.react("🤖")
 				return
 			}
 		
