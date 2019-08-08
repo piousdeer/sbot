@@ -63,6 +63,7 @@ export const commands = {
 	},
 	Ping: {
 		r: /^(пинг|ping)[.!]?$/,
+		v: true,
 		f (msg) {
 			let pongText = "🏓 Понг!"
 			msg.channel.send(pongText)
@@ -693,6 +694,7 @@ export const commands = {
 	},
 	Stats: {
 		r: /^(stats|статы|статистика|гз|ап(тайм)?|up(time)?)[.!]?$/,
+		v: true,
 		f (msg) {
 			let diff = Date.now() - readyTime
 			let tarr = [1000, 60, 60, 24]
@@ -834,6 +836,7 @@ export const commands = {
 	},
 	Three: {
 		r: /^-?(\d)[.!]?$/,
+		v: true,
 		f (msg, args, msgCommandOriginal) {
 			if (!args[0]) {
 				return
