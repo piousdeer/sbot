@@ -24,11 +24,13 @@ export const simpleAnswers = [
 		t: ["Я – просто скрипт."]
 	},
 	{
-		r: /^(мне ску[чшщ]н[оа]|развлеки меня)/,
+		r: /^((мне )?ску[чшщ]н[оа])/,
 		t: [
 			"Придумай какую-нибудь игру и закодь бота для неё.\nhttps://discordapp.com/developers/applications/",
 			"Как насчёт выучить новый язык?\nhttps://invite.duolingo.com/BDHTZTB5CWWKTTJB3BBQBELDDY",
-			"Заходи к нам в Дискорд!\nhttps://discord.gg/2VP7h4f"
+			"Посмотри Revolution OS https://youtu.be/n1F_MfLRlX0?t=394",
+			"Посмотри Коносубу",
+			"Посмотри Жожу"
 		]
 	}
 ]
