@@ -123,9 +123,9 @@ client.on('ready', () => {
 	let readyTimeString = new Date(readyTime).toLocaleString("ru", Object.assign(dateOptions, timeOptions))
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
-	client.user.setPresence({game: {name: "sb help", type: 0}})
+	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
 	BOT_ID = client.user.id
-	BOT_PREFIX = new RegExp(`^(?:[сcs][бb6]|сбот|стилл?бот|sbot|still?bot|<@\!?${BOT_ID}>),?$`)
+	BOT_PREFIX = new RegExp(`^(?:${process.env.ACCEPTABLE_BOT_NICKNAME}|<@\!?${BOT_ID}>),?$`)
 
 	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
