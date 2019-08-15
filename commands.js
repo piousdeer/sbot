@@ -511,6 +511,7 @@ export const commands = {
 		v: true,
 		async f (msg, args, msgCommandOriginal, usedArrowButton) {
 			let page_number
+			let contentText = ""
 		
 			if (args[0]) {
 				if (Number(args[0]) >= 1 && Number(args[0]) <= 8130) {
@@ -571,7 +572,8 @@ export const commands = {
 		
 				if (is_there_video) {
 					// send title, desc and video link
-					s.showHomestuckPage(msg, {}, usedArrowButton, comic_number + "\n" + yt_link)
+					comic_embed = {}
+					contentText = comic_number + "\n" + yt_link
 				} else {
 					// getting title
 					let comic_title = $('h2.type-hs-header').text()
@@ -630,14 +632,33 @@ export const commands = {
 						// send title and footer
 						comic_embed.footer = {text: "It's probably interactive."}
 					}
-					s.showHomestuckPage(msg, comic_embed, usedArrowButton, "")
 				}
 			} catch (err) {
 				if (err.statusCode === 404) {
 					comic_embed.footer = {text: "It's probably missing page."}
-					s.showHomestuckPage(msg, comic_embed, usedArrowButton, "")
 				}
 			}
+			
+			let embed = {embed: comic_embed}
+			if (usedArrowButton) {
+				if (contentText) {
+					msg.edit(contentText, embed)
+				} else {
+					msg.edit(embed)
+				}
+			} else {
+				let contentToSend = (contentText) ? contentText : embed
+				msg.channel.send(contentToSend)
+					.then((msg) => {
+						msg.react("⬅")
+							.then(() => {
+								msg.react("➡")
+							})
+							.catch(error => console.log(error))
+					})
+					.catch(error => console.log(error))
+			}
+
 		}
 	},
 	SnowflakeTime: {

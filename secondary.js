@@ -194,27 +194,6 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		return false
 	}
 }
-export function showHomestuckPage(msg, comic_embed, usedArrowButton, contentText) {
-	let embed = {embed: comic_embed}
-	if (usedArrowButton) {
-		if (contentText) {
-			msg.edit(contentText, embed)
-		} else {
-			msg.edit(embed)
-		}
-	} else {
-		let contentToSend = (contentText) ? contentText : embed
-		msg.channel.send(contentToSend)
-			.then((msg) => {
-				msg.react("⬅")
-					.then(() => {
-						msg.react("➡")
-					})
-					.catch(error => console.log(error))
-			})
-			.catch(error => console.log(error))
-	}
-}
 
 // special methods
 
