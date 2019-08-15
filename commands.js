@@ -330,7 +330,7 @@ export const commands = {
 	Sticker: {
 		r: /^(с(тикер)?|sticker|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
 		v: true,
-		f (msg, args) {
+		async f (msg, args) {
 			if (!args[0]) {
 				msg.react("📜")
 				return
@@ -355,14 +355,19 @@ export const commands = {
 				msg.react("604015450304806952")
 				return
 			}
-		
-			msg.channel.send({
-				embed: {
-					description: `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}> – ${emoji.name}`, 
-					image: {
-						url: `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? "gif" : "png"}`
+
+			let imageLink = `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? "gif" : "png"}`
+
+			await s.getMainColorFromImage(imageLink, color => {
+				msg.channel.send({
+					embed: {
+						color: color,
+						description: `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}> – ${emoji.name}`, 
+						image: {
+							url: imageLink
+						}
 					}
-				}
+				})
 			})
 		}
 	},
