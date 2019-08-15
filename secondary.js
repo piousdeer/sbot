@@ -307,7 +307,6 @@ export function trimPunc(str) {
 export async function getMainColorFromImage(link, callback) {
 	let dataset = []
 	try {
-		let startTime = Date.now()
 		jimp.read(link)
 			.then(image => {
 				if (image.bitmap.width > 160) {
@@ -318,8 +317,6 @@ export async function getMainColorFromImage(link, callback) {
 					dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
 
 					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
-						let diff = Date.now() - startTime
-
 						let centroids = skmeans(dataset, 10, "kmpp", 100).centroids
 						let hsvColors = []
 						for (let i = 0; i < centroids.length; i++) {
@@ -333,7 +330,6 @@ export async function getMainColorFromImage(link, callback) {
 						let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
 
 						if (callback) {
-							console.log(diff/1000)
 							callback(color)
 						}
 					}
