@@ -304,17 +304,15 @@ export function hsv2rgb([h, s, v]) {
 export function trimPunc(str) {
 	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(\)]*$/)[1]
 }
-export function getMainColorFromImage(link, callback) {
-	let color
+export async function getMainColorFromImage(link, callback) {
 	let dataset = []
 	try {
+		let startTime = Date.now()
 		jimp.read(link)
 			.then(image => {
-				if (image.bitmap.width > 128) {
-					image.resize(128,jimp.AUTO)
+				if (image.bitmap.width > 160) {
+					image.resize(160,jimp.AUTO)
 				}
-				
-				let startTime = Date.now()
 
 				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
 					dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
@@ -335,6 +333,7 @@ export function getMainColorFromImage(link, callback) {
 						let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
 
 						if (callback) {
+							console.log(diff/1000)
 							callback(color)
 						}
 					}
@@ -342,7 +341,6 @@ export function getMainColorFromImage(link, callback) {
 			})
 			.catch(err => {
 				console.log(err)
-				msg.channel.send("Что-то пошло не так...")
 			})
 	} catch (err) {
 		console.log(err)

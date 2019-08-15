@@ -90,20 +90,23 @@ export const commands = {
 				if (imageInfo.error) throw Error(imageInfo.error)
 			
 				let imageExtension = imageInfo.tags.includes("gif") ? "gif" : "png"
-				await msg.channel.send({
-					embed: {
-						color: 0x7486C2,
-						author: {
-							name: imageInfo.title,
-							icon_url: "https://i.imgur.com/5EOhj0z.png",
-							url: `https://stilltest.tk/gallery/#${imageInfo.id}`
-						},
-						description: `Теги: ${imageInfo.tags.join(", ")}`
-							+ (imageInfo.date ? `\nДата: ${imageInfo.date}` : ""),
-						image: {
-							url: `https://i.imgur.com/${imageInfo.id}.${imageExtension}`
+				let imagePreview = `https://i.imgur.com/${imageInfo.id}t.jpg`
+				await s.getMainColorFromImage(imagePreview, color => {
+					msg.channel.send({
+						embed: {
+							color: color,
+							author: {
+								name: imageInfo.title,
+								icon_url: "https://i.imgur.com/5EOhj0z.png",
+								url: `https://stilltest.tk/gallery/#${imageInfo.id}`
+							},
+							description: `Теги: ${imageInfo.tags.join(", ")}`
+								+ (imageInfo.date ? `\nДата: ${imageInfo.date}` : ""),
+							image: {
+								url: `https://i.imgur.com/${imageInfo.id}.${imageExtension}`
+							}
 						}
-					}
+					})
 				})
 			} catch (err) {
 				await msg.react("604015450304806952")
@@ -404,7 +407,7 @@ export const commands = {
 	Avatar: {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
 		v: true,
-		f (msg, args, msgCommandOriginal) {
+		async f (msg, args, msgCommandOriginal) {
 			let user
 			if (args[0] == "random") {
 				user = client.users.filter(u => u.avatar).random()
@@ -476,7 +479,7 @@ export const commands = {
 			// k-means clusterization part
 			let link = user.avatarURL.split("?size=")[0] + "?size=128"
 
-			s.getMainColorFromImage(link, color => {
+			await s.getMainColorFromImage(link, color => {
 				msg.channel.send({embed: {
 					color: color, 
 					description: user.tag, 
