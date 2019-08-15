@@ -26,7 +26,7 @@ export let requestsCounter = 0
 let userDB = {}
 const floodRate = 5 * 1000; 
 const floodMax = 20 * 1000; 
-const floodChillsMax = 3;
+const floodChillsMax = 2;
 
 function processMessage(msg) {
 
@@ -101,7 +101,7 @@ function processMessage(msg) {
 	}
 	if (score > floodMax) {
 		if (udata.fchills == floodChillsMax - 1) {
-			console.log(`${msg.author.tag} пишет много сообщений!`)
+			console.log(`${msg.author.tag} is flooding now!!`)
 			msg.channel.send(s.getRandomElem([
 				"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
 				"Дудос проведён успешно! <:sho:355426437639176194>",
