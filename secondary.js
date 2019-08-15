@@ -2,6 +2,8 @@ import {client} from "./bot"
 import {botsChannels} from "./config"
 
 import got from "got"
+import jimp from "jimp"
+import skmeans from "skmeans"
 
 let timeoutForAutoReact
 let whoNeedsToReactToSomething = {}
@@ -301,4 +303,48 @@ export function hsv2rgb([h, s, v]) {
 }
 export function trimPunc(str) {
 	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(\)]*$/)[1]
+}
+export function getMainColorFromImage(link, callback) {
+	let color
+	let dataset = []
+	try {
+		jimp.read(link)
+			.then(image => {
+				if (image.bitmap.width > 128) {
+					image.resize(128,jimp.AUTO)
+				}
+				
+				let startTime = Date.now()
+
+				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
+					dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
+
+					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
+						let diff = Date.now() - startTime
+
+						let centroids = skmeans(dataset, 10, "kmpp", 100).centroids
+						let hsvColors = []
+						for (let i = 0; i < centroids.length; i++) {
+							hsvColors.push(rgb2hsv(centroids[i]))
+						}
+						hsvColors.sort((a, b) => {
+							return (b[1]+0.01)*b[2]*b[2] - (a[1]+0.01)*a[2]*a[2]
+						})
+
+						let colorRGB = hsv2rgb(hsvColors[0])
+						let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
+
+						if (callback) {
+							callback(color)
+						}
+					}
+				})
+			})
+			.catch(err => {
+				console.log(err)
+				msg.channel.send("Что-то пошло не так...")
+			})
+	} catch (err) {
+		console.log(err)
+	}
 }

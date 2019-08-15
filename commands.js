@@ -5,8 +5,6 @@ import {imgDatabaseURL} from "./config"
 import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
-import jimp from "jimp"
-import skmeans from "skmeans"
 
 export const commands = {
 	Help: {
@@ -477,53 +475,17 @@ export const commands = {
 		
 			// k-means clusterization part
 			let link = user.avatarURL.split("?size=")[0] + "?size=128"
-		
-			let dataset = []
-			
-			try {
-				jimp.read(link)
-					.then(image => {
-						if (image.bitmap.width > 128) {
-							image.resize(128,jimp.AUTO)
-						}
-						
-						let startTime = Date.now()
-		
-						image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
-							dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
-		
-							if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
-								let diff = Date.now() - startTime
-		
-								let centroids = skmeans(dataset, 10, "kmpp", 100).centroids
-								let hsvColors = []
-								for (let i = 0; i < centroids.length; i++) {
-									hsvColors.push(s.rgb2hsv(centroids[i]))
-								}
-								hsvColors.sort((a, b) => {
-									return (b[1]+0.01)*b[2]*b[2] - (a[1]+0.01)*a[2]*a[2]
-								})
-		
-								let colorRGB = s.hsv2rgb(hsvColors[0])
-								let color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
-		
-								msg.channel.send({embed: {
-									color: color, 
-									description: user.tag, 
-									image: {
-										url: fullSizeLink
-									}
-								}})
-							}
-						})
-					})
-					.catch(err => {
-						console.log(err)
-						msg.channel.send("Что-то пошло не так...")
-					})
-			} catch (err) {
-				console.log(err)
-			}
+
+			s.getMainColorFromImage(link, color => {
+				msg.channel.send({embed: {
+					color: color, 
+					description: user.tag, 
+					image: {
+						url: fullSizeLink
+					}
+				}})
+			})
+
 		}
 	},
 	Invite: {
