@@ -23,6 +23,11 @@ export const readyTime = Date.now()
 export let visibleServers = []
 export let requestsCounter = 0
 
+let userDB = {}
+const floodRate = 5 * 1000; 
+const floodMax = 20 * 1000; 
+const floodChillsMax = 3;
+
 function processMessage(msg) {
 
 	// для логов
@@ -69,6 +74,50 @@ function processMessage(msg) {
 	} else {
 		return
 	}
+
+
+	// antiflood system by PLAYER_CHAR
+	const now = Date.now()
+	const uid = msg.author.id
+	
+	if (!userDB[uid]) {
+		userDB[uid] = {
+			ftime: -Infinity, // таймстемп ожидания флуда
+			fchills: 0, // предупреждений за текущий акт флуда
+		}
+	}
+	const udata = userDB[uid]
+	
+	let score = udata.ftime - now
+	if (score < 0) {
+		udata.fchills = 0
+		score = 0
+	}
+	score += floodRate
+	udata.ftime = now + score
+	
+	if (udata.fchills >= floodChillsMax) {
+		return
+	}
+	if (score > floodMax) {
+		if (udata.fchills == floodChillsMax - 1) {
+			console.log(`${msg.author.tag} пишет много сообщений!`)
+			msg.channel.send(s.getRandomElem([
+				"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
+				"Дудос проведён успешно! <:sho:355426437639176194>",
+				"CPU usage 🔥 JUMPS 📈 to 100% \n❄ Initiating cooling system... ❄"
+			]))
+		} else {
+			msg.channel.send(s.getRandomElem([
+				"Постой! Не так быстро.",
+				"no flood allowed here",
+				"<:cracker:357960229259837440> <:SPAM:533333156644913152>"
+			]))
+		}
+		udata.fchills++
+		return
+	}
+
 
 	// если всё ок, продолжаем...
 	requestsCounter++
