@@ -199,8 +199,8 @@ client.on('ready', () => {
 })
 client.on('message', msg => {
 	if (msg.author.id == BOT_ID) return
-	// processMessage(msg)
-	setTimeout(processMessage, 50, msg)
+	processMessage(msg)
+	// setTimeout(processMessage, 50, msg)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
