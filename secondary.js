@@ -293,7 +293,11 @@ export async function getMainColorFromImage(link, callback) {
 				}
 
 				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
-					dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
+					if (this.bitmap.data[idx + 3] > 64) {
+						dataset[idx/4] = [this.bitmap.data[idx + 0], this.bitmap.data[idx + 1], this.bitmap.data[idx + 2]]
+					} else {
+						dataset[idx/4] = [0, 0, 0]
+					}
 
 					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
 						let centroids = skmeans(dataset, 10, "kmpp", 100).centroids

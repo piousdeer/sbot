@@ -481,7 +481,6 @@ export const commands = {
 		
 			let fullSizeLink = user.avatarURL.split("?size=")[0] + "?size=2048"
 		
-			// k-means clusterization part
 			let link = user.avatarURL.split("?size=")[0] + "?size=128"
 
 			await s.getMainColorFromImage(link, color => {
