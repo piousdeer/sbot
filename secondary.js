@@ -12,7 +12,7 @@ let whichGuildThisUserMeans = {}
 // general methods
 
 export function sentLog(msg, text, options) {
-	console.log(`${(new Date).toLocaleString("ru", options)} <${msg.author.tag}> ${text}`)
+	console.log(`${msg.channel.id} | ${(new Date).toLocaleString("ru", options)} <${msg.author.tag}> ${text}`)
 }
 export function getRandomElem(arr) {
 	return arr[Math.floor(arr.length*Math.random())]
