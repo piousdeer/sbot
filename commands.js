@@ -60,7 +60,7 @@ export const commands = {
 		}
 	},
 	Ping: {
-		r: /^(пинг|ping)[.!]?$/,
+		r: /^(зштп|пинг|ping)[.!]?$/,
 		v: true,
 		f (msg) {
 			let pongText = "🏓 Понг!"
