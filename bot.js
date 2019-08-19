@@ -199,10 +199,11 @@ client.on('ready', () => {
 
 })
 client.on('message', msg => {
-	if (msg.author.id == BOT_ID) return
+	if (msg.author.bot) return
 	processMessage(msg)
 	messagesCounter++
-	if (messagesCounter % 10 == 0) console.log(`messages: ${messagesCounter}`)
+	let uselessMessages = messagesCounter - requestsCounter
+	if (uselessMessages % 3 == 0) console.log({uselessMessages})
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
