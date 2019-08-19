@@ -22,6 +22,7 @@ import {timeOptions} from "./config"
 export const readyTime = Date.now()
 export let visibleServers = []
 export let requestsCounter = 0
+export let messagesCounter = 0
 
 let userDB = {}
 const floodRate = 5 * 1000; 
@@ -200,7 +201,8 @@ client.on('ready', () => {
 client.on('message', msg => {
 	if (msg.author.id == BOT_ID) return
 	processMessage(msg)
-	// setTimeout(processMessage, 50, msg)
+	messagesCounter++
+	if (messagesCounter % 10 == 0) console.log(`messages: ${messagesCounter}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
