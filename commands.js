@@ -207,7 +207,7 @@ export const commands = {
 			}
 			let imageTagsText = imageTags.map(x=>'"'+x+'"').join(', ')
 		
-			let imageJSON = `\`\`\`json\n\t"${imageID}": {\n\t\t"title": "${imageTitle}",\n\t\t"date": "${(imageDate) ? imageDate : customDate}",\n\t\t"takenBy": "${(takenBy) ? takenBy : msg.author.username}",\n\t\t"big": true,\n\t\t"tags": [${imageTagsText}]\n\t},\n\`\`\``
+			let imageJSON = `\`\`\`json\n\t"${imageID}": {\n\t\t"title": ${JSON.stringify(imageTitle)},\n\t\t"date": "${(imageDate) ? imageDate : customDate}",\n\t\t"takenBy": "${(takenBy) ? takenBy : msg.author.username}",\n\t\t"big": true,\n\t\t"tags": [${imageTagsText}]\n\t},\n\`\`\``
 		
 			client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + discordLink + imageLink + "\n" + imageJSON)
 				.then(() => {
