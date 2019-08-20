@@ -203,7 +203,7 @@ client.on('message', msg => {
 	processMessage(msg)
 	messagesCounter++
 	let uselessMessages = messagesCounter - requestsCounter
-	if (uselessMessages % 3 == 0) console.log({uselessMessages})
+	if (uselessMessages % 100 == 0) console.log({uselessMessages})
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
