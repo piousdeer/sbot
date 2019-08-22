@@ -19,7 +19,6 @@ import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
 import {timeOptions, dateOptions} from "./config"
 
-export let readyTime
 export let visibleServers = []
 export let requestsCounter = 0
 export let messagesCounter = 0
@@ -156,8 +155,6 @@ function processMessage(msg) {
 }
 client.on('ready', () => {
 
-	readyTime = Date.now()
-
 	// для логов
 	let dateOptions = {
 		weekday: "long",
@@ -166,7 +163,7 @@ client.on('ready', () => {
 		day: "numeric"
 	}
 
-	let readyTimeString = new Date(readyTime).toLocaleString("ru", Object.assign(dateOptions, timeOptions))
+	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("ru", Object.assign(dateOptions, timeOptions))
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
 	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})

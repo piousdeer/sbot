@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, readyTime, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
+import {client, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
 import {imgDatabaseURL} from "./config"
 
 import got from "got"
@@ -701,7 +701,7 @@ export const commands = {
 		r: /^(stats|статы|статистика|гз|ап(тайм)?|up(time)?)[.!]?$/,
 		v: true,
 		f (msg) {
-			let diff = Date.now() - readyTime
+			let diff = Date.now() - client.readyTimestamp
 			let tarr = [1000, 60, 60, 24]
 			for (let i in tarr) {
 				let x = tarr[i]
