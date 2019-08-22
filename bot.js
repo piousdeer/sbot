@@ -260,12 +260,14 @@ client.on('guildCreate', (guild) => {
 	if (guild.emojis.size) {
 		visibleServers.push(guild.id)
 	}
+	console.log(`Bot was added to ${guild.name} (${guild.id})`)
 })
 client.on('guildDelete', (guild) => {
 	let index = visibleServers.indexOf(guild.id)
 	if (index) {
 		visibleServers.splice(index, 1)
 	}
+	console.log(`Bot was kicked from ${guild.name} (${guild.id})`)
 })
 client.on('guildMemberAdd', member => {
 	if (member.guild.id == "540145900526501899") {
