@@ -202,8 +202,8 @@ client.on('message', msg => {
 	if (msg.author.bot) return
 	processMessage(msg)
 	messagesCounter++
-	let uselessMessages = messagesCounter - requestsCounter
-	if (uselessMessages % 100 == 0) console.log({uselessMessages})
+	let um = messagesCounter - requestsCounter
+	if (um % 100 == 0) console.log(`| ${(new Date).toLocaleString("ru", timeOptions)} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
