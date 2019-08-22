@@ -74,6 +74,21 @@ export const commands = {
 				.catch(error => console.log(error))
 		}
 	},
+	Destroy: {
+		r: /^(дестрой)[.!]?$/,
+		v: true,
+		f (msg) {
+			if (msg.author.id == OWNER_ID) {
+				console.log("Destroying client...")
+				msg.author.send("🛌 🌌").then(() => {
+					client.destroy().then(() => {
+						console.log("Exiting process...")
+						process.exit()
+					})
+				})
+			}
+		}
+	},
 	Img: {
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
 		v: true,
