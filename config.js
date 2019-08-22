@@ -4,6 +4,10 @@ export const timeOptions = {
 	hour12: false,
 	timeZone: "Europe/Moscow"
 }
+export let dateOptions = {
+	month: "2-digit",
+	day: "2-digit"
+}
 export const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 export const botsChannels = [
 	{

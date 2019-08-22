@@ -17,7 +17,7 @@ if (!(TOKEN && OWNER_ID)) {
 import * as s from "./secondary"
 import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
-import {timeOptions} from "./config"
+import {timeOptions, dateOptions} from "./config"
 
 export const readyTime = Date.now()
 export let visibleServers = []
@@ -30,12 +30,6 @@ const floodMax = 20 * 1000;
 const floodChillsMax = 2;
 
 function processMessage(msg) {
-
-	// для логов
-	let dateOptions = {
-		month: "2-digit",
-		day: "2-digit"
-	}
 
 	// если юзер отправил в лс картинку-аттачмент
 	let isSentImageHere = false
@@ -203,7 +197,7 @@ client.on('message', msg => {
 	processMessage(msg)
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
-	if (um % 100 == 0) console.log(`| ${(new Date).toLocaleString("ru", timeOptions)} | Useless messages: ${um}`)
+	if (um % 100 == 0) console.log(`| ${(new Date).toLocaleString("ru", Object.assign(dateOptions, timeOptions))} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
