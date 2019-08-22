@@ -723,20 +723,15 @@ export const commands = {
 				}
 				sarr.push(tarr[i] + ' ' + s.pluralize(tarr[i], warr[i]))
 			}
-			let uptimeResult = "Я работаю уже " + sarr.join(', ') + '.'
-		
-			const statsLines = [
-				uptimeResult,
-				"",
-				"Серверов: " + client.guilds.size,
-				"Эмоджи: " + client.emojis.size,
-				"Запросов за эту сессию: " + requestsCounter
-			]
+			let uptimeResult = `Я работаю уже ${sarr.join(', ')}.`
 		
 			const statsEmbed = {
 				color: 0x888888,
 				title: "Статистика",
-				description: statsLines.join("\n")
+				description: uptimeResult,
+				footer: {
+					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size}`
+				}
 			}
 		
 			msg.channel.send({embed: statsEmbed})

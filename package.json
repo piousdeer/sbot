@@ -2,7 +2,7 @@
   "name": "sbot",
   "version": "1.5.24",
   "scripts": {
-    "start": "ts-node -r esm bot.js"
+    "start": "node -r esm bot.js"
   },
   "dependencies": {
     "@types/node": "^12.6.9",
