@@ -19,7 +19,7 @@ import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
 import {timeOptions, dateOptions} from "./config"
 
-export const readyTime = Date.now()
+export let readyTime
 export let visibleServers = []
 export let requestsCounter = 0
 export let messagesCounter = 0
@@ -155,6 +155,8 @@ function processMessage(msg) {
 	s.autoreact(msg, args, true)
 }
 client.on('ready', () => {
+
+	readyTime = Date.now()
 
 	// для логов
 	let dateOptions = {

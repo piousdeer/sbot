@@ -69,7 +69,7 @@ export const commands = {
 					let userTime = msg.createdTimestamp / 1000
 					let botTime = pong.createdTimestamp / 1000
 					let pongTime = (botTime - userTime).toFixed(3)
-					pong.edit(pongText + " " + pongTime + " сек.")
+					pong.edit(`${pongText} ${pongTime} сек`)
 				})
 				.catch(error => console.log(error))
 		}
