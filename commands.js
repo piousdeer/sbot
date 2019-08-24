@@ -734,7 +734,7 @@ export const commands = {
 				title: "Статистика",
 				description: uptimeResult,
 				footer: {
-					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size}`
+					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size} | 👥 ${client.users.size}`
 				}
 			}
 		
