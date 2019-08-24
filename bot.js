@@ -196,7 +196,7 @@ client.on('message', msg => {
 	processMessage(msg)
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
-	if (um % 100 == 0) console.log(`| ${(new Date).toLocaleString("ru", Object.assign(dateOptions, timeOptions))} | Useless messages: ${um}`)
+	if (um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("ru", Object.assign(dateOptions, timeOptions))} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message

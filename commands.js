@@ -241,8 +241,10 @@ export const commands = {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
 		v: true,
 		f (msg, args, msgCommandOriginal, usedArrowButton) {
-			let fromWhichServer = client.guilds.get("540145900526501899")
+			let defaultGuildId = "540145900526501899"
+			let fromWhichServer = client.guilds.get(defaultGuildId)
 			let askedServer = s.getGuild(args[0])
+			let numberOfCurrentGuild = visibleServers.indexOf(defaultGuildId) + 1
 		
 			let goRight = false
 			let goLeft = false
@@ -270,6 +272,7 @@ export const commands = {
 						n = 0
 					}
 		
+					numberOfCurrentGuild = n + 1
 					fromWhichServer = client.guilds.get(visibleServers[n])
 				}
 			}
@@ -283,7 +286,10 @@ export const commands = {
 							name: "1-1:",
 							value: ""
 						}
-					]
+					],
+					footer: {
+						text: `📖 ${numberOfCurrentGuild}/${visibleServers.length}`
+					}
 				}
 		
 				let i = 0
