@@ -255,9 +255,11 @@ export const commands = {
 			} else if (askedServer) {
 				fromWhichServer = askedServer
 			}
+
+			let possiblePrevId = msg.content.match(/(\d{17,20})\`$/)
 		
-			if (usedArrowButton && msg.content.match(/\d{17,20}/g)) {
-				let prevServer = msg.content.match(/\d{17,20}/g)[0]
+			if (usedArrowButton && possiblePrevId) {
+				let prevServer = possiblePrevId[1]
 				let p = visibleServers.indexOf(prevServer)
 				if (p > -1) {
 					let n
