@@ -705,7 +705,7 @@ export const commands = {
 		r: /^(stats|статы|статистика|гз|ап(тайм)?|up(time)?)[.!]?$/,
 		v: true,
 		f (msg) {
-			let diff = Date.now() - client.readyTimestamp
+			let diff = client.uptime
 			let tarr = [1000, 60, 60, 24]
 			for (let i in tarr) {
 				let x = tarr[i]
