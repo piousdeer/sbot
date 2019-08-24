@@ -446,12 +446,7 @@ export const commands = {
 				let result
 				let usernameId
 				// проверка на айди
-				if (username.match(/^\d+$/g) && client.users.get(username)) {
-					await client.fetchUser(username).then(user => {
-						result = user
-					})
-				// проверка на призывалку
-				} else if (usernameId = username.match(/<@\!?(\d+)>/)) {
+				if (usernameId = username.match(/(?:<@\!?)?(\d+)>?/)) {
 					await client.fetchUser(usernameId[1]).then(user => {
 						result = user
 					})
