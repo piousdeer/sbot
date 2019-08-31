@@ -964,7 +964,9 @@ export const commands = {
 				await s.getMainColorFromImage(imagePreview, (color, palette) => {
 					let hexColors = []
 					for (let i = 0; i < palette.length; i++) {
-						hexColors.push(`#${palette[i].toString(16)}`)
+						let hex = palette[i].toString(16)
+						hex = (hex.length == 5) ? `0${hex}` : hex
+						hexColors.push(`#${hex}`)
 					}
 					msg.channel.send({
 						embed: {
