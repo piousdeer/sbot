@@ -6,6 +6,8 @@ import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
 
+const { createCanvas } = require('canvas')
+
 export const commands = {
 	Help: {
 		r: /^(рудз|х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
@@ -961,21 +963,38 @@ export const commands = {
 					w = Math.round(att.width / (att.height / max))
 				}
 				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+
 				await s.getMainColorFromImage(imagePreview, (color, palette) => {
 					let hexColors = []
+
+					let canvasW = 300
+					let canvasH = 20
+					let segmentW = Math.round(canvasW / palette.length)
+
+					const canvas = createCanvas(canvasW, canvasH)
+					const ctx = canvas.getContext('2d')
 					for (let i = 0; i < palette.length; i++) {
 						let hex = palette[i].toString(16)
 						hex = (hex.length == 5) ? `0${hex}` : hex
-						hexColors.push(`#${hex}`)
+						hex = `#${hex}`
+						hexColors.push(hex)
+						ctx.fillStyle = hex
+						ctx.fillRect(segmentW*i, 0, segmentW, canvasH)
 					}
+					const buf = canvas.toBuffer('image/jpeg', { quality: 0.9 })
+
 					msg.channel.send({
 						embed: {
 							color: color,
-							description: `${hexColors.join(" ")}`,
+							description: `\`${hexColors.join(" ")}\``,
 							image: {
 								url: imagePreview
 							}
-						}
+						},
+						files: [{
+							attachment: buf,
+							name: palette.jpg
+						}]
 					})
 				})
 			})
