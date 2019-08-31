@@ -30,20 +30,6 @@ const floodChillsMax = 2;
 
 function processMessage(msg) {
 
-	// если юзер отправил в лс картинку-аттачмент
-	let isSentImageHere = false
-	if (msg.channel.type == "dm" && !["палитра", "palette"].includes(msg.content)) {
-		msg.attachments.forEach(att => {
-			commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
-			isSentImageHere = true
-		})
-	}
-	if (isSentImageHere) {
-		requestsCounter++
-		s.sentLog(msg, msg.cleanContent, Object.assign(dateOptions, timeOptions))
-		return
-	}
-
 	// обработка сообщения
 	let componentsOriginal = msg.content.split(/\s+/)
 	let components = s.getSimpleString(msg.content).split(/\s+/)
@@ -64,6 +50,20 @@ function processMessage(msg) {
 			componentsOriginal.shift()
 			commands.Send.f(msg, null, `send ${url} ${componentsOriginal.join(" ")}`)
 			return
+		} else {
+			// если юзер отправил в лс картинку-аттачмент
+			let isSentImageHere = false
+			if (msg.channel.type == "dm" && !["палитра", "palette"].includes(msg.content)) {
+				msg.attachments.forEach(att => {
+					commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
+					isSentImageHere = true
+				})
+			}
+			if (isSentImageHere) {
+				requestsCounter++
+				s.sentLog(msg, msg.cleanContent, Object.assign(dateOptions, timeOptions))
+				return
+			}
 		}
 	} else {
 		return
