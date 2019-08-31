@@ -952,7 +952,7 @@ export const commands = {
 		}
 	},
 	Palette: {
-		r: /^(цвет|палитра|color|palette)[.!]?$/,
+		r: /^(палитра|palette)[.!]?$/,
 		v: true,
 		async f (msg) {
 			msg.attachments.forEach(async (att) => {
