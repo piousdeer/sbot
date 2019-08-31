@@ -94,12 +94,9 @@ function processMessage(msg) {
 		componentsOriginal.shift()
 		components.shift()
 	}
-	if (components[0].match(BOT_PREFIX) && components.length > 1) {
+	if (components.length) {
 		msgCommandOriginal = componentsOriginal.join(" ")
 		msgCommand = components.join(" ")
-	} else if (msg.channel.type != "text") {
-		msgCommandOriginal = msg.content.replace(/\s+/g, " ")
-		msgCommand = s.getSimpleString(msg.content)
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
 			let url = componentsOriginal[0]
 			componentsOriginal.shift()
