@@ -19,6 +19,7 @@ import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
 import {timeOptions, dateOptions} from "./config"
 
+export let logDateOptions = Object.assign(dateOptions, timeOptions)
 export let visibleServers = []
 export let requestsCounter = 0
 export let messagesCounter = 0
@@ -71,7 +72,7 @@ function processMessage(msg) {
 			}
 			if (isSentImageHere) {
 				requestsCounter++
-				s.sentLog(msg, msg.cleanContent, Object.assign(dateOptions, timeOptions))
+				s.sentLog(msg, msg.cleanContent, logDateOptions)
 				return
 			}
 		}
@@ -105,7 +106,7 @@ function processMessage(msg) {
 	}
 	if (score > floodMax) {
 		if (udata.fchills == floodChillsMax - 1) {
-			console.log(`${msg.author.tag} is flooding now!!`)
+			console.log(`| ${(new Date).toLocaleString("ru", logDateOptions)} | ${msg.author.tag} is flooding now!!`)
 			msg.channel.send(s.getRandomElem([
 				"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
 				"Дудос проведён успешно! <:sho:355426437639176194>",
@@ -125,7 +126,7 @@ function processMessage(msg) {
 
 	// если всё ок, продолжаем...
 	requestsCounter++
-	s.sentLog(msg, msg.cleanContent.replace(/\s+/g, " "), Object.assign(dateOptions, timeOptions))
+	s.sentLog(msg, msg.cleanContent.replace(/\s+/g, " "), logDateOptions)
 
 	// поделить запрос на "основную команду" и аргументы
 	let args = msgCommand.split(/\s+/)
@@ -173,7 +174,7 @@ client.on('ready', () => {
 		day: "numeric"
 	}
 
-	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("ru", Object.assign(dateOptions, timeOptions))
+	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("ru", logDateOptions)
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
 	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
@@ -206,7 +207,7 @@ client.on('message', msg => {
 	processMessage(msg)
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
-	if (um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("ru", Object.assign(dateOptions, timeOptions))} | Useless messages: ${um}`)
+	if (um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("ru", logDateOptions)} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
