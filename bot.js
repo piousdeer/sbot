@@ -106,7 +106,7 @@ function processMessage(msg) {
 	}
 	if (score > floodMax) {
 		if (udata.fchills == floodChillsMax - 1) {
-			console.log(`| ${(new Date).toLocaleString("ru", logDateOptions)} | ${msg.author.tag} is flooding now!!`)
+			console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | ${msg.author.tag} is flooding now!!`)
 			msg.channel.send(s.getRandomElem([
 				"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
 				"Дудос проведён успешно! <:sho:355426437639176194>",
@@ -174,7 +174,7 @@ client.on('ready', () => {
 		day: "numeric"
 	}
 
-	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("ru", logDateOptions)
+	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("en-US", Object.assign(dateOptions, timeOptions))
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
 	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
@@ -207,7 +207,7 @@ client.on('message', msg => {
 	processMessage(msg)
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
-	if (um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("ru", logDateOptions)} | Useless messages: ${um}`)
+	if (um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
