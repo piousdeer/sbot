@@ -134,8 +134,8 @@ export const commands = {
 	},
 	Send: {
 		r: /^(отправ(ит)?ь|предложи(ть)?|пришли|прислать|send)$/,
-		async f (msg, args, msgCommandOriginal) {
-			let imageParamsArray = msgCommandOriginal.match(/\S+ (\S+) ([\s\S]+)/)
+		async f (msg, args, msgSimplifiedOrigCase) {
+			let imageParamsArray = msgSimplifiedOrigCase.match(/\S+ (\S+) ([\s\S]+)/)
 		
 			if (!imageParamsArray) {
 				msg.react("📜")
@@ -244,7 +244,7 @@ export const commands = {
 	EmojiList: {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
 		v: true,
-		f (msg, args, msgCommandOriginal, usedArrowButton) {
+		f (msg, args, msgSimplifiedOrigCase, usedArrowButton) {
 			let defaultGuildId = "540145900526501899"
 			let fromWhichServer = client.guilds.get(defaultGuildId)
 			let askedServer = s.getGuild(args[0])
@@ -439,14 +439,14 @@ export const commands = {
 	Avatar: {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
 		v: true,
-		async f (msg, args, msgCommandOriginal) {
+		async f (msg, args, msgSimplifiedOrigCase) {
 			let user
 			if (args[0] == "random") {
 				user = client.users.filter(u => u.avatar).random()
 			} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 				user = client.users.get(BOT_ID)
 			} else if (args[0]) {
-				let username = s.getSimpleString(msgCommandOriginal.match(/\S+ (.+)/)[1])
+				let username = s.getSimpleString(msgSimplifiedOrigCase.match(/\S+ (.+)/)[1])
 				let result
 				let usernameId
 				// проверка на айди
@@ -531,7 +531,7 @@ export const commands = {
 	Homestuck: {
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
 		v: true,
-		async f (msg, args, msgCommandOriginal, usedArrowButton) {
+		async f (msg, args, msgSimplifiedOrigCase, usedArrowButton) {
 			let page_number
 			let contentText = ""
 		
@@ -748,12 +748,12 @@ export const commands = {
 	When: {
 		r: /^(когда)[.!]?$/,
 		v: true,
-		f (msg, args, msgCommandOriginal) {
+		f (msg, args, msgSimplifiedOrigCase) {
 			if (!args[0]) {
 				return
 			}
 		
-			let questionOriginal = msgCommandOriginal.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
+			let questionOriginal = msgSimplifiedOrigCase.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
 			let question = s.getSimpleString(questionOriginal)
 		
 			let epochStart = 17999
@@ -845,12 +845,12 @@ export const commands = {
 	Three: {
 		r: /^-?(\d)[.!]?$/,
 		v: true,
-		f (msg, args, msgCommandOriginal) {
+		f (msg, args, msgSimplifiedOrigCase) {
 			if (!args[0]) {
 				return
 			}
 		
-			let num = parseInt(msgCommandOriginal.split(" ")[0])
+			let num = parseInt(msgSimplifiedOrigCase.split(" ")[0])
 		
 			if (!num && num !== 0) {
 				return
@@ -885,14 +885,14 @@ export const commands = {
 	},
 	Rtfm: {
 		r: /^(rtfm|man|docs?)[.!]?$/,
-		async f (msg, args, msgCommandOriginal) {
+		async f (msg, args, msgSimplifiedOrigCase) {
 			if (!args[0] || !args[1]) {
 				msg.channel.send("Укажите в команде, какие доки вам нужны (js, py, jda) и какой метод/событие ищите.")
 				return
 			}
 		
 			let lang = args[0]
-			let query = msgCommandOriginal.split(" ")[2]
+			let query = msgSimplifiedOrigCase.split(" ")[2]
 		
 			let [, docsClass, docsMethod] = query.match(/^(\w+)(?:\.([\w\.]+))?/)
 			docsClass = docsClass[0].toUpperCase() + docsClass.slice(1);

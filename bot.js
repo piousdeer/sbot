@@ -86,9 +86,9 @@ function processMessage(msg) {
 	}
 
 	// если юзер не флудит, можем идти дальше...
-	
-	let msgCommandOriginal
-	let msgCommand
+
+	let msgSimplifiedOrigCase
+	let msgSimplified
 	let args
 	let cmd
 
@@ -98,9 +98,9 @@ function processMessage(msg) {
 		components.shift()
 	}
 	if (components.length) {
-		msgCommandOriginal = componentsOriginal.join(" ")
-		msgCommand = components.join(" ")
-		args = msgCommand.split(/\s+/)
+		msgSimplifiedOrigCase = componentsOriginal.join(" ")
+		msgSimplified = components.join(" ")
+		args = msgSimplified.split(/\s+/)
 		cmd = args.shift()
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
 			let url = componentsOriginal[0]
@@ -141,7 +141,7 @@ function processMessage(msg) {
 					})
 					.catch(error => console.log(error))
 			} else {
-				commands[i].f(msg, args, msgCommandOriginal)
+				commands[i].f(msg, args, msgSimplifiedOrigCase)
 			}
 			return
 		}
@@ -149,7 +149,7 @@ function processMessage(msg) {
 
 	// "общение"
 	for (let i of simpleAnswers) {
-		if (msgCommand.match(i.r)) {
+		if (msgSimplified.match(i.r)) {
 			if (i.e) {
 				msg.react(s.getRandomElem(i.e))
 			} else if (i.t) {
