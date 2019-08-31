@@ -32,7 +32,7 @@ function processMessage(msg) {
 
 	// если юзер отправил в лс картинку-аттачмент
 	let isSentImageHere = false
-	if (msg.channel.type == "dm") {
+	if (msg.channel.type == "dm" && !["цвет", "палитра", "color", "palette"].includes(msg.content)) {
 		msg.attachments.forEach(att => {
 			commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
 			isSentImageHere = true

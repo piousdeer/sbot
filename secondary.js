@@ -299,6 +299,7 @@ export async function getMainColorFromImage(link, callback) {
 
 					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1) {
 						let color
+						let palette = []
 						if (dataset.length) {
 							let centroids = skmeans(dataset, 10, "kmpp", 100).centroids
 							let hsvColors = []
@@ -308,15 +309,18 @@ export async function getMainColorFromImage(link, callback) {
 							hsvColors.sort((a, b) => {
 								return (b[1]+0.01)*b[2]*b[2] - (a[1]+0.01)*a[2]*a[2]
 							})
-	
-							let colorRGB = hsv2rgb(hsvColors[0])
-							color = colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2]
+							hsvColors.splice(5)
+							for (let i = 0; i < hsvColors.length; i++) {
+								let colorRGB = hsv2rgb(hsvColors[i])
+								palette.push(colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2])
+							}
+							color = palette[0]
 						} else {
 							color = undefined
 						}
 
 						if (callback) {
-							callback(color)
+							callback(color, palette)
 						}
 					}
 				})

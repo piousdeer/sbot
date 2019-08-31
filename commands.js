@@ -946,5 +946,38 @@ export const commands = {
 			}
 			
 		}
+	},
+	Palette: {
+		r: /^(цвет|палитра|color|palette)[.!]?$/,
+		v: true,
+		async f (msg) {
+			msg.attachments.forEach(async (att) => {
+				let max = 128
+				let w = max
+				let h = max
+				if (att.width > att.height) {
+					h = Math.round(att.height / (att.width / max))
+				} else {
+					w = Math.round(att.width / (att.height / max))
+				}
+				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+				await s.getMainColorFromImage(imagePreview, (color, palette) => {
+					let hexColors = []
+					for (let i = 0; i < palette.length; i++) {
+						hexColors.push(`#${palette[i].toString(16)}`)
+					}
+					msg.channel.send({
+						embed: {
+							color: color,
+							description: `${hexColors.join(" ")}`,
+							image: {
+								url: imagePreview
+							}
+						}
+					})
+				})
+			})
+
+		}
 	}
 }
