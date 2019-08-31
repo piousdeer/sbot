@@ -35,8 +35,6 @@ function processMessage(msg) {
 	let componentsOriginal = msg.content.split(/\s+/)
 	let components = s.getSimpleString(msg.content).split(/\s+/)
 	let isPrefixThere = components[0].match(BOT_PREFIX)
-	let msgCommandOriginal
-	let msgCommand
 
 	// проверка сообщения на наличие команды
 	if (!isPrefixThere && msg.channel.type == "text") {
@@ -88,6 +86,11 @@ function processMessage(msg) {
 	}
 
 	// если юзер не флудит, можем идти дальше...
+	
+	let msgCommandOriginal
+	let msgCommand
+	let args
+	let cmd
 
 	// выявление команды и аргументов из сообщения
 	if (isPrefixThere) {
@@ -97,6 +100,8 @@ function processMessage(msg) {
 	if (components.length) {
 		msgCommandOriginal = componentsOriginal.join(" ")
 		msgCommand = components.join(" ")
+		args = msgCommand.split(/\s+/)
+		cmd = args.shift()
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
 			let url = componentsOriginal[0]
 			componentsOriginal.shift()
@@ -105,7 +110,7 @@ function processMessage(msg) {
 		} else {
 			// если юзер отправил в лс картинку-аттачмент
 			let isSentImageHere = false
-			if (msg.channel.type == "dm" && !["палитра", "palette"].includes(msg.content)) {
+			if (msg.channel.type == "dm" && !["палитра", "palette"].includes(components[0])) {
 				msg.attachments.forEach(att => {
 					commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
 					isSentImageHere = true
@@ -125,10 +130,6 @@ function processMessage(msg) {
 	// если команда найдена, запишем сообщение в лог
 	requestsCounter++
 	s.sentLog(msg, msg.cleanContent.replace(/\s+/g, " "), logDateOptions)
-
-	// поделить сообщение на команду и аргументы
-	let args = msgCommand.split(/\s+/)
-	let cmd = args.shift()
 
 	// ищем команду в регулярках
 	for (let i in commands) {
