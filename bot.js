@@ -30,17 +30,27 @@ const floodChillsMax = 2;
 
 function processMessage(msg) {
 
-	// обработка сообщения
+	// разбиение сообщения на компоненты
 	let componentsOriginal = msg.content.split(/\s+/)
 	let components = s.getSimpleString(msg.content).split(/\s+/)
+	let isPrefixThere = components[0].match(BOT_PREFIX)
 	let msgCommandOriginal
 	let msgCommand
 
 	// проверка сообщения на наличие команды
-	if (components[0].match(BOT_PREFIX) && components.length > 1) {
+	if (!isPrefixThere && msg.channel.type == "text") {
+		return
+	}
+
+	// отлично, юзер обращается именно к боту, идём дальше...
+
+	// выявление команды и аргументов из сообщения
+	if (isPrefixThere) {
 		componentsOriginal.shift()
-		msgCommandOriginal = componentsOriginal.join(" ")
 		components.shift()
+	}
+	if (components[0].match(BOT_PREFIX) && components.length > 1) {
+		msgCommandOriginal = componentsOriginal.join(" ")
 		msgCommand = components.join(" ")
 	} else if (msg.channel.type != "text") {
 		msgCommandOriginal = msg.content.replace(/\s+/g, " ")
