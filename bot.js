@@ -45,43 +45,7 @@ function processMessage(msg) {
 
 	// отлично, юзер обращается именно к боту, идём дальше...
 
-	// выявление команды и аргументов из сообщения
-	if (isPrefixThere) {
-		componentsOriginal.shift()
-		components.shift()
-	}
-	if (components[0].match(BOT_PREFIX) && components.length > 1) {
-		msgCommandOriginal = componentsOriginal.join(" ")
-		msgCommand = components.join(" ")
-	} else if (msg.channel.type != "text") {
-		msgCommandOriginal = msg.content.replace(/\s+/g, " ")
-		msgCommand = s.getSimpleString(msg.content)
-		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
-			let url = componentsOriginal[0]
-			componentsOriginal.shift()
-			commands.Send.f(msg, null, `send ${url} ${componentsOriginal.join(" ")}`)
-			return
-		} else {
-			// если юзер отправил в лс картинку-аттачмент
-			let isSentImageHere = false
-			if (msg.channel.type == "dm" && !["палитра", "palette"].includes(msg.content)) {
-				msg.attachments.forEach(att => {
-					commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
-					isSentImageHere = true
-				})
-			}
-			if (isSentImageHere) {
-				requestsCounter++
-				s.sentLog(msg, msg.cleanContent, logDateOptions)
-				return
-			}
-		}
-	} else {
-		return
-	}
-
-
-	// antiflood system by PLAYER_CHAR
+	// антифлуд
 	const now = Date.now()
 	const uid = msg.author.id
 	
@@ -123,12 +87,49 @@ function processMessage(msg) {
 		return
 	}
 
+	// если юзер не флудит, можем идти дальше...
 
-	// если всё ок, продолжаем...
+	// выявление команды и аргументов из сообщения
+	if (isPrefixThere) {
+		componentsOriginal.shift()
+		components.shift()
+	}
+	if (components[0].match(BOT_PREFIX) && components.length > 1) {
+		msgCommandOriginal = componentsOriginal.join(" ")
+		msgCommand = components.join(" ")
+	} else if (msg.channel.type != "text") {
+		msgCommandOriginal = msg.content.replace(/\s+/g, " ")
+		msgCommand = s.getSimpleString(msg.content)
+		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
+			let url = componentsOriginal[0]
+			componentsOriginal.shift()
+			commands.Send.f(msg, null, `send ${url} ${componentsOriginal.join(" ")}`)
+			return
+		} else {
+			// если юзер отправил в лс картинку-аттачмент
+			let isSentImageHere = false
+			if (msg.channel.type == "dm" && !["палитра", "palette"].includes(msg.content)) {
+				msg.attachments.forEach(att => {
+					commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
+					isSentImageHere = true
+				})
+			}
+			if (isSentImageHere) {
+				requestsCounter++
+				s.sentLog(msg, msg.cleanContent, logDateOptions)
+				return
+			}
+		}
+	} else {
+		return
+	}
+
+
+	// если команда найдена, запишем сообщение в лог
 	requestsCounter++
 	s.sentLog(msg, msg.cleanContent.replace(/\s+/g, " "), logDateOptions)
 
-	// поделить запрос на "основную команду" и аргументы
+	// поделить сообщение на команду и аргументы
 	let args = msgCommand.split(/\s+/)
 	let cmd = args.shift()
 
@@ -207,7 +208,7 @@ client.on('message', msg => {
 	processMessage(msg)
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
-	if (um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Useless messages: ${um}`)
+	if (um && um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
