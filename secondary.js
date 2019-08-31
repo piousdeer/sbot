@@ -309,7 +309,6 @@ export async function getMainColorFromImage(link, callback) {
 							hsvColors.sort((a, b) => {
 								return (b[1]+0.01)*b[2]*b[2] - (a[1]+0.01)*a[2]*a[2]
 							})
-							hsvColors.splice(5)
 							for (let i = 0; i < hsvColors.length; i++) {
 								let colorRGB = hsv2rgb(hsvColors[i])
 								palette.push(colorRGB[0]*256*256 + colorRGB[1]*256 + colorRGB[2])

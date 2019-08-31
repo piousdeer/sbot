@@ -967,33 +967,29 @@ export const commands = {
 				await s.getMainColorFromImage(imagePreview, (color, palette) => {
 					let hexColors = []
 
-					let canvasW = 300
-					let canvasH = 20
-					let segmentW = Math.round(canvasW / palette.length)
+					let canvasW = 350
+					let canvasH = 50
+					let segmentW = Math.round(canvasW / palette.length) * 2
+					let segmentH = Math.round(canvasH / 2)
 
 					const canvas = createCanvas(canvasW, canvasH)
 					const ctx = canvas.getContext('2d')
 					for (let i = 0; i < palette.length; i++) {
 						let hex = palette[i].toString(16)
-						hex = (hex.length == 5) ? `0${hex}` : hex
-						hex = `#${hex}`
+						let tempHex = `00000${hex}`
+						hex = `#${tempHex.slice(-6)}`
 						hexColors.push(hex)
+						let x = i % 5
+						let y = Math.floor(i / 5)
 						ctx.fillStyle = hex
-						ctx.fillRect(segmentW*i, 0, segmentW, canvasH)
+						ctx.fillRect(segmentW*x, segmentH*y, segmentW, segmentH)
 					}
-					const buf = canvas.toBuffer('image/jpeg', { quality: 0.9 })
+					const buf = canvas.toBuffer('image/png')
 
-					msg.channel.send({
-						embed: {
-							color: color,
-							description: `\`${hexColors.join(" ")}\``,
-							image: {
-								url: imagePreview
-							}
-						},
+					msg.channel.send(`\`\`\`${hexColors.slice(0,5).join(" ")}\n${hexColors.slice(5,10).join(" ")}\`\`\``, {
 						files: [{
 							attachment: buf,
-							name: palette.jpg
+							name: "palette.jpg"
 						}]
 					})
 				})
