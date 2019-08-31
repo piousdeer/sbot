@@ -32,7 +32,7 @@ const floodChillsMax = 2;
 function processMessage(msg) {
 
 	// разбиение сообщения на компоненты
-	let componentsOriginal = msg.content.split(/\s+/)
+	let componentsOrigCase = msg.content.split(/\s+/)
 	let components = s.getSimpleString(msg.content).split(/\s+/)
 	let isPrefixThere = components[0].match(BOT_PREFIX)
 
@@ -94,18 +94,18 @@ function processMessage(msg) {
 
 	// выявление команды и аргументов из сообщения
 	if (isPrefixThere) {
-		componentsOriginal.shift()
+		componentsOrigCase.shift()
 		components.shift()
 	}
 	if (components.length) {
-		msgSimplifiedOrigCase = componentsOriginal.join(" ")
+		msgSimplifiedOrigCase = componentsOrigCase.join(" ")
 		msgSimplified = components.join(" ")
 		args = msgSimplified.split(/\s+/)
 		cmd = args.shift()
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
-			let url = componentsOriginal[0]
-			componentsOriginal.shift()
-			commands.Send.f(msg, null, `send ${url} ${componentsOriginal.join(" ")}`)
+			let url = componentsOrigCase[0]
+			componentsOrigCase.shift()
+			commands.Send.f(msg, null, `send ${url} ${componentsOrigCase.join(" ")}`)
 			return
 		} else {
 			// если юзер отправил в лс картинку-аттачмент
