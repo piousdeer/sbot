@@ -989,7 +989,7 @@ export const commands = {
 					msg.channel.send(`\`\`\`${hexColors.slice(0,5).join(" ")}\n${hexColors.slice(5,10).join(" ")}\`\`\``, {
 						files: [{
 							attachment: buf,
-							name: "palette.jpg"
+							name: "palette.png"
 						}]
 					})
 				})
