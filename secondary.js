@@ -62,6 +62,15 @@ export function removeElementsByValue(arr) {
     }
     return arr;
 }
+export function closestValueInArray(num, arr) {
+	let curr = arr[0]
+	for (let i = 0; i < arr.length; i++) {
+		if (Math.abs(num - arr[i]) < Math.abs(num - curr)) {
+			curr = arr[i]
+		}
+	}
+	return curr
+}
 
 // emoji methods
 
