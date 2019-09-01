@@ -292,6 +292,14 @@ export function hsv2rgb([h, s, v]) {
 export function trimPunc(str) {
 	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(\)]*$/)[1]
 }
+export function grayFromRGBHex(hex) {
+	let Red = hex % 256
+	let Green = Math.floor(hex / 256) % 256
+	let Blue = Math.floor(hex / 256 / 256) % 256
+	let GrayHue = Math.round(Red * 0.2126 + Green * 0.7152 + Blue * 0.0722)
+	let GrayHex = GrayHue*256*256 + GrayHue*256 + GrayHue
+	return GrayHex
+}
 export async function getMainColorFromImage(link, callback) {
 	let dataset = []
 	try {
