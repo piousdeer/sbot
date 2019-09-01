@@ -998,5 +998,36 @@ export const commands = {
 			})
 
 		}
+	},
+	Recolor: {
+		r: /^(кусщдщк|recolor)[.!]?$/,
+		v: true,
+		async f (msg, args) {
+			let pal = []
+			for (let i = 0; i < args.length; i++) {
+				pal.push(parseInt(args[i].slice(-6), 16)*256 + 255)
+			}
+			msg.attachments.forEach(async (att) => {
+				let max = 512
+				let w = max
+				let h = max
+				if (att.width > att.height) {
+					h = Math.round(att.height / (att.width / max))
+				} else {
+					w = Math.round(att.width / (att.height / max))
+				}
+				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+
+				await s.recolorByPalette(imagePreview, pal, buf => {
+					msg.channel.send({
+						files: [{
+							attachment: buf,
+							name: "recolored.png"
+						}]
+					})
+				})
+			})
+
+		}
 	}
 }

@@ -62,11 +62,11 @@ export function removeElementsByValue(arr) {
     }
     return arr;
 }
-export function closestValueInArray(num, arr) {
-	let curr = arr[0]
+export function indexOfClosestValueInArray(num, arr) {
+	let curr = 0
 	for (let i = 0; i < arr.length; i++) {
-		if (Math.abs(num - arr[i]) < Math.abs(num - curr)) {
-			curr = arr[i]
+		if (Math.abs(num - arr[i]) < Math.abs(num - arr[curr])) {
+			curr = i
 		}
 	}
 	return curr
@@ -292,12 +292,12 @@ export function hsv2rgb([h, s, v]) {
 export function trimPunc(str) {
 	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(\)]*$/)[1]
 }
-export function grayFromRGBHex(hex) {
-	let Red = hex % 256
+export function grayFromRGBAHex(hex) {
+	let Red = Math.floor(hex / 256 / 256) % 256
 	let Green = Math.floor(hex / 256) % 256
-	let Blue = Math.floor(hex / 256 / 256) % 256
+	let Blue = hex % 256
 	let GrayHue = Math.round(Red * 0.2126 + Green * 0.7152 + Blue * 0.0722)
-	let GrayHex = GrayHue*256*256 + GrayHue*256 + GrayHue
+	let GrayHex = GrayHue*256*256*256 + GrayHue*256*256 + GrayHue*256 + 255
 	return GrayHex
 }
 export async function getMainColorFromImage(link, callback) {
@@ -339,6 +339,35 @@ export async function getMainColorFromImage(link, callback) {
 							callback(color, palette)
 						}
 					}
+				})
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	} catch (err) {
+		console.log(err)
+	}
+}
+export async function recolorByPalette(link, pal, callback) {
+	let grayPal = []
+	for (let i = 0; i < pal.length; i++) {
+		grayPal.push(grayFromRGBAHex(pal[i]))
+	}
+	try {
+		jimp.read(link)
+			.then(image => {
+				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
+					let CurrHex = this.bitmap.data[idx + 0]*256*256*256 + this.bitmap.data[idx + 1]*256*256 + this.bitmap.data[idx + 2]*256 + 255
+					let GrayHex = grayFromRGBAHex(CurrHex)
+					let closestColor = pal[indexOfClosestValueInArray(GrayHex, grayPal)]
+					image.setPixelColor(closestColor, x, y)
+					
+					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1 && callback) {
+						image.getBuffer("image/png", (err, buf) => {
+							callback(buf)
+						})
+					}
+					
 				})
 			})
 			.catch(err => {

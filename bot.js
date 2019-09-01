@@ -101,31 +101,9 @@ function processMessage(msg) {
 	let args = msgSimplified.split(/\s+/)
 	let cmd = args.shift()
 
-	if (components.length) {
-		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
-			let url = componentsOrigCase[0]
-			componentsOrigCase.shift()
-			commands.Send.f(msg, null, `send ${url} ${componentsOrigCase.join(" ")}`)
-			return
-		} else {
-			// если юзер отправил в лс картинку-аттачмент
-			let isSentImageHere = false
-			if (msg.channel.type == "dm" && !["палитра", "palette"].includes(components[0])) {
-				msg.attachments.forEach(att => {
-					commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
-					isSentImageHere = true
-				})
-			}
-			if (isSentImageHere) {
-				requestsCounter++
-				s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
-				return
-			}
-		}
-	} else {
+	if (!components.length) {
 		return
 	}
-
 
 	// если команда найдена, запишем сообщение в лог
 	requestsCounter++
@@ -143,6 +121,27 @@ function processMessage(msg) {
 			} else {
 				commands[i].f(msg, args, msgSimplifiedOrigCase)
 			}
+			return
+		}
+	}
+
+	// если это не команда, проверяем на отправку пикчи в Галерею
+	if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
+		let url = componentsOrigCase[0]
+		componentsOrigCase.shift()
+		commands.Send.f(msg, null, `send ${url} ${componentsOrigCase.join(" ")}`)
+		return
+	} else {
+		let isSentImageHere = false
+		if (msg.channel.type == "dm") {
+			msg.attachments.forEach(att => {
+				commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
+				isSentImageHere = true
+			})
+		}
+		if (isSentImageHere) {
+			requestsCounter++
+			s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
 			return
 		}
 	}
