@@ -1022,12 +1022,19 @@ export const commands = {
 				}
 				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
 
-				await s.recolorByPalette(imagePreview, pal, buf => {
-					msg.channel.send({
-						files: [{
-							attachment: buf,
-							name: "recolored.png"
-						}]
+				await s.recolorByPalette(imagePreview, pal, async buf => {
+					await s.getMainColorFromImage(buf, async (color, palette) => {
+						for (let i = 0; i < palette.length; i++) {
+							palette[i] = palette[i]*256 + 255
+						}
+						await s.recolorByPalette(buf, palette, buf => {
+							msg.channel.send({
+								files: [{
+									attachment: buf,
+									name: "recolored.png"
+								}]
+							})
+						})
 					})
 				})
 			})
