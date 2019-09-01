@@ -357,10 +357,12 @@ export async function recolorByPalette(link, pal, callback) {
 		jimp.read(link)
 			.then(image => {
 				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
-					let CurrHex = this.bitmap.data[idx + 0]*256*256*256 + this.bitmap.data[idx + 1]*256*256 + this.bitmap.data[idx + 2]*256 + 255
-					let GrayHex = grayFromRGBAHex(CurrHex)
-					let closestColor = pal[indexOfClosestValueInArray(GrayHex, grayPal)]
-					image.setPixelColor(closestColor, x, y)
+					if (this.bitmap.data[idx + 3] > 64) {
+						let CurrHex = this.bitmap.data[idx + 0]*256*256*256 + this.bitmap.data[idx + 1]*256*256 + this.bitmap.data[idx + 2]*256 + 255
+						let GrayHex = grayFromRGBAHex(CurrHex)
+						let closestColor = pal[indexOfClosestValueInArray(GrayHex, grayPal)]
+						image.setPixelColor(closestColor, x, y)
+					}
 					
 					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1 && callback) {
 						image.getBuffer("image/png", (err, buf) => {

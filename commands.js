@@ -1003,6 +1003,10 @@ export const commands = {
 		r: /^(кусщдщк|recolor)[.!]?$/,
 		v: true,
 		async f (msg, args) {
+			if (!args.length) {
+				msg.channel.send("Нужно указать цвета! Например, `#d51a24 #7ca4af #f8dfa8 #05324a`")
+				return
+			}
 			let pal = []
 			for (let i = 0; i < args.length; i++) {
 				pal.push(parseInt(args[i].slice(-6), 16)*256 + 255)
