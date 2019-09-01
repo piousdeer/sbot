@@ -33,6 +33,7 @@ function processMessage(msg) {
 
 	// разбиение сообщения на компоненты
 	let componentsOrigCase = msg.content.split(/\s+/)
+	let componentsOrigPings = msg.cleanContent.split(/\s+/)
 	let components = s.getSimpleString(msg.content).split(/\s+/)
 	let isPrefixThere = components[0].match(BOT_PREFIX)
 
@@ -87,21 +88,20 @@ function processMessage(msg) {
 
 	// если юзер не флудит, можем идти дальше...
 
-	let msgSimplifiedOrigCase
-	let msgSimplified
-	let args
-	let cmd
-
 	// выявление команды и аргументов из сообщения
 	if (isPrefixThere) {
 		componentsOrigCase.shift()
+		componentsOrigPings.shift()
 		components.shift()
 	}
+
+	let msgSimplifiedOrigCase = componentsOrigCase.join(" ")
+	let msgSimplifiedOrigPings = componentsOrigPings.join(" ")
+	let msgSimplified = components.join(" ")
+	let args = msgSimplified.split(/\s+/)
+	let cmd = args.shift()
+
 	if (components.length) {
-		msgSimplifiedOrigCase = componentsOrigCase.join(" ")
-		msgSimplified = components.join(" ")
-		args = msgSimplified.split(/\s+/)
-		cmd = args.shift()
 		if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
 			let url = componentsOrigCase[0]
 			componentsOrigCase.shift()
@@ -118,7 +118,7 @@ function processMessage(msg) {
 			}
 			if (isSentImageHere) {
 				requestsCounter++
-				s.sentLog(msg, msg.cleanContent, logDateOptions)
+				s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
 				return
 			}
 		}
@@ -129,7 +129,7 @@ function processMessage(msg) {
 
 	// если команда найдена, запишем сообщение в лог
 	requestsCounter++
-	s.sentLog(msg, msg.cleanContent.replace(/\s+/g, " "), logDateOptions)
+	s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
 
 	// ищем команду в регулярках
 	for (let i in commands) {
