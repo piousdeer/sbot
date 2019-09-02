@@ -292,11 +292,15 @@ export function hsv2rgb([h, s, v]) {
 export function trimPunc(str) {
 	return str.match(/^[\s'`"]*([^]+?)[\s'`",.(\)]*$/)[1]
 }
-export function grayFromRGBAHex(hex) {
+export function getRGBFromHex(hex) {
 	let Red = Math.floor(hex / 256 / 256) % 256
 	let Green = Math.floor(hex / 256) % 256
 	let Blue = hex % 256
-	let GrayHue = Math.round(Red * 0.2126 + Green * 0.7152 + Blue * 0.0722)
+	return [Red, Green, Blue]
+}
+export function grayFromRGBAHex(hex) {
+	let colors = getRGBFromHex(hex)
+	let GrayHue = Math.round(colors[0] * 0.2126 + colors[1] * 0.7152 + colors[2] * 0.0722)
 	let GrayHex = GrayHue*256*256*256 + GrayHue*256*256 + GrayHue*256 + 255
 	return GrayHex
 }
@@ -349,33 +353,56 @@ export async function getMainColorFromImage(link, callback) {
 	}
 }
 export async function recolorByPalette(link, pal, callback) {
-	let grayPal = []
-	for (let i = 0; i < pal.length; i++) {
-		grayPal.push(grayFromRGBAHex(pal[i]))
-	}
-	try {
-		jimp.read(link)
-			.then(image => {
-				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
-					if (this.bitmap.data[idx + 3] > 64) {
-						let CurrHex = this.bitmap.data[idx + 0]*256*256*256 + this.bitmap.data[idx + 1]*256*256 + this.bitmap.data[idx + 2]*256 + 255
-						let GrayHex = grayFromRGBAHex(CurrHex)
-						let closestColor = pal[indexOfClosestValueInArray(GrayHex, grayPal)]
-						image.setPixelColor(closestColor, x, y)
-					}
-					
-					if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1 && callback) {
-						image.getBuffer("image/png", (err, buf) => {
-							callback(buf)
-						})
-					}
-					
+	await getMainColorFromImage(link, (color, paletteFromImage) => {
+		paletteFromImage.sort((a,b) => grayFromRGBAHex(b) - grayFromRGBAHex(a))
+		let paletteFromUser = pal
+		let paletteReady = []
+		for (let i = 0; i < paletteFromImage.length; i++) {
+			let bestSimilarity = Infinity
+			let colorHex
+			let cI = getRGBFromHex(paletteFromImage[i])
+			for (let j = 0; j < paletteFromUser.length; j++) {
+				let cU = getRGBFromHex(paletteFromUser[j])
+				let similarity = Math.sqrt((cU[0] - cI[0])**2 + (cU[1] - cI[1])**2 + (cU[2] - cI[2])**2)
+				if (similarity < bestSimilarity) {
+					bestSimilarity = similarity
+					colorHex = paletteFromUser[j]
+				}
+			}
+			paletteReady.push(colorHex)
+		}
+		try {
+			jimp.read(link)
+				.then(image => {
+					image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
+						if (this.bitmap.data[idx + 3] > 64) {
+							let bestSimilarity = Infinity
+							let colorHex
+							let cI = getRGBFromHex(image.getPixelColor(x, y))
+							for (let j = 0; j < paletteReady.length; j++) {
+								let cU = getRGBFromHex(paletteReady[j])
+								let similarity = Math.sqrt((cU[0] - cI[0])**2 + (cU[1] - cI[1])**2 + (cU[2] - cI[2])**2)
+								if (similarity < bestSimilarity) {
+									bestSimilarity = similarity
+									colorHex = paletteReady[j]
+								}
+							}
+							image.setPixelColor(colorHex, x, y)
+						}
+						
+						if (x == image.bitmap.width - 1 && y == image.bitmap.height - 1 && callback) {
+							image.getBuffer("image/png", (err, buf) => {
+								callback(buf)
+							})
+						}
+						
+					})
 				})
-			})
-			.catch(err => {
-				console.log(err)
-			})
-	} catch (err) {
-		console.log(err)
-	}
+				.catch(err => {
+					console.log(err)
+				})
+		} catch (err) {
+			console.log(err)
+		}
+	})
 }
