@@ -955,6 +955,10 @@ export const commands = {
 		r: /^(палитра|palette)[.!]?$/,
 		v: true,
 		async f (msg) {
+			if (!msg.attachments.size) {
+				msg.channel.send("Нужно прикрепить картинку к сообщению!")
+				return
+			}
 			msg.attachments.forEach(async (att) => {
 				let max = 128
 				let w = max
@@ -1005,6 +1009,10 @@ export const commands = {
 		async f (msg, args) {
 			if (!args.length) {
 				msg.channel.send("Нужно указать цвета! Например, `#d51a24 #7ca4af #f8dfa8 #05324a`")
+				return
+			}
+			if (!msg.attachments.size) {
+				msg.channel.send("Нужно прикрепить картинку к сообщению!")
 				return
 			}
 			let pal = []
