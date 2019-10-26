@@ -227,7 +227,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 		let msg = messageReaction.message
 		let msgReaction = messageReaction.emoji.name
 	
-		if (["⬅", "➡"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
+		if (["⬅", "➡", "🔃"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
 			let msg = messageReaction.message
 			let cMatch, eMatch, page_number, page_to_go
 			if (cMatch = msg.content.match(/hs(2)?#(\d+)/)) {
@@ -241,6 +241,8 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 					page_to_go = page_number + 1
 				} else if (msgReaction == "⬅") {
 					page_to_go = page_number - 1
+				} else if (msgReaction == "🔃") {
+					page_to_go = page_number
 				}
 				commands.Homestuck.f(msg, [page_to_go], null, true)
 			}

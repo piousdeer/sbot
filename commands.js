@@ -680,15 +680,16 @@ export const commands = {
 				}
 			} else {
 				let contentToSend = (contentText) ? contentText : embed
-				msg.channel.send(contentToSend)
-					.then((msg) => {
-						msg.react("⬅")
-							.then(() => {
-								msg.react("➡")
-							})
-							.catch(error => console.log(error))
+				msg.channel.send(contentToSend).then((msg) => {
+					msg.react("⬅").then(() => {
+						msg.react("➡").then(() => {
+							msg.react("🔃")
+						})
+						.catch(error => console.log(error))
 					})
 					.catch(error => console.log(error))
+				})
+				.catch(error => console.log(error))
 			}
 
 		}
