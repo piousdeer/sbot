@@ -534,10 +534,20 @@ export const commands = {
 		async f (msg, args, msgSimplifiedOrigCase, usedArrowButton) {
 			let page_number
 			let contentText = ""
+
+			let domain = 'https://www.homestuck.com'
+			let hs_part_mark = "hs#"
+			let text_location = 'p.type-rg'
 		
 			if (args[0]) {
-				if (Number(args[0]) >= 1 && Number(args[0]) <= 8130) {
+				let num = Number(args[0])
+				if (num >= 1 && num <= 8130) {
 					page_number = args[0]
+				} else if (num > 8130) {
+					domain = 'https://www.homestuck2.com'
+					hs_part_mark = "hs2#"
+					text_location = 'div.type-rg'
+					page_number = num % 8130
 				} else {
 					return
 				}
@@ -545,8 +555,8 @@ export const commands = {
 				page_number = 1
 			}
 		
-			let page_link = 'https://www.homestuck.com/story/' + page_number
-			let comic_number = "hs#" + page_number
+			let page_link = domain + '/story/' + page_number
+			let comic_number = hs_part_mark + page_number
 			let got_error_already = false
 			let embed_color = 0x249E28
 		
@@ -607,7 +617,7 @@ export const commands = {
 					comic_embed.author.name = comic_title
 		
 					// getting description
-					let desc = $('p.type-rg').text().replace(/\ +/g, " ").replace(/^\s+/, "").replace(/\s+$/, "")
+					let desc = $(text_location).text().replace(/\ +/g, " ").replace(/^\s+/, "").replace(/\s+$/, "")
 					let desc_limit = 2047
 					if (desc.length > desc_limit) {
 						desc = desc.substring(0, desc_limit) + "…"
@@ -642,9 +652,9 @@ export const commands = {
 					if (imgs.length) {
 						// send title, image and desc
 						if (is_img_from_flash) {
-							img_link = `https://www.homestuck.com${imgs}`
+							img_link = `${domain}${imgs}`
 						} else if (imgs.attr('src').startsWith("/")) {
-							img_link = `https://www.homestuck.com${imgs.attr('src')}`
+							img_link = `${domain}${imgs.attr('src')}`
 						} else {
 							img_link = imgs.attr('src')
 						}

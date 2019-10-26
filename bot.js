@@ -230,10 +230,10 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 		if (["⬅", "➡"].includes(msgReaction) && msg.author.id == BOT_ID && user.id != BOT_ID) {
 			let msg = messageReaction.message
 			let cMatch, eMatch, page_number, page_to_go
-			if (cMatch = msg.content.match(/hs#(\d+)/)) {
-				page_number = Number(cMatch[1])
-			} else if (msg.embeds[0] && (eMatch = msg.embeds[0].author.name.match(/hs#(\d+)/))) {
-				page_number = Number(eMatch[1])
+			if (cMatch = msg.content.match(/hs(2)?#(\d+)/)) {
+				page_number = cMatch[1] ? Number(cMatch[2]) + 8130 : Number(cMatch[2])
+			} else if (msg.embeds[0] && (eMatch = msg.embeds[0].author.name.match(/hs(2)?#(\d+)/))) {
+				page_number = eMatch[1] ? Number(eMatch[2]) + 8130 : Number(eMatch[2])
 			}
 	
 			if (page_number) {
