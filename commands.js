@@ -537,22 +537,26 @@ export const commands = {
 
 			let domain = 'https://www.homestuck.com'
 			let hs_part_mark = "hs#"
-			let text_location = 'p.type-rg'
+			let text_location = "p.type-rg"
 		
+			let num = Number(args[0])
+
 			if (args[0]) {
-				let num = Number(args[0])
 				if (num >= 1 && num <= 8130) {
 					page_number = args[0]
 				} else if (num > 8130) {
-					domain = 'https://www.homestuck2.com'
-					hs_part_mark = "hs2#"
-					text_location = 'div.type-rg'
 					page_number = num % 8130
 				} else {
 					return
 				}
 			} else {
 				page_number = 1
+			}
+
+			if (args[1] == "2" || num > 8130) {
+				domain = 'https://www.homestuck2.com'
+				hs_part_mark = "hs2#"
+				text_location = 'div.type-rg'
 			}
 		
 			let page_link = domain + '/story/' + page_number
