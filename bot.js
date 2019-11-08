@@ -285,7 +285,10 @@ client.on('guildMemberAdd', member => {
 		let welcomeLines = [
 			`Какой-то ПЕК-НЕК ${member} зашёл к нам на чай! <:peckneck:574889131826479104>`,
 			`Добро пожаловать в наш филиал #творчества, ${member}! <a:metaThinking:552849453493649412>`,
-			`${member}, какова цель вашего визита? Покажите визу <:tanyaVisa:579028733306863617>`
+			`${member}, какова цель вашего визита? Покажите визу <:tanyaVisa:579028733306863617>`,
+			`Рады видеть вас в нашем заведении, ${member}! <:dorothy:641990931834339329>`,
+			`Добро пожаловать в фан-клуб Тарковского, ${member}! <:geniy2:615595424761380864>`,
+			`${member}, ｗ ｅ ｌ ｃ ｏ ｍ ｅ <a:peaceAndTranquility:562289489347739648>`
 		]
 		let channel = client.channels.get("540145900979355658")
 		let welcomeRandom = s.getRandomElem(welcomeLines)
