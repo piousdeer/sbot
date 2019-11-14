@@ -310,6 +310,16 @@ client.on('guildMemberRemove', member => {
 	}
 })
 
+client.on('userUpdate', async (oldUser, newUser) => {
+	if (oldUser.avatarURL != newUser.avatarURL) {
+			console.log(`${newUser.tag} had this avatar: \n${oldUser.avatarURL}`)
+			let imgurParams = await s.sendAttachmentToImgur(oldUser.avatarURL)
+			if (imgurParams) {
+				console.log(imgurParams[0])
+			}
+	}
+})
+
 function login() {
     client.login(TOKEN).catch(() => setTimeout(login, 5000))
 }
