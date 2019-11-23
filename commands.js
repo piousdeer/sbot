@@ -1,6 +1,7 @@
 import * as s from "./secondary"
 import {client, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
 import {imgDatabaseURL} from "./config"
+import {hiragana, katakana, kanacyr} from "./japdata"
 
 import got from "got"
 import Cheerio from "cheerio"
@@ -1054,6 +1055,106 @@ export const commands = {
 					})
 				})
 			})
+
+		}
+	},
+	Kana: {
+		r: /^(kana|кана)[.!]?$/,
+		v: true,
+		async f (msg, args) {
+			let k = hiragana
+			if (["katakana", "катакана"].includes(args[0])) {
+				k = katakana
+			}
+
+			let firstQuestion = true
+			let botMessage
+			let isGameRunning = true
+
+			let score = 0
+			let rounds = 0
+			let wrongMap = []
+
+			let buttons = ["🔴", "🔶", "🍏", "🔵"]
+			const filter = (reaction, user) => buttons.includes(reaction.emoji.name) && user.id == msg.author.id;
+			
+			while (isGameRunning) {
+
+				let con = Math.floor(k.syl.length*Math.random())
+				let vow = Math.floor(k.syl[con].length*Math.random())
+
+				let res = k.syl[con][vow]
+
+				let pos = Math.floor(4*Math.random())
+
+				let crow = [...kanacyr[con]]
+				let rescyr = crow[vow]
+
+				let opts
+				if (crow.length == 5) {
+					opts = crow
+					opts.splice(vow, 1)
+					opts = s.shuffle(opts).slice(0,3)
+				} else {
+					let tempRows = [...kanacyr]
+					tempRows.splice(con, 1)
+					opts = s.shuffle(tempRows.toString().split(',')).slice(0,3)
+				}
+				opts.splice(pos, 0, rescyr)
+
+				const embed = {
+					title: res,
+					description: `[Шпаргалка](${k.pic}) \n${opts}`,
+					footer: {
+						icon_url: msg.author.avatarURL,
+						text: `${msg.author.tag} - ${score}/${rounds}`
+					}
+				}
+				
+				if (firstQuestion) {
+					await msg.channel.send({embed: embed}).then(async (m) => {
+						firstQuestion = false
+						botMessage = m
+
+						for (let i = 0; i < 4; i++) {
+							await m.react(buttons[i])
+						}
+					})
+					.catch(error => console.log(error))
+				} else {
+					await botMessage.edit({embed: embed})
+				}
+				
+				await botMessage.awaitReactions(filter, { max: 1, time: 5000 })
+					.then(collected => {
+						const reaction = collected.first()
+
+						if (buttons.indexOf(reaction.emoji.name) == pos) {
+							score++
+						} else {
+							wrongMap[con] = []
+							wrongMap[con][vow] = true
+						}
+					})
+					.catch(collected => {
+						isGameRunning = false
+						let wrongGuesses = []
+						for (let i = 0; i < wrongMap.length; i++) {
+							if (wrongMap[i]) {
+								for (let j = 0; j < wrongMap[i].length; j++) {
+									if (wrongMap[i][j]) {
+										wrongGuesses.push(k.syl[i][j])
+									}
+								}
+							}
+						}
+						if (wrongGuesses) {
+							botMessage.reply(`Время вышло! Подучить: ${wrongGuesses}`)
+						}
+					});
+
+				rounds++
+			}	
 
 		}
 	}
