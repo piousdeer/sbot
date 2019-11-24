@@ -1,7 +1,7 @@
 import * as s from "./secondary"
 import {client, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
 import {imgDatabaseURL} from "./config"
-import {hiragana, katakana, kanacyr} from "./japdata"
+import {hiragana, katakana, kanalat} from "./japdata"
 
 import got from "got"
 import Cheerio from "cheerio"
@@ -1088,7 +1088,7 @@ export const commands = {
 
 				let pos = Math.floor(4*Math.random())
 
-				let crow = [...kanacyr[con]]
+				let crow = [...kanalat[con]]
 				let rescyr = crow[vow]
 
 				let opts
@@ -1097,7 +1097,7 @@ export const commands = {
 					opts.splice(vow, 1)
 					opts = s.shuffle(opts).slice(0,3)
 				} else {
-					let tempRows = [...kanacyr]
+					let tempRows = [...kanalat]
 					tempRows.splice(con, 1)
 					opts = s.shuffle(tempRows.toString().split(',')).slice(0,3)
 				}
