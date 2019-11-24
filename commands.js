@@ -1075,7 +1075,8 @@ export const commands = {
 			let rounds = 0
 			let wrongMap = []
 
-			let buttons = ["🔴", "🔶", "🍏", "🔵"]
+			let secondsToWait = 15
+			let buttons = ["1️⃣", "2️⃣", "3️⃣", "4️⃣"]
 			const filter = (reaction, user) => buttons.includes(reaction.emoji.name) && user.id == msg.author.id;
 			
 			while (isGameRunning) {
@@ -1104,7 +1105,7 @@ export const commands = {
 
 				const embed = {
 					title: res,
-					description: `[Шпаргалка](${k.pic}) \n${opts}`,
+					description: `${opts.join(" ").toUpperCase()} \n\nУ вас ${secondsToWait} секунд!\n[Шпаргалка](${k.pic})`,
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
@@ -1125,7 +1126,7 @@ export const commands = {
 					await botMessage.edit({embed: embed})
 				}
 				
-				await botMessage.awaitReactions(filter, { max: 1, time: 5000 })
+				await botMessage.awaitReactions(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const reaction = collected.first()
 
@@ -1149,7 +1150,7 @@ export const commands = {
 							}
 						}
 						if (wrongGuesses) {
-							botMessage.reply(`Время вышло! Подучить: ${wrongGuesses}`)
+							msg.reply(`Время вышло! Подучить: ${wrongGuesses.join(" ")}`)
 						}
 					});
 
