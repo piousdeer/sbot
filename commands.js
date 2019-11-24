@@ -1081,6 +1081,10 @@ export const commands = {
 			let wrongMap = []
 
 			let secondsToWait = 15
+			if (args[1] && Number(args[1])) {
+				secondsToWait = Number(args[1])
+			}
+
 			let buttons = ["1️⃣", "2️⃣", "3️⃣", "4️⃣"]
 			const filter = (reaction, user) => buttons.includes(reaction.emoji.name) && user.id == msg.author.id;
 			
@@ -1155,7 +1159,11 @@ export const commands = {
 							}
 						}
 						if (wrongGuesses) {
-							msg.reply(`Время вышло! Подучить: ${wrongGuesses.join(" ")}`)
+							let gameoverText = "Время вышло!"
+							if (wrongGuesses.length) {
+								gameoverText += ` Подучить: ${wrongGuesses.join(" ")}`
+							}
+							msg.reply(gameoverText)
 						}
 					});
 

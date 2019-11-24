@@ -33,8 +33,8 @@ export const katakana = {
 export const kanalat = [
     [ "a",  "i",  "u",  "e",  "o"],
     ["ka", "ki", "ku", "ke", "ko"], ["ga", "gi", "gu", "ge", "go"],
-    ["sa", "si", "su", "se", "so"], ["za", "zi", "zu", "ze", "zo"],
-    ["ta", "ti","tsu", "te", "to"], ["da", "di", "du", "de", "do"],
+    ["sa","shi", "su", "se", "so"], ["za", "zi", "zu", "ze", "zo"],
+    ["ta","chi","tsu", "te", "to"], ["da", "di", "du", "de", "do"],
     ["na", "ni", "nu", "ne", "no"],
     ["ha", "hi", "fu", "he", "ho"], ["ba", "bi", "bu", "be", "bo"], ["pa", "pi", "pu", "pe", "po"],
     ["ma", "mi", "mu", "me", "mo"],
