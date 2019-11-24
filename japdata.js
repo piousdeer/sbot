@@ -1,6 +1,5 @@
 export const hiragana = {
     title: "Хирагана",
-    pic: "https://cdn.discordapp.com/attachments/602935027306856449/647825956878417920/hiragana.png",
     syl: [
         "あいうえお",
         "かきくけこ", "がぎぐげご",
@@ -17,7 +16,6 @@ export const hiragana = {
 }
 export const katakana = {
     title: "Катакана",
-    pic: "https://cdn.discordapp.com/attachments/602935027306856449/647825987190521869/katakana.png",
     syl: [
         "アイウエオ",
         "カキクケコ", "ガギグゲゴ",

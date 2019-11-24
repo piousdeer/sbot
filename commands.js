@@ -49,6 +49,11 @@ export const commands = {
 						inline: true
 					},
 					{
+						name: "кана <хирагана|катакана>",
+						value: "日本語を学ぶ!",
+						inline: true
+					},
+					{
 						name: "когда <что-то случится>",
 						value: "Узнай, когда это случится!",
 						inline: true
@@ -1105,7 +1110,7 @@ export const commands = {
 
 				const embed = {
 					title: res,
-					description: `${opts.join(" ").toUpperCase()} \n\nУ вас ${secondsToWait} секунд!\n[Шпаргалка](${k.pic})`,
+					description: `${opts.join(" ").toUpperCase()} \n\nУ вас ${secondsToWait} секунд!\n[Шпаргалка](https://docs.google.com/spreadsheets/d/1GdpF_ameYIvhFTT2Ji_MNisDS7qCLENoxMllR59q6Zg/edit?usp=drivesdk)`,
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
