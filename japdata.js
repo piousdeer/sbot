@@ -8,10 +8,8 @@ export const hiragana = {
         "なにぬねの",
         "はひふへほ", "ばびぶべぼ", "ぱぴぷぺぽ",
         "まみむめも",
-        "やゆよ",
         "らりるれろ",
-        "わを",
-        "ん"
+        "やゆよわをん"
     ]
 }
 export const katakana = {
@@ -24,10 +22,8 @@ export const katakana = {
         "ナ二ヌネノ",
         "ハ匕フヘホ", "バビブべボ", "パピプぺポ",
         "マミムメモ",
-        "ヤユヨ",
         "ラリルレロ",
-        "ワヲ",
-        "ン"
+        "ヤユヨワヲン"
     ]
 }
 export const kanalat = [
@@ -38,8 +34,6 @@ export const kanalat = [
     ["na", "ni", "nu", "ne", "no"],
     ["ha", "hi", "fu", "he", "ho"], ["ba", "bi", "bu", "be", "bo"], ["pa", "pi", "pu", "pe", "po"],
     ["ma", "mi", "mu", "me", "mo"],
-    ["ya",       "yu",       "yo"],
     ["ra", "ri", "ru", "re", "ro"],
-    ["wa",                   "wo"],
-    [ "n"]
+    ["ya", "yu", "yo", "wa", "wo", "n"]
 ]

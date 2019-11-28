@@ -1098,19 +1098,13 @@ export const commands = {
 				let pos = Math.floor(4*Math.random())
 
 				let crow = [...kanalat[con]]
-				let rescyr = crow[vow]
+				let reslat = crow[vow]
 
-				let opts
-				if (crow.length == 5) {
-					opts = crow
-					opts.splice(vow, 1)
-					opts = s.shuffle(opts).slice(0,3)
-				} else {
-					let tempRows = [...kanalat]
-					tempRows.splice(con, 1)
-					opts = s.shuffle(tempRows.toString().split(',')).slice(0,3)
-				}
-				opts.splice(pos, 0, rescyr)
+				let opts = crow
+				opts.splice(vow, 1)
+				opts = s.shuffle(opts).slice(0,3)
+				
+				opts.splice(pos, 0, reslat)
 
 				const embed = {
 					title: res,
