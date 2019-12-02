@@ -1,5 +1,6 @@
 import Discord from "discord.js"
 export const client = new Discord.Client()
+import fs from "fs"
 
 import dotenv from "dotenv"
 dotenv.config()
@@ -30,6 +31,28 @@ const floodMax = 20 * 1000;
 const floodChillsMax = 2;
 
 function processMessage(msg) {
+
+	// рассылка кино-уведомлений
+	if (msg.channel.id == '600294780144189481') {
+		msg.mentions.roles.forEach(role => {
+			let data = JSON.parse(fs.readFileSync('cinemadata.json'))
+			const embed = {
+				description: msg.cleanContent,
+				footer: {
+					text: msg.author.tag,
+					icon_url: msg.author.avatarURL
+				}
+			}
+
+			if (data[role.id]) {
+				for (const item in data[role.id].users) {
+					client.fetchUser(item).then(user => {
+						user.send({embed: embed});
+					})
+				}
+			}
+		})
+	}
 
 	// разбиение сообщения на компоненты
 	let componentsOrigCase = msg.content.split(/\s+/)

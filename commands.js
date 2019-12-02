@@ -6,6 +6,7 @@ import {hiragana, katakana, kanalat} from "./japdata"
 import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
+import fs from "fs"
 
 const { createCanvas } = require('canvas')
 
@@ -1164,6 +1165,54 @@ export const commands = {
 				rounds++
 			}	
 
+		}
+	},
+	Sub: {
+		r: /^((un)?sub)[.!]?$/,
+		v: false,
+		async f (msg, args, msgSimplifiedOrigCase) {
+			if (!args[0]) {
+				return
+			}
+			let isUserSubbing = true
+			if (msgSimplifiedOrigCase.match(/^(unsub)/)) {
+				isUserSubbing = false
+			}
+			let subTarget
+			switch (args[0]) {
+				case "kino":
+					subTarget = "565291444705689612"
+					break;
+				case "anime":
+					subTarget = "577130367304204288"
+					break;
+				default:
+					break;
+			}
+			let data = JSON.parse(fs.readFileSync('cinemadata.json'))
+			if (isUserSubbing) {
+				if (data[subTarget].users[msg.author.id]) {
+					msg.author.send(`Вы уже подписаны на ${data[subTarget].name}!`)
+				} else {
+					data[subTarget].users[msg.author.id] = 1
+					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
+						if (!err) {
+							msg.author.send(`Теперь вы подписаны на ${data[subTarget].name}!`)
+						}
+					})
+				}
+			} else {
+				if (!data[subTarget].users[msg.author.id]) {
+					msg.author.send(`Вы и так не подписаны на ${data[subTarget].name}!`)
+				} else {
+					delete data[subTarget].users[msg.author.id]
+					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
+						if (!err) {
+							msg.author.send(`Теперь вы отписаны от ${data[subTarget].name}!`)
+						}
+					})
+				}
+			}
 		}
 	}
 }
