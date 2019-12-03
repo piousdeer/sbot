@@ -1191,25 +1191,30 @@ export const commands = {
 					break;
 			}
 			let data = JSON.parse(fs.readFileSync('cinemadata.json'))
+			let users = new Set(data[subTarget].users)
+			let subName = data[subTarget].name
+			let uid = msg.author.id
 			if (isUserSubbing) {
-				if (data[subTarget].users[msg.author.id]) {
-					msg.author.send(`Вы уже подписаны на ${data[subTarget].name}!`)
+				if (users.has(uid)) {
+					msg.author.send(`Вы уже подписаны на ${subName}!`)
 				} else {
-					data[subTarget].users[msg.author.id] = 1
+					users.add(uid)
+					data[subTarget].users = Array.from(users)
 					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
 						if (!err) {
-							msg.author.send(`Теперь вы подписаны на ${data[subTarget].name}!`)
+							msg.author.send(`Теперь вы подписаны на ${subName}!`)
 						}
 					})
 				}
 			} else {
-				if (!data[subTarget].users[msg.author.id]) {
-					msg.author.send(`Вы и так не подписаны на ${data[subTarget].name}!`)
+				if (!users.has(uid)) {
+					msg.author.send(`Вы и так не подписаны на ${subName}!`)
 				} else {
-					delete data[subTarget].users[msg.author.id]
+					users.delete(uid)
+					data[subTarget].users = Array.from(users)
 					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
 						if (!err) {
-							msg.author.send(`Теперь вы отписаны от ${data[subTarget].name}!`)
+							msg.author.send(`Теперь вы отписаны от ${subName}!`)
 						}
 					})
 				}

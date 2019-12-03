@@ -31,13 +31,13 @@ const floodMax = 20 * 1000;
 const floodChillsMax = 2;
 
 function processMessage(msg) {
-
+	
 	// рассылка кино-уведомлений
 	if (msg.channel.id == '540156381479567371') {
-		let pingedUsers = {}
+		let pingedUsers = new Set([])
 		msg.mentions.roles.forEach(role => {
 			let data = JSON.parse(fs.readFileSync('cinemadata.json'))
-			const embed = {
+			let embed = {
 				description: msg.cleanContent,
 				footer: {
 					text: msg.author.tag,
@@ -45,10 +45,20 @@ function processMessage(msg) {
 				}
 			}
 
+			if (msg.attachments.size) {
+				let att = msg.attachments.first()
+				if (att.width) { // test if att is an image
+					embed.image = {
+						url: att.url
+					}
+				}
+			}
+
 			if (data[role.id]) {
-				for (const item in data[role.id].users) {
-					if (!pingedUsers[item]) {
-						pingedUsers[item] = 1
+				embed.color = data[role.id].color
+				for (const item of data[role.id].users) {
+					if (!pingedUsers.has(item)) {
+						pingedUsers.add(item)
 						client.fetchUser(item).then(user => {
 							user.send({embed: embed});
 						})
