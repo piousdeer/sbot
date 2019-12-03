@@ -1174,6 +1174,7 @@ export const commands = {
 			if (!args[0]) {
 				return
 			}
+			s.envelope(msg)
 			let isUserSubbing = true
 			if (msgSimplifiedOrigCase.match(/^(unsub)/)) {
 				isUserSubbing = false

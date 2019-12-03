@@ -33,7 +33,8 @@ const floodChillsMax = 2;
 function processMessage(msg) {
 
 	// рассылка кино-уведомлений
-	if (msg.channel.id == '600294780144189481') {
+	if (msg.channel.id == '540156381479567371') {
+		let pingedUsers = {}
 		msg.mentions.roles.forEach(role => {
 			let data = JSON.parse(fs.readFileSync('cinemadata.json'))
 			const embed = {
@@ -46,9 +47,12 @@ function processMessage(msg) {
 
 			if (data[role.id]) {
 				for (const item in data[role.id].users) {
-					client.fetchUser(item).then(user => {
-						user.send({embed: embed});
-					})
+					if (!pingedUsers[item]) {
+						pingedUsers[item] = 1
+						client.fetchUser(item).then(user => {
+							user.send({embed: embed});
+						})
+					}
 				}
 			}
 		})
