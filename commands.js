@@ -1174,7 +1174,6 @@ export const commands = {
 			if (!args[0]) {
 				return
 			}
-			s.envelope(msg)
 			let isUserSubbing = true
 			if (msgSimplifiedOrigCase.match(/^(unsub)/)) {
 				isUserSubbing = false
@@ -1203,6 +1202,7 @@ export const commands = {
 					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
 						if (!err) {
 							msg.author.send(`Теперь вы подписаны на ${subName}!`)
+							s.envelope(msg)
 						}
 					})
 				}
@@ -1215,6 +1215,7 @@ export const commands = {
 					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
 						if (!err) {
 							msg.author.send(`Теперь вы отписаны от ${subName}!`)
+							s.envelope(msg)
 						}
 					})
 				}
