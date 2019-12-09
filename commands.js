@@ -731,36 +731,45 @@ export const commands = {
 		r: /^(stats|статы|статистика|гз|ап(тайм)?|up(time)?)[.!]?$/,
 		v: true,
 		f (msg) {
-			let diff = client.uptime
-			let tarr = [1000, 60, 60, 24]
-			for (let i in tarr) {
-				let x = tarr[i]
-				tarr[i] = diff % x
-				diff = (diff - tarr[i]) / x
-			}
-			tarr.push(diff)
-			tarr.shift()
-			let warr = [
-				['секунду', 'секунды', 'секунд'],
-				['минуту', 'минуты', 'минут'],
-				['час', 'часа', 'часов'],
-				['день', 'дня', 'дней'],
-			]
-			let sarr = []
-			for (let i = tarr.length - 1; i >= 0; i--) {
-				if (!tarr[i]) {
-					continue
+			let uptimeResult
+			let u = client.uptime
+			console.log(u)
+			if (u > 1000) {
+				let diff = u
+				let tarr = [1000, 60, 60, 24]
+				for (let i in tarr) {
+					let x = tarr[i]
+					tarr[i] = diff % x
+					diff = (diff - tarr[i]) / x
 				}
-				sarr.push(tarr[i] + ' ' + s.pluralize(tarr[i], warr[i]))
+				tarr.push(diff)
+				tarr.shift()
+				let warr = [
+					['секунду', 'секунды', 'секунд'],
+					['минуту', 'минуты', 'минут'],
+					['час', 'часа', 'часов'],
+					['день', 'дня', 'дней'],
+				]
+				let sarr = []
+				for (let i = tarr.length - 1; i >= 0; i--) {
+					if (!tarr[i]) {
+						continue
+					}
+					sarr.push(tarr[i] + ' ' + s.pluralize(tarr[i], warr[i]))
+				}
+				uptimeResult = `Я работаю уже ${sarr.join(', ')}.`
+			} else {
+				uptimeResult = `Я только зашёл.`
 			}
-			let uptimeResult = `Я работаю уже ${sarr.join(', ')}.`
+
+			let subData = JSON.parse(fs.readFileSync('cinemadata.json'))
 		
 			const statsEmbed = {
 				color: 0x888888,
 				title: "Статистика",
 				description: uptimeResult,
 				footer: {
-					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size} | 👥 ${client.users.size}`
+					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size} | 👥 ${client.users.size} | 📽️ ${subData["565291444705689612"].users.length} | ⛩️ ${subData["577130367304204288"].users.length}`
 				}
 			}
 		
