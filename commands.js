@@ -1204,27 +1204,25 @@ export const commands = {
 			let uid = msg.author.id
 			if (isUserSubbing) {
 				if (users.has(uid)) {
-					msg.author.send(`Вы уже подписаны на ${subName}!`)
+					msg.reply(`Вы уже подписаны на ${subName}!`)
 				} else {
 					users.add(uid)
 					data[subTarget].users = Array.from(users)
 					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
 						if (!err) {
-							msg.author.send(`Теперь вы подписаны на ${subName}!`)
-							s.envelope(msg)
+							msg.reply(`Теперь вы подписаны на ${subName}!`)
 						}
 					})
 				}
 			} else {
 				if (!users.has(uid)) {
-					msg.author.send(`Вы и так не подписаны на ${subName}!`)
+					msg.reply(`Вы и так не подписаны на ${subName}!`)
 				} else {
 					users.delete(uid)
 					data[subTarget].users = Array.from(users)
 					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
 						if (!err) {
-							msg.author.send(`Теперь вы отписаны от ${subName}!`)
-							s.envelope(msg)
+							msg.reply(`Теперь вы отписаны от ${subName}!`)
 						}
 					})
 				}
