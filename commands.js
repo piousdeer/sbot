@@ -733,7 +733,6 @@ export const commands = {
 		f (msg) {
 			let uptimeResult
 			let u = client.uptime
-			console.log(u)
 			if (u > 1000) {
 				let diff = u
 				let tarr = [1000, 60, 60, 24]
@@ -903,6 +902,11 @@ export const commands = {
 		
 			let emoji = s.findEmoji(emojiName, guildName)
 		
+			if (!emoji) {
+				msg.react('604015450304806952')
+				return
+			}
+
 			let prefix = "<:"
 			let postfix = "> "
 			if (emoji.animated) {
