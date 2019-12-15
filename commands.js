@@ -877,6 +877,8 @@ export const commands = {
 		v: true,
 		f (msg, args, msgSimplifiedOrigCase) {
 			if (!args[0]) {
+				args.unshift(msg.content.split(/\s+/).slice(-1)[0])
+				s.autoreact(msg, args, false)
 				return
 			}
 		
