@@ -186,7 +186,7 @@ function processMessage(msg) {
 	// ищем команду в регулярках
 	let linkedcmd
 	for (let i in commands) {
-		if (cmd.match(commands[i].r) || (cmd[0].match(/[а-я]/i) && cmdLayoutSwitched.match(commands[i].r)) || (cmdLayoutSwitched.match(commands[i].r) && !s.autoreact(msg, [cmd].concat(args), true))) {
+		if (cmd.match(commands[i].r) || (cmdLayoutSwitched.match(commands[i].r) && (cmd[0].match(/[а-я]/i) || !s.autoreact(msg, [cmd].concat(args), true)))) {
 			linkedcmd = commands[i]
 		}
 	}
