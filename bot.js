@@ -213,8 +213,7 @@ function processMessage(msg) {
 	}
 
 	// если запрос не соответствует ни одной из команд, попробовать автореакцию
-	args.unshift(cmd)
-	s.autoreact(msg, args, true)
+	s.autoreact(msg, [cmd].concat(args), true)
 }
 client.on('ready', () => {
 
