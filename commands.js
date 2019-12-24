@@ -1148,7 +1148,9 @@ export const commands = {
 				await botMessage.awaitReactions(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const reaction = collected.first()
-						reaction.remove(msg.author.id)
+						if (botMessage.channel.type == "text" && botMessage.member.hasPermission('MANAGE_MESSAGES')) {
+							reaction.remove(msg.author.id)
+						}
 						if (buttons.indexOf(reaction.emoji.name) == pos) {
 							score++
 						} else {
