@@ -199,12 +199,7 @@ function processMessage(msg) {
 		}
 	}
 
-	// попробовать найти реакцию
-	if (s.autoreact(msg, [cmd].concat(args), true)) {
-		return
-	} 
-
-	// попробовать "общение", если команда или реакция не найдена
+	// попробовать "общение", если команда не найдена
 	for (let i of simpleAnswers) {
 		if (msgSimplified.match(i.r)) {
 			if (i.e) {
@@ -215,6 +210,11 @@ function processMessage(msg) {
 			return
 		}
 	}
+
+	// попробовать найти реакцию
+	if (s.autoreact(msg, [cmd].concat(args), true)) {
+		return
+	} 
 
 }
 client.on('ready', () => {
