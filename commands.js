@@ -1185,21 +1185,23 @@ export const commands = {
 		}
 	},
 	Sub: {
-		r: /^((un)?sub)[.!]?$/,
+		r: /^((un)?sub|(ан)?саб)[.!]?$/,
 		v: false,
 		async f (msg, args, msgSimplifiedOrigCase) {
 			if (!args[0]) {
 				return
 			}
 			let isUserSubbing = true
-			if (msgSimplifiedOrigCase.match(/^(unsub)/)) {
+			if (msgSimplifiedOrigCase.match(/^(unsub|ансаб)/)) {
 				isUserSubbing = false
 			}
 			let subTarget
 			switch (args[0]) {
+				case "кино":
 				case "kino":
 					subTarget = "565291444705689612"
 					break;
+				case "аниме":
 				case "anime":
 					subTarget = "577130367304204288"
 					break;
