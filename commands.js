@@ -265,6 +265,7 @@ export const commands = {
 				goLeft = true
 			} else if (askedServer) {
 				fromWhichServer = askedServer
+				numberOfCurrentGuild = visibleServers.indexOf(askedServer.id) + 1
 			}
 
 			let possiblePrevId = msg.content.match(/(\d{17,20})\`$/)
