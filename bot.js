@@ -199,7 +199,12 @@ function processMessage(msg) {
 		}
 	}
 
-	// попробовать "общение", если команда не найдена
+	// попробовать найти реакцию
+	if (s.autoreact(msg, [cmd].concat(args), true)) {
+		return
+	} 
+
+	// попробовать "общение", если команда или реакция не найдена
 	for (let i of simpleAnswers) {
 		if (msgSimplified.match(i.r)) {
 			if (i.e) {
