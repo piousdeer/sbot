@@ -1148,7 +1148,7 @@ export const commands = {
 				await botMessage.awaitReactions(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const reaction = collected.first()
-
+						reaction.remove(msg.author.id)
 						if (buttons.indexOf(reaction.emoji.name) == pos) {
 							score++
 						} else {
@@ -1163,7 +1163,7 @@ export const commands = {
 							if (wrongMap[i]) {
 								for (let j = 0; j < wrongMap[i].length; j++) {
 									if (wrongMap[i][j]) {
-										wrongGuesses.push(k.syl[i][j])
+										wrongGuesses.push(`${k.syl[i][j]} ||${kanalat[i][j]}||`)
 									}
 								}
 							}
