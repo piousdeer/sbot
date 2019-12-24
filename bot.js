@@ -184,23 +184,24 @@ function processMessage(msg) {
 	}
 
 	// ищем команду в регулярках
-	let iscmdvalid = false
 	let linkedcmd
 	for (let i in commands) {
-		if (cmd.match(commands[i].r) || (cmdLayoutSwitched[0].match(/[a-z]/i) && cmdLayoutSwitched.match(commands[i].r))) {
-			iscmdvalid = true
+		if (cmd.match(commands[i].r) || (cmd[0].match(/[а-я]/i) && cmdLayoutSwitched.match(commands[i].r)) || (cmdLayoutSwitched.match(commands[i].r) && !s.autoreact(msg, [cmd].concat(args), true))) {
 			linkedcmd = commands[i]
-			if (linkedcmd.v && !s.isThisBotsChannel(msg)) {
-				msg.react("#⃣")
-					.then(() => {
-						msg.react("🤖")
-					})
-					.catch(error => console.log(error))
-			} else {
-				linkedcmd.f(msg, args, msgSimplifiedOrigCase)
-			}
-			return
 		}
+	}
+
+	if (linkedcmd) {
+		if (linkedcmd.v && !s.isThisBotsChannel(msg)) {
+			msg.react("#⃣")
+				.then(() => {
+					msg.react("🤖")
+				})
+				.catch(error => console.log(error))
+		} else {
+			linkedcmd.f(msg, args, msgSimplifiedOrigCase)
+		}
+		return
 	}
 
 	// "общение"
@@ -216,7 +217,7 @@ function processMessage(msg) {
 	}
 
 	// если запрос не соответствует ни одной из команд, попробовать автореакцию
-	s.autoreact(msg, [cmd].concat(args), true)
+	
 }
 client.on('ready', () => {
 
