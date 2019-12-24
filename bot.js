@@ -30,8 +30,7 @@ const floodRate = 5 * 1000;
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
 
-let layoutCyr = "йцукенгшщзхъфывапролджэячсмитьбюё"
-let layoutLat = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`"
+let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
 function processMessage(msg) {
 	
@@ -171,13 +170,15 @@ function processMessage(msg) {
 
 	// попробовать сменить раскладку на всякий случай
 	let cmdLayoutSwitched = ''
-	if (cmd && cmd[0].match(/[а-я]/i)) {
+	if (cmd) {
 		for (let i = 0; i < cmd.length; i++) {
-			if (!cmd[i].match(/[a-z]/i)) {
-				cmdLayoutSwitched += layoutLat[layoutCyr.indexOf(cmd[i])]
+			let num = layoutCyrLat.indexOf(cmd[i])
+			let newnum
+			if (num >= 0 && num < 66) {
+				newnum = num >= 33 ? num - 33 : num + 33
+				cmdLayoutSwitched += layoutCyrLat[newnum]
 			} else {
-				cmdLayoutSwitched = ''
-				break;
+				cmdLayoutSwitched += cmd[i]
 			}
 		}
 	}
