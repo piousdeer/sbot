@@ -12,7 +12,7 @@ const { createCanvas } = require('canvas')
 
 export const commands = {
 	Help: {
-		r: /^(рудз|х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
+		r: /^(х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
 		v: true,
 		f (msg) {
 			const helpLines = [
@@ -71,7 +71,7 @@ export const commands = {
 		}
 	},
 	Ping: {
-		r: /^(зштп|пинг|ping)[.!]?$/,
+		r: /^(пинг|ping)[.!]?$/,
 		v: true,
 		f (msg) {
 			let pongText = "🏓 Понг!"
@@ -706,7 +706,7 @@ export const commands = {
 		}
 	},
 	SnowflakeTime: {
-		r: /^(снежинк[аи]|ыаешьу|sftime)[.!]?$/,
+		r: /^(снежинк[аи]|sftime)[.!]?$/,
 		f (msg, args) {
 			let totalSFTimes = []
 			args.forEach(arg => {
@@ -728,7 +728,7 @@ export const commands = {
 		}
 	},
 	Stats: {
-		r: /^(stats|статы|статистика|гз|ап(тайм)?|up(time)?)[.!]?$/,
+		r: /^(stats|статы|статистика|ап(тайм)?|up(time)?)[.!]?$/,
 		v: true,
 		f (msg) {
 			let uptimeResult
@@ -1041,7 +1041,7 @@ export const commands = {
 		}
 	},
 	Recolor: {
-		r: /^(кусщдщк|recolor)[.!]?$/,
+		r: /^(реколор|recolor)[.!]?$/,
 		v: true,
 		async f (msg, args) {
 			if (!args.length) {

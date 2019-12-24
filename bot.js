@@ -30,6 +30,9 @@ const floodRate = 5 * 1000;
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
 
+let layoutCyr = "йцукенгшщзфывапролдячсмить"
+let layoutLat = "qwertyuiopasdfghjklzxcvbnm"
+
 function processMessage(msg) {
 	
 	// рассылка кино-уведомлений
@@ -144,9 +147,24 @@ function processMessage(msg) {
 	requestsCounter++
 	s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
 
+	// попробовать сменить раскладку на всякий случай
+	let cmdLatSwitched = ''
+	if (cmd && cmd[0].match(/[а-я]/i)) {
+		let iscmdvalid = true
+		for (let i = 0; i < cmd.length; i++) {
+			if (!cmd[i].match(/[a-z]/i)) {
+				cmdLatSwitched += layoutLat[layoutCyr.indexOf(cmd[i])]
+			} else {
+				iscmdvalid = false
+				cmdLatSwitched = ''
+				break;
+			}
+		}
+	}
+
 	// ищем команду в регулярках
 	for (let i in commands) {
-		if (cmd.match(commands[i].r)) {
+		if (cmd.match(commands[i].r) || cmdLatSwitched.match(commands[i].r)) {
 			if (commands[i].v && !s.isThisBotsChannel(msg)) {
 				msg.react("#⃣")
 					.then(() => {
