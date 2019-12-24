@@ -1174,7 +1174,7 @@ export const commands = {
 						if (wrongGuesses) {
 							let gameoverText = "Время вышло!"
 							if (wrongGuesses.length) {
-								gameoverText += ` Подучить: ${wrongGuesses.join(" ")}`
+								gameoverText += ` \nПодучить: ${wrongGuesses.join(" ")}`
 							}
 							msg.reply(gameoverText)
 						}
