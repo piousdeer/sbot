@@ -150,7 +150,7 @@ export function getEmojiName(emojiText) {
 export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 	if (!args[0]) {
 		msg.react("📜")
-		return
+		return false
 	}
 
 	let emojiName
@@ -173,7 +173,7 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 		} else {
 			msg.react("604015450304806952")
 		}
-		return
+		return false
 	}
 
 	msg.react("👌")
@@ -182,6 +182,7 @@ export function autoreact(msg, args, isCommandCanBeAnEmoji) {
 	whichGuildThisUserMeans[msg.author.id] = guildName
 	
 	deleteUserMessage(msg)
+	return true
 }
 export function checkReactionForAutoreact(messageReaction, user) {
 	if (whoNeedsToReactToSomething[user.id]) {
