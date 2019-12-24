@@ -199,7 +199,7 @@ function processMessage(msg) {
 		}
 	}
 
-	// "общение"
+	// попробовать "общение", если команда не найдена
 	for (let i of simpleAnswers) {
 		if (msgSimplified.match(i.r)) {
 			if (i.e) {
@@ -211,8 +211,6 @@ function processMessage(msg) {
 		}
 	}
 
-	// если запрос не соответствует ни одной из команд, попробовать автореакцию
-	
 }
 client.on('ready', () => {
 
