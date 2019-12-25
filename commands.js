@@ -1227,13 +1227,18 @@ export const commands = {
 									if (x == hir.length - 1) { // check if it's lowered vowel
 										rvarRomaji = rvarRomaji.slice(0, -1)
 									}
-									rvarRomaji += lat[x][y]
+									if ([3,4,5,6].includes(x) && y == 2) { // if it's sh/ch/j
+										rvarRomaji += lat[x][y][1] // add without y symbol
+									} else {
+										rvarRomaji += lat[x][y]
+									}
 								}
 							}
 						}
 					}
 					romaji.push(rvarRomaji)
 				}
+				console.log(k.r)
 				console.log(romaji)
 
 				const embed = {
@@ -1250,13 +1255,18 @@ export const commands = {
 				await msg.channel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const m = collected.first()
-						if (k.r.includes(m.content) || romaji.includes(m.content) || m.content.match(k.m)) {
+						let matchesWithMeaning = m.content.match(k.m)
+						if (k.r.includes(m.content) || romaji.includes(m.content) || matchesWithMeaning) {
 							score++
-							messageForPreviousGuess = `Верно! ${k.s} == ${k.r.join(', ')} \n`
+							messageForPreviousGuess = `Верно!`
+							if (!matchesWithMeaning) {
+								messageForPreviousGuess += ` ${k.s} == ${k.r.join(', ')}`
+							}
 						} else {
 							wrongSet.add(num)
-							messageForPreviousGuess = `Неа. \n`
+							messageForPreviousGuess = `Неа.`
 						}
+						messageForPreviousGuess += ` \n`
 					})
 					.catch(collected => {
 						isGameRunning = false

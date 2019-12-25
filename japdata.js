@@ -27,15 +27,15 @@ export const katakana = {
     ]
 }
 export const kanalat = [
-    [ "a",  "i",  "u",  "e",  "o"],
-    ["ka", "ki", "ku", "ke", "ko"], ["ga", "gi", "gu", "ge", "go"],
-    ["sa","shi", "su", "se", "so"], ["za", "ji", "zu", "ze", "zo"],
-    ["ta","chi","tsu", "te", "to"], ["da", "ji", "zu", "de", "do"],
-    ["na", "ni", "nu", "ne", "no"],
-    ["ha", "hi", "fu", "he", "ho"], ["ba", "bi", "bu", "be", "bo"], ["pa", "pi", "pu", "pe", "po"],
-    ["ma", "mi", "mu", "me", "mo"],
-    ["ra", "ri", "ru", "re", "ro"],
-    ["ya", "yu", "yo", "wa", "wo", "n"]
+    [ "a",  "i",  "u",  "e",  "o"], // 0
+    ["ka", "ki", "ku", "ke", "ko"], ["ga", "gi", "gu", "ge", "go"], // 1, 2
+    ["sa","shi", "su", "se", "so"], ["za", "ji", "zu", "ze", "zo"], // 3, 4
+    ["ta","chi","tsu", "te", "to"], ["da", "ji", "zu", "de", "do"], // 5, 6
+    ["na", "ni", "nu", "ne", "no"], // 7
+    ["ha", "hi", "fu", "he", "ho"], ["ba", "bi", "bu", "be", "bo"], ["pa", "pi", "pu", "pe", "po"], // 8, 9, 10
+    ["ma", "mi", "mu", "me", "mo"], // 11
+    ["ra", "ri", "ru", "re", "ro"], // 12
+    ["ya", "yu", "yo", "wa", "wo", "n"] // 13
 ]
 export const kanji = [
     {
@@ -139,7 +139,7 @@ export const kanji = [
     },
     {
         s: "火",
-        r: ["ひ", "カ"],
+        r: ["ひ", "か"],
         m: /огонь/
     },
     {
