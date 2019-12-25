@@ -1225,10 +1225,14 @@ export const commands = {
 							for (let y = 0; y < hir[x].length; y++) {
 								if (rvar[j] == hir[x][y]) {
 									if (x == hir.length - 1) { // check if it's lowered vowel
-										rvarRomaji = rvarRomaji.slice(0, -1)
-									}
-									if ([3,4,5,6].includes(x) && y == 2) { // if it's sh/ch/j
-										rvarRomaji += lat[x][y][1] // add without y symbol
+										if (rvarRomaji.slice(-1) != 'n') {
+											rvarRomaji = rvarRomaji.slice(0, -1)
+										}
+										if (["sh", "ch"].includes(rvarRomaji.slice(-2)) || rvarRomaji.slice(-1) == "j") {
+											rvarRomaji += lat[x][y][1]
+										} else {
+											rvarRomaji += lat[x][y]
+										}
 									} else {
 										rvarRomaji += lat[x][y]
 									}
