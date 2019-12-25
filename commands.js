@@ -1242,8 +1242,6 @@ export const commands = {
 					}
 					romaji.push(rvarRomaji)
 				}
-				console.log(k.r)
-				console.log(romaji)
 
 				const embed = {
 					title: k.s,
@@ -1267,14 +1265,18 @@ export const commands = {
 								messageForPreviousGuess += ` ${k.s} == ${k.r.join(', ')}`
 							}
 						} else {
-							wrongSet.add(num)
+							wrongSet.add(k.s)
 							messageForPreviousGuess = `Неа.`
 						}
 						messageForPreviousGuess += ` \n`
 					})
 					.catch(collected => {
 						isGameRunning = false
-						msg.reply("Время вышло или ошибка!")
+						let gameoverText = "Время вышло!"
+						if (wrongSet.size) {
+							gameoverText += ` \nПодучить: ${Array.from(wrongSet).join(" ")}`
+						}
+						msg.reply(gameoverText)
 					});
 
 				rounds++
