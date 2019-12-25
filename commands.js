@@ -1256,7 +1256,7 @@ export const commands = {
 
 				const embed = {
 					title: k.s,
-					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5) ||\` ${k.r.join(", ")} \`||  `,
+					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20${k.s}) ||\` ${k.r.join(", ")} \`||  `,
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
@@ -1268,8 +1268,7 @@ export const commands = {
 				await msg.channel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const m = collected.first()
-						let matchesWithMeaning = m.content.match(k.m)
-						if (k.r.includes(m.content) || romaji.includes(m.content) || matchesWithMeaning) {
+						if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
 							score++
 							messageForPreviousGuess = `Верно!`
 						} else {
