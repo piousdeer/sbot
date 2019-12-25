@@ -1,7 +1,7 @@
 import * as s from "./secondary"
 import {client, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
 import {imgDatabaseURL} from "./config"
-import {hiragana, katakana, kanalat} from "./japdata"
+import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
 import got from "got"
 import Cheerio from "cheerio"
@@ -1178,6 +1178,63 @@ export const commands = {
 							}
 							msg.reply(gameoverText)
 						}
+					});
+
+				rounds++
+			}	
+
+		}
+	},
+	Kanji: {
+		r: /^(kanji|кан(д?[жз])и)[.!]?$/,
+		v: true,
+		async f (msg, args) {
+
+			let isGameRunning = true
+
+			let messageForPreviousGuess = ''
+
+			let score = 0
+			let rounds = 0
+			let wrongSet = new Set()
+
+			let secondsToWait = 15
+			if (args[1] && Number(args[1])) {
+				secondsToWait = Number(args[1])
+			}
+
+			const filter = (m) => m.author.id == msg.author.id;
+
+			while (isGameRunning) {
+
+				let num = Math.floor(Math.random() * kanji.length)
+				let k = kanji[num]
+
+				const embed = {
+					title: k.s,
+					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5)`,
+					footer: {
+						icon_url: msg.author.avatarURL,
+						text: `${msg.author.tag} - ${score}/${rounds}`
+					}
+				}
+				
+				await msg.channel.send({embed: embed})
+				
+				await msg.channel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
+					.then(collected => {
+						const m = collected.first()
+						if (k.r.includes(m.content) || m.content.match(k.m)) {
+							score++
+							messageForPreviousGuess = 'Верно! \n'
+						} else {
+							wrongSet.add(num)
+							messageForPreviousGuess = 'Неа. \n'
+						}
+					})
+					.catch(collected => {
+						isGameRunning = false
+						msg.reply("Время вышло или ошибка!")
 					});
 
 				rounds++
