@@ -1279,11 +1279,13 @@ export const commands = {
 					})
 					.catch(collected => {
 						isGameRunning = false
-						let gameoverText = "Время вышло!"
-						if (wrongSet.size) {
-							gameoverText += ` \nПодучить: ${Array.from(wrongSet).join(" ")}`
+						const gameoverEmbed = {
+							title: "Время вышло!"
 						}
-						msg.reply(gameoverText)
+						if (wrongSet.size) {
+							gameoverEmbed.description = `Подучить: ${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join(" ")}`
+						}
+						msg.reply({embed: gameoverEmbed})
 					});
 
 				rounds++
