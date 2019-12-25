@@ -1220,10 +1220,19 @@ export const commands = {
 				for (let i = 0; i < k.r.length; i++) {
 					let rvar = k.r[i]
 					let rvarRomaji = ''
+					let tsuRepeating = false
 					for (let j = 0; j < rvar.length; j++) {
+						if (rvar[j] == 'っ') {
+							tsuRepeating = true
+							continue;
+						}
 						for (let x = 0; x < hir.length; x++) {
 							for (let y = 0; y < hir[x].length; y++) {
 								if (rvar[j] == hir[x][y]) {
+									if (tsuRepeating) {
+										rvarRomaji += lat[x][y][0]
+										tsuRepeating = false
+									}
 									if (x == hir.length - 1) { // check if it's lowered vowel
 										if (rvarRomaji.slice(-1) != 'n') {
 											rvarRomaji = rvarRomaji.slice(0, -1)
