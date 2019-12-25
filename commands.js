@@ -1210,6 +1210,29 @@ export const commands = {
 				let num = Math.floor(Math.random() * kanji.length)
 				let k = kanji[num]
 
+				let hir = [...hiragana.syl]
+				hir.push('ゃゅょ')
+				let lat = [...kanalat]
+				lat.push(['ya', 'yu', 'yo'])
+
+				let romaji = []
+
+				for (let i = 0; i < k.r.length; i++) {
+					let rvar = k.r[i]
+					let rvarRomaji = ''
+					for (let j = 0; j < rvar.length; j++) {
+						for (let x = 0; x < hir.length; x++) {
+							for (let y = 0; y < hir[x].length; y++) {
+								if (rvar[j] == hir[x][y]) {
+									rvarRomaji += lat[x][y]
+								}
+							}
+						}
+					}
+					romaji.push(rvarRomaji)
+				}
+				console.log(romaji)
+
 				const embed = {
 					title: k.s,
 					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5)`,
@@ -1224,12 +1247,12 @@ export const commands = {
 				await msg.channel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const m = collected.first()
-						if (k.r.includes(m.content) || m.content.match(k.m)) {
+						if (k.r.includes(m.content) || romaji.includes(m.content) || m.content.match(k.m)) {
 							score++
-							messageForPreviousGuess = 'Верно! \n'
+							messageForPreviousGuess = `Верно! ${k.s} == ${k.r.join(', ')} \n`
 						} else {
 							wrongSet.add(num)
-							messageForPreviousGuess = 'Неа. \n'
+							messageForPreviousGuess = `Неа. \n`
 						}
 					})
 					.catch(collected => {
