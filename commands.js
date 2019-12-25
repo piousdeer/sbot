@@ -1224,6 +1224,9 @@ export const commands = {
 						for (let x = 0; x < hir.length; x++) {
 							for (let y = 0; y < hir[x].length; y++) {
 								if (rvar[j] == hir[x][y]) {
+									if (x == hir.length - 1) { // check if it's lowered vowel
+										rvarRomaji = rvarRomaji.slice(0, -1)
+									}
 									rvarRomaji += lat[x][y]
 								}
 							}
