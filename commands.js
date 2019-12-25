@@ -1171,13 +1171,11 @@ export const commands = {
 								}
 							}
 						}
-						if (wrongGuesses) {
-							let gameoverText = "Время вышло!"
-							if (wrongGuesses.length) {
-								gameoverText += ` \nПодучить: ${wrongGuesses.join(" ")}`
-							}
-							msg.reply(gameoverText)
+						let gameoverText = "Время вышло!"
+						if (wrongGuesses.length) {
+							gameoverText += ` \nПодучить: ${wrongGuesses.join(" ")}`
 						}
+						msg.reply(gameoverText)
 					});
 
 				rounds++
@@ -1270,9 +1268,6 @@ export const commands = {
 						if (k.r.includes(m.content) || romaji.includes(m.content) || matchesWithMeaning) {
 							score++
 							messageForPreviousGuess = `Верно!`
-							if (!matchesWithMeaning) {
-								messageForPreviousGuess += ` ${k.s} == ${k.r.join(', ')}`
-							}
 						} else {
 							wrongSet.add(k.s)
 							messageForPreviousGuess = `Неа.`
