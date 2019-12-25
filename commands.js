@@ -1254,7 +1254,7 @@ export const commands = {
 
 				const embed = {
 					title: k.s,
-					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5) ||  ${k.r.join(", ")}||  `,
+					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5) ||\` ${k.r.join(", ")} \`||  `,
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
