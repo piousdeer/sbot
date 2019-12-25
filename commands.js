@@ -1199,8 +1199,8 @@ export const commands = {
 			let wrongSet = new Set()
 
 			let secondsToWait = 15
-			if (args[1] && Number(args[1])) {
-				secondsToWait = Number(args[1])
+			if (args[0] && Number(args[0])) {
+				secondsToWait = Number(args[0])
 			}
 
 			const filter = (m) => m.author.id == msg.author.id;
@@ -1245,7 +1245,7 @@ export const commands = {
 
 				const embed = {
 					title: k.s,
-					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5)`,
+					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20%23jlpt-n5) ||  ${k.r.join(", ")}||  `,
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
