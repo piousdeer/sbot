@@ -1224,6 +1224,10 @@ export const commands = {
 							tsuRepeating = true
 							continue;
 						}
+						if (rvar[j] == 'ー') {
+							rvarRomaji += rvarRomaji.slice(-1)
+							continue;
+						}
 						for (let x = 0; x < hir.length; x++) {
 							for (let y = 0; y < hir[x].length; y++) {
 								if (rvar[j] == hir[x][y]) {
