@@ -1183,8 +1183,8 @@ export const commands = {
 
 		}
 	},
-	Kanji: {
-		r: /^(kanji|кан(д?[жз])и)[.!]?$/,
+	Jwords: {
+		r: /^(jwords|jlpt)[.!]?$/,
 		v: true,
 		async f (msg, args) {
 
@@ -1282,7 +1282,7 @@ export const commands = {
 					.catch(collected => {
 						isGameRunning = false
 						const gameoverEmbed = {
-							title: "Time is up!"
+							title: "Time's up!"
 						}
 						if (rounds) {
 							gameoverEmbed.description = `Result: ${(score/rounds*100).toFixed(2)}%`
