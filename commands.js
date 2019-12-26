@@ -1258,7 +1258,7 @@ export const commands = {
 
 				const embed = {
 					title: k.s,
-					description: `${messageForPreviousGuess}У вас ${secondsToWait} секунд!\n[Шпаргалка](https://jisho.org/search/%23kanji%20${k.s}) \n\n||\` ${k.r.join(", ")}, ${k.m[0]} \`||  `,
+					description: `${messageForPreviousGuess}You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/%23kanji%20${k.s}) \n\n||\` ${k.r.join(", ")}, ${k.m[0]} \`||  `,
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
@@ -1272,21 +1272,25 @@ export const commands = {
 						const m = collected.first()
 						if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
 							score++
-							messageForPreviousGuess = `Верно!`
+							messageForPreviousGuess = `Right!`
 						} else {
 							wrongSet.add(k.s)
-							messageForPreviousGuess = `Неа.`
+							messageForPreviousGuess = `Nope.`
 						}
 						messageForPreviousGuess += ` \n`
 					})
 					.catch(collected => {
 						isGameRunning = false
 						const gameoverEmbed = {
-							title: "Время вышло!"
+							title: "Time is up!"
 						}
-						if (wrongSet.size) {
-							gameoverEmbed.description = `Подучить: ${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join(" ")}`
+						if (rounds) {
+							gameoverEmbed.description = `Result: ${(score/rounds*100).toFixed(2)}%`
+							if (wrongSet.size) {
+								gameoverEmbed.description += ` \nTo learn: ${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join(" ")}`
+							}
 						}
+
 						msg.reply({embed: gameoverEmbed})
 					});
 
