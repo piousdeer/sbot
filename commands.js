@@ -1184,7 +1184,7 @@ export const commands = {
 		}
 	},
 	Jwords: {
-		r: /^(jwords|jlpt)[.!]?$/,
+		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
 		v: true,
 		async f (msg, args) {
 
