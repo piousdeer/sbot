@@ -1210,6 +1210,8 @@ export const commands = {
 
 				let hir = [...hiragana.syl]
 				hir.push('ゃゅょ')
+				let kat = [...katakana.syl]
+				kat.push('ャュョ')
 				let lat = [...kanalat]
 				lat.push(['ya', 'yu', 'yo'])
 
@@ -1220,7 +1222,7 @@ export const commands = {
 					let rvarRomaji = ''
 					let tsuRepeating = false
 					for (let j = 0; j < rvar.length; j++) {
-						if (rvar[j] == 'っ') {
+						if (['っ', 'ッ'].includes(rvar[j])) {
 							tsuRepeating = true
 							continue;
 						}
@@ -1230,7 +1232,7 @@ export const commands = {
 						}
 						for (let x = 0; x < hir.length; x++) {
 							for (let y = 0; y < hir[x].length; y++) {
-								if (rvar[j] == hir[x][y]) {
+								if ([hir[x][y], kat[x][y]].includes(rvar[j])) {
 									if (tsuRepeating) {
 										rvarRomaji += lat[x][y][0]
 										tsuRepeating = false
