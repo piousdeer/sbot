@@ -1203,9 +1203,40 @@ export const commands = {
 
 			const filter = (m) => m.author.id == msg.author.id;
 
+			let userPath = `jap_users/${msg.author.id}.json`
+			let userData
+			if (fs.existsSync(userPath)) {
+				userData = JSON.parse(fs.readFileSync(`jap_users/${msg.author.id}.json`))
+			} else {
+				userData = {
+					"studied": [],
+					"problemed": {}
+				}
+			}
+
+			let studied = new Set(userData.studied)
+
 			while (isGameRunning) {
 
-				let num = Math.floor(Math.random() * kanji.length)
+				let num
+				let probArr = Object.keys(userData.problemed)
+
+				console.log(probArr.length, studied.size)
+				console.log(!probArr.length || (studied.size + probArr.length) % 5)
+				
+				if (!probArr.length || (studied.size + probArr.length) % 5) {
+					num = Math.floor(Math.random() * kanji.length)
+				} else {
+					if (Math.random() > 0.2) {
+						num = s.getRandomElem(probArr)
+					} else {
+						num = s.getRandomElem(Array.from(studied))
+						console.log('happy accident')
+					}
+				}
+
+				// divider
+
 				let k = kanji[num]
 
 				let hir = [...hiragana.syl]
@@ -1273,9 +1304,26 @@ export const commands = {
 						if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
 							score++
 							messageForPreviousGuess = `Right!`
+
+							if (!studied.has(num)) {
+								let p = userData.problemed[num]
+
+								p = (p) ? ++p : 1
+								
+								if (p == 3) {
+									studied.add(num)
+									delete userData.problemed[num]
+								} else {
+									userData.problemed[num] = p
+								}
+							}
+							
 						} else {
 							wrongSet.add(k.s)
 							messageForPreviousGuess = `Nope.`
+
+							userData.problemed[num] = 0
+							studied.delete(num)
 						}
 						messageForPreviousGuess += ` \n`
 					})
@@ -1292,6 +1340,15 @@ export const commands = {
 						}
 
 						msg.reply({embed: gameoverEmbed})
+
+						userData.studied = Array.from(studied)
+						fs.writeFile(userPath, JSON.stringify(userData, null, 2), err => {
+							if (err) {
+								console.log(userData)
+								console.log(err)
+								console.log("error on writing to file!")
+							}
+						})
 					});
 
 				rounds++
