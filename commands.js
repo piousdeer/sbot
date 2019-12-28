@@ -1306,7 +1306,7 @@ export const commands = {
 
 								p = (p) ? ++p : 1
 								
-								if (p == 3) {
+								if (p == 7) {
 									studied.add(num)
 									delete userData.problemed[num]
 								} else {
