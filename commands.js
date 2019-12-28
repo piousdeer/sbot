@@ -1221,9 +1221,6 @@ export const commands = {
 				let num
 				let probArr = Object.keys(userData.problemed)
 
-				console.log(probArr.length, studied.size)
-				console.log(!probArr.length || (studied.size + probArr.length) % 5)
-				
 				if (!probArr.length || (studied.size + probArr.length) % 5) {
 					num = Math.floor(Math.random() * kanji.length)
 				} else {
@@ -1231,7 +1228,6 @@ export const commands = {
 						num = s.getRandomElem(probArr)
 					} else {
 						num = s.getRandomElem(Array.from(studied))
-						console.log('happy accident')
 					}
 				}
 
