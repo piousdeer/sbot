@@ -31,14 +31,17 @@ export function envelope(msg) {
 		msg.react("✉")
 	}
 }
-export function deleteUserMessage(msg) {
-	if (msg.channel.type == "text") { // если бот не начал "беседовать" с юзером
-		let bot_permissions = msg.channel.permissionsFor(client.user)
-		if (bot_permissions.has("MANAGE_MESSAGES")) {
-			msg.delete(10000)
-				.then(() => {})
-				.catch(error => console.log(error))
-		}
+export function deleteUserMessage(msg, time) {
+	if (time === undefined) {
+		time = 10000
+	}
+	if (msg.channel.type == "text" && msg.guild.member(client.user.id).hasPermission('MANAGE_MESSAGES')) {
+		msg.delete(time)
+		.then(() => {})
+		.catch(error => console.log(error))
+		return true
+	} else {
+		return false
 	}
 }
 export function isThisBotsChannel(msg) {

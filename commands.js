@@ -1189,6 +1189,9 @@ export const commands = {
 		async f (msg, args) {
 
 			let isGameRunning = true
+			let firstQuestion = true
+			let botMessage
+			let userAnswerMessage
 
 			let messageForPreviousGuess = ''
 
@@ -1289,12 +1292,21 @@ export const commands = {
 						text: `${msg.author.tag} - ${score}/${rounds}`
 					}
 				}
-				
-				await msg.channel.send({embed: embed})
+
+				if (!firstQuestion && s.deleteUserMessage(userAnswerMessage, 0)) {
+					await botMessage.edit({embed: embed})
+				} else {
+					await msg.channel.send({embed: embed}).then(async (m) => {
+						firstQuestion = false
+						botMessage = m
+					})
+					.catch(error => console.log(error))
+				}
 				
 				await msg.channel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
 						const m = collected.first()
+						userAnswerMessage = m
 						if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
 							score++
 							messageForPreviousGuess = `Right!`
