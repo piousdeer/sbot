@@ -25,7 +25,7 @@ export let visibleServers = []
 export let requestsCounter = 0
 export let messagesCounter = 0
 
-let userDB = {}
+export let userDB = {}
 const floodRate = 5 * 1000; 
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
@@ -81,7 +81,7 @@ function processMessage(msg) {
 
 	// отлично, юзер обращается именно к боту, идём дальше...
 
-	// антифлуд
+	// заносим юзера в базу
 	const now = Date.now()
 	const uid = msg.author.id
 	
@@ -92,7 +92,13 @@ function processMessage(msg) {
 		}
 	}
 	const udata = userDB[uid]
+
+	// проверяем, нужно ли сейчас обрабатывать команды в лс
+	if (msg.channel.type == "dm" && userDB[uid].learningKanji) {
+		return;
+	}
 	
+	// антифлуд
 	let score = udata.ftime - now
 	if (score < 0) {
 		udata.fchills = 0

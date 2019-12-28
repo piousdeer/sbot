@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, requestsCounter, visibleServers} from "./bot"
+import {client, OWNER_ID, BOT_ID, userDB, visibleServers} from "./bot"
 import {imgDatabaseURL} from "./config"
 import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
@@ -1189,6 +1189,8 @@ export const commands = {
 		async f (msg, args) {
 
 			let isGameRunning = true
+			userDB[msg.author.id].learningKanji = true
+
 			let firstQuestion = true
 			let botMessage
 			let userAnswerMessage
@@ -1335,6 +1337,7 @@ export const commands = {
 					})
 					.catch(collected => {
 						isGameRunning = false
+						userDB[msg.author.id].learningKanji = false
 						const gameoverEmbed = {
 							title: "Time's up!"
 						}
