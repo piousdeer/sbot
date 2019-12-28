@@ -1329,7 +1329,7 @@ export const commands = {
 						if (rounds) {
 							gameoverEmbed.description = `Result: ${(score/rounds*100).toFixed(2)}%`
 							if (wrongSet.size) {
-								gameoverEmbed.description += ` \nTo learn: ${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join(" ")}`
+								gameoverEmbed.description += ` \nTo learn: ${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join("　")}`
 							}
 						}
 
