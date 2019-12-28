@@ -1224,14 +1224,12 @@ export const commands = {
 				if (!probArr.length || (studied.size + probArr.length) % 5) {
 					num = Math.floor(Math.random() * kanji.length)
 				} else {
-					if (Math.random() > 0.2) {
+					if (Math.random() > 0.2 || !studied.size) {
 						num = s.getRandomElem(probArr)
 					} else {
 						num = s.getRandomElem(Array.from(studied))
 					}
 				}
-
-				// divider
 
 				let k = kanji[num]
 
@@ -1340,8 +1338,6 @@ export const commands = {
 						userData.studied = Array.from(studied)
 						fs.writeFile(userPath, JSON.stringify(userData, null, 2), err => {
 							if (err) {
-								console.log(userData)
-								console.log(err)
 								console.log("error on writing to file!")
 							}
 						})
