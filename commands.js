@@ -75,7 +75,7 @@ export const commands = {
 		v: true,
 		f (msg) {
 			let pongText = "🏓 Понг!"
-			console.log("ping test")
+			console.log("ping test more")
 			msg.channel.send(pongText)
 				.then((pong) => {
 					let userTime = msg.createdTimestamp / 1000
