@@ -1189,7 +1189,9 @@ export const commands = {
 		async f (msg, args) {
 
 			let isGameRunning = true
-			userDB[msg.author.id].learningKanji = true
+			if (msg.channel.type == "dm") {
+				userDB[msg.author.id].learningKanji = true
+			}
 
 			let firstQuestion = true
 			let botMessage
