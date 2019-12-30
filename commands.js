@@ -1271,7 +1271,7 @@ export const commands = {
 										if (rvarRomaji.slice(-1) != 'n') {
 											rvarRomaji = rvarRomaji.slice(0, -1)
 										}
-										if (["sh", "ch"].includes(rvarRomaji.slice(-2)) || rvarRomaji.slice(-1) == "j") {
+										if (rvarRomaji.match(/(sh|ch|j)$/)) {
 											rvarRomaji += lat[x][y][1]
 										} else {
 											rvarRomaji += lat[x][y]
