@@ -1349,6 +1349,7 @@ export const commands = {
 					}]
 				}).then(async (m) => {
 					botMessage = m
+					gameChannel.stopTyping()
 				})
 				.catch(error => console.log(error))
 
