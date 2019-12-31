@@ -1292,8 +1292,8 @@ export const commands = {
 
 				// canvas start
 
-				const canvas = Canvas.createCanvas(k.s.length*160+40, 200)
-				const ctx = canvas.getContext('2d')
+				let canvas = Canvas.createCanvas(k.s.length*160+40, 200)
+				let ctx = canvas.getContext('2d')
 	
 				let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
 				if (imageInfo.error) throw Error(imageInfo.error)
@@ -1324,7 +1324,7 @@ export const commands = {
 				ctx.strokeStyle = 'black';
 				ctx.lineWidth = 1;
 				ctx.strokeText(k.s, canw/2, canh/2);
-				const buf = canvas.toBuffer('image/png')
+				let buf = canvas.toBuffer('image/png')
 				
 				// canvas end
 
@@ -1350,6 +1350,9 @@ export const commands = {
 				}).then(async (m) => {
 					botMessage = m
 					gameChannel.stopTyping()
+					canvas = null
+					ctx = null
+					buf = null
 				})
 				.catch(error => console.log(error))
 
