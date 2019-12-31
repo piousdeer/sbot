@@ -1205,7 +1205,7 @@ export const commands = {
 			let rounds = 0
 			let wrongSet = new Set()
 
-			let secondsToWait = 15
+			let secondsToWait = 60
 			if (args[0] && Number(args[0])) {
 				secondsToWait = Number(args[0])
 			}
