@@ -1329,7 +1329,8 @@ export const commands = {
 				// canvas end
 
 				let hintText = `${k.r.join(", ")}, ${k.m[0]}`
-				if (userData.problemed[num] >= 3) { // if user wrote word 3 times already
+				let pb = userData.problemed[num]
+				if (pb === undefined || pb >= 3) { // if user wrote word 3 times already
 					hintText = `||\` ${hintText} \`||`
 				}
 
@@ -1404,7 +1405,7 @@ export const commands = {
 						if (rounds) {
 							gameoverEmbed.description = `Result: ${(score/rounds*100).toFixed(2)}%`
 							if (wrongSet.size) {
-								gameoverEmbed.description += ` \nTo learn: ${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join("　")}`
+								gameoverEmbed.description += ` \nTo learn: \n${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/%23kanji%20'+x+')').join("　")}`
 							}
 						}
 
