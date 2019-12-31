@@ -1383,7 +1383,7 @@ export const commands = {
 
 								p = (p) ? ++p : 1
 								
-								if (p == timesToAnswer) {
+								if (p >= timesToAnswer) {
 									studied.add(num)
 									delete userData.problemed[num]
 								} else {
@@ -1416,7 +1416,7 @@ export const commands = {
 						msg.reply({embed: gameoverEmbed})
 
 						userData.studied = Array.from(studied)
-						fs.writeFile(userPath, JSON.stringify(userData, null, 2), err => {
+						fs.writeFile(userPath, JSON.stringify(userData, null, 4), err => {
 							if (err) {
 								console.log("error on writing to file!")
 							}
