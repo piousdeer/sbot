@@ -1210,6 +1210,10 @@ export const commands = {
 				secondsToWait = Number(args[0])
 			}
 
+			let newWordsToAddCount = 5
+			let timesToAnswer = 7
+			let timesToShowHint = 3
+
 			const filter = (m) => m.author.id == msg.author.id;
 
 			let userPath = `jap_users/${msg.author.id}.json`
@@ -1230,7 +1234,7 @@ export const commands = {
 				let num
 				let probArr = Object.keys(userData.problemed)
 
-				if (!probArr.length || (studied.size + probArr.length) % 5) {
+				if (!probArr.length || (studied.size + probArr.length) % newWordsToAddCount) {
 					num = Math.floor(Math.random() * kanji.length)
 				} else {
 					if (Math.random() > 0.2 || !studied.size) {
@@ -1330,7 +1334,7 @@ export const commands = {
 
 				let hintText = `${k.r.join(", ")}, ${k.m[0]}`
 				let pb = userData.problemed[num]
-				if (pb === undefined || pb >= 3) { // if user wrote word 3 times already
+				if (pb === undefined || pb >= timesToShowHint) {
 					hintText = `||\` ${hintText} \`||`
 				}
 
@@ -1379,7 +1383,7 @@ export const commands = {
 
 								p = (p) ? ++p : 1
 								
-								if (p == 7) {
+								if (p == timesToAnswer) {
 									studied.add(num)
 									delete userData.problemed[num]
 								} else {
