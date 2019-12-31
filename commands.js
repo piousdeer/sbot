@@ -8,7 +8,8 @@ import Cheerio from "cheerio"
 import Intl from "intl"
 import fs from "fs"
 
-const { createCanvas } = require('canvas')
+const Canvas = require('canvas')
+Canvas.registerFont('fonts/KosugiMaru-Regular.ttf', { family: 'KosugiMaru' })
 
 export const commands = {
 	Help: {
@@ -1016,7 +1017,7 @@ export const commands = {
 					let segmentW = Math.round(canvasW / palette.length) * 2
 					let segmentH = Math.round(canvasH / 2)
 
-					const canvas = createCanvas(canvasW, canvasH)
+					const canvas = Canvas.createCanvas(canvasW, canvasH)
 					const ctx = canvas.getContext('2d')
 					for (let i = 0; i < palette.length; i++) {
 						let hex = palette[i].toString(16)
@@ -1196,8 +1197,9 @@ export const commands = {
 			let firstQuestion = true
 			let botMessage
 			let userAnswerMessage
+			let gameChannel = msg.channel
 
-			let messageForPreviousGuess = ''
+			let messageForPreviousGuess = 'Let\'s begin!'
 
 			let score = 0
 			let rounds = 0
@@ -1288,27 +1290,77 @@ export const commands = {
 					romaji.push(rvarRomaji)
 				}
 
+				// canvas start
+
+				const canvas = Canvas.createCanvas(k.s.length*160+40, 200)
+				const ctx = canvas.getContext('2d')
+	
+				let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
+				if (imageInfo.error) throw Error(imageInfo.error)
+				const bg = await Canvas.loadImage(imageInfo.url)
+	
+				const bgw = bg.width
+				const bgh = bg.height
+				const canw = canvas.width
+				const canh = canvas.height
+	
+				const bgRatio = bgw/bgh
+				const canvasRatio = canw/canh
+	
+				if (bgRatio < canvasRatio) {
+					ctx.drawImage(bg, 0, (bgh-bgw/canvasRatio)/2, bgw, bgw/canvasRatio, 0, 0, canw, canh)
+				} else {
+					ctx.drawImage(bg, (bgw-bgh*canvasRatio)/2, 0, bgh*canvasRatio, bgh, 0, 0, canw, canh)
+				}
+				
+	
+				ctx.font = `160px "KosugiMaru"`
+				ctx.textAlign = "center"
+				ctx.textBaseline = "middle"
+				ctx.fillStyle = 'rgba(114, 137, 218, 0.3)';
+				ctx.fillRect(0, 0, canw, canh);
+				ctx.fillStyle = 'white'
+				ctx.fillText(k.s, canw/2, canh/2)
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = 1;
+				ctx.strokeText(k.s, canw/2, canh/2);
+				const buf = canvas.toBuffer('image/png')
+				
+				// canvas end
+
 				const embed = {
-					title: k.s,
-					description: `${messageForPreviousGuess}You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/%23kanji%20${k.s}) \n\n||\` ${k.r.join(", ")}, ${k.m[0]} \`||  `,
+					title: messageForPreviousGuess,
+					description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/%23kanji%20${k.s}) \n\n||\` ${k.r.join(", ")}, ${k.m[0]} \`||  `,
+					image: {
+						url: 'attachment://neko.png'
+					},
 					footer: {
 						icon_url: msg.author.avatarURL,
 						text: `${msg.author.tag} - ${score}/${rounds}`
 					}
 				}
 
+				let botmsgToDelete = botMessage
+				await gameChannel.send({
+					embed: embed,
+					files: [{
+						attachment: buf,
+						name: 'neko.png'
+					}]
+				}).then(async (m) => {
+					botMessage = m
+				})
+				.catch(error => console.log(error))
+
 				if (!firstQuestion && s.deleteUserMessage(userAnswerMessage, 0)) {
-					await botMessage.edit({embed: embed})
+					await botmsgToDelete.delete()
 				} else {
-					await msg.channel.send({embed: embed}).then(async (m) => {
-						firstQuestion = false
-						botMessage = m
-					})
-					.catch(error => console.log(error))
+					firstQuestion = false
 				}
 				
-				await msg.channel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
+				await gameChannel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
 					.then(collected => {
+						gameChannel.startTyping()
 						const m = collected.first()
 						userAnswerMessage = m
 						if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
@@ -1335,7 +1387,6 @@ export const commands = {
 							userData.problemed[num] = 0
 							studied.delete(num)
 						}
-						messageForPreviousGuess += ` \n`
 					})
 					.catch(collected => {
 						isGameRunning = false
