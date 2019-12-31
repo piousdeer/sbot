@@ -1328,9 +1328,14 @@ export const commands = {
 				
 				// canvas end
 
+				let hintText = `${k.r.join(", ")}, ${k.m[0]}`
+				if (userData.problemed[num] >= 3) { // if user wrote word 3 times already
+					hintText = `||\` ${hintText} \`||`
+				}
+
 				const embed = {
 					title: messageForPreviousGuess,
-					description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/%23kanji%20${k.s}) \n\n||\` ${k.r.join(", ")}, ${k.m[0]} \`||  `,
+					description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/%23kanji%20${k.s}) \n\n${hintText}`,
 					image: {
 						url: 'attachment://neko.png'
 					},
