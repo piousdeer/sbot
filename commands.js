@@ -1340,7 +1340,7 @@ export const commands = {
 
 				const embed = {
 					title: messageForPreviousGuess,
-					description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/%23kanji%20${k.s}) \n\n${hintText}`,
+					description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/${k.s}) \n\n${hintText}`,
 					image: {
 						url: 'attachment://neko.png'
 					},
