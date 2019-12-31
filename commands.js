@@ -25,36 +25,16 @@ export const commands = {
 				color: 0x7486C2,
 				title: "Привет, меня зовут СтиллБот <:tuturuMetal:601419582837751810>",
 				description: helpLines.join("\n"),
-				fields: [
-					{
-						name: "имг [теги через пробел]",
-						value: "Рандомная пикча из [Галереи](https://stilltest.tk/gallery/).",
-						inline: true
-					},
-					{
-						name: "ава [никнейм или айди юзера]",
-						value: "Глянуть чью-то авку.",
-						inline: true
-					},
-					{
-						name: "<описание пикчи> + прикреплённое изображение 📎",
-						value: "Предложить свой скриншот в Галерею (только в ЛС, [пример оформления](https://i.imgur.com/kus289H.png)).\nЕсли я поставил в ответ 📮 - отправка работает."
-					},
-					{
-						name: "палитра + прикреплённое изображение 📎",
-						value: "Считать цвета с картинки."
-					},
-					{
-						name: "кана <хирагана|катакана>",
-						value: "Подучить кану.",
-						inline: true
-					},
-					{
-						name: "kanji [seconds]",
-						value: "JLPT N5 vocabulary test!",
-						inline: true
-					}
-				]
+				fields: []
+			}
+
+			// collect descriptions
+			let cmds = Object.keys(commands)
+			for (let cmd of cmds) {
+				let d = commands[cmd].d
+				if (d) {
+					helpEmbed.fields.push(d)
+				}
 			}
 		
 			msg.channel.send({embed: helpEmbed})
@@ -93,6 +73,11 @@ export const commands = {
 	Img: {
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
 		v: true,
+		d: {
+			name: "имг [теги через пробел]",
+			value: "Рандомная пикча из [Галереи](https://stilltest.tk/gallery/).",
+			inline: true
+		},
 		async f (msg, args) {
 			let argsText = ""
 		
@@ -131,6 +116,10 @@ export const commands = {
 	},
 	Send: {
 		r: /^(отправ(ит)?ь|предложи(ть)?|пришли|прислать|send)$/,
+		d: {
+			name: "<описание пикчи> + прикреплённое изображение 📎",
+			value: "Предложить свой скриншот в Галерею (только в ЛС, [пример оформления](https://i.imgur.com/kus289H.png)).\nЕсли я поставил в ответ 📮 - отправка работает."
+		},
 		async f (msg, args, msgSimplifiedOrigCase) {
 			let imageParamsArray = msgSimplifiedOrigCase.match(/\S+ (\S+) ([\s\S]+)/)
 		
@@ -437,6 +426,11 @@ export const commands = {
 	Avatar: {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
 		v: true,
+		d: {
+			name: "ава [никнейм или айди юзера]",
+			value: "Глянуть чью-то авку.",
+			inline: true
+		},
 		async f (msg, args, msgSimplifiedOrigCase) {
 			let user
 			if (args[0] == "random") {
@@ -982,6 +976,10 @@ export const commands = {
 	Palette: {
 		r: /^(палитра|palette)[.!]?$/,
 		v: true,
+		d: {
+			name: "палитра + прикреплённое изображение 📎",
+			value: "Считать цвета с картинки."
+		},
 		async f (msg) {
 			if (!msg.attachments.size) {
 				msg.channel.send("Нужно прикрепить картинку к сообщению!")
@@ -1073,6 +1071,11 @@ export const commands = {
 	Kana: {
 		r: /^(kana|кана)[.!]?$/,
 		v: true,
+		d: {
+			name: "кана <хирагана|катакана>",
+			value: "Подучить кану.",
+			inline: true
+		},
 		async f (msg, args) {
 			let k = hiragana
 			if (["katakana", "катакана"].includes(args[0])) {
@@ -1176,6 +1179,11 @@ export const commands = {
 	Jwords: {
 		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
 		v: true,
+		d: {
+			name: "kanji [seconds]",
+			value: "JLPT N5 vocabulary test!",
+			inline: true
+		},
 		async f (msg, args) {
 
 			let isGameRunning = true
