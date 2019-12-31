@@ -1391,6 +1391,7 @@ export const commands = {
 					})
 					.catch(collected => {
 						isGameRunning = false
+						gameChannel.stopTyping()
 						userDB[msg.author.id].learningKanji = false
 						const gameoverEmbed = {
 							title: "Time's up!"
