@@ -1210,9 +1210,13 @@ export const commands = {
 				secondsToWait = Number(args[0])
 			}
 
-			let newWordsToAddCount = 5
-			let timesToAnswer = 7
-			let timesToShowHint = 3
+			const newWordsToAddCount = 5
+			const timesToAnswer = 7
+			const timesToShowHint = 3
+
+			const canh = 200
+			const textRatio = 0.8
+			const cardFontSize = Math.ceil(canh*textRatio)
 
 			const filter = (m) => m.author.id == msg.author.id;
 
@@ -1296,7 +1300,9 @@ export const commands = {
 
 				// canvas start
 
-				const canvas = Canvas.createCanvas(k.s.length*160+40, 200)
+				const canw = k.s.length*cardFontSize + (canh - cardFontSize)
+
+				const canvas = Canvas.createCanvas(canw, canh)
 				const ctx = canvas.getContext('2d')
 	
 				let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
@@ -1305,8 +1311,6 @@ export const commands = {
 	
 				const bgw = bg.width
 				const bgh = bg.height
-				const canw = canvas.width
-				const canh = canvas.height
 	
 				const bgRatio = bgw/bgh
 				const canvasRatio = canw/canh
@@ -1318,7 +1322,7 @@ export const commands = {
 				}
 				
 	
-				ctx.font = `160px "KosugiMaru"`
+				ctx.font = `${cardFontSize}px "KosugiMaru"`
 				ctx.textAlign = "center"
 				ctx.textBaseline = "middle"
 				ctx.fillStyle = 'rgba(114, 137, 218, 0.3)';
