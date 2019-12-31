@@ -1211,8 +1211,8 @@ export const commands = {
 			}
 
 			const newWordsToAddCount = 5
-			const timesToAnswer = 7
-			const timesToShowHint = 3
+			const timesToAnswer = 5
+			const timesToShowHint = 2
 
 			const canh = 200
 			const textRatio = 0.8
