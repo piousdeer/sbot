@@ -1326,8 +1326,7 @@ export const commands = {
 				// canvas end
 
 				let hintText = `${k.r.join(", ")}, ${k.m[0]}`
-				let pb = userData.problemed[num]
-				if (pb === undefined || pb >= timesToShowHint) {
+				if (studied.has(num) || userData.problemed[num] >= timesToShowHint) {
 					hintText = `||\` ${hintText} \`||`
 				}
 
