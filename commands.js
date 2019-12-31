@@ -1297,7 +1297,7 @@ export const commands = {
 	
 				let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
 				if (imageInfo.error) throw Error(imageInfo.error)
-				const bg = await Canvas.loadImage(imageInfo.url)
+				let bg = await Canvas.loadImage(imageInfo.url)
 	
 				const bgw = bg.width
 				const bgh = bg.height
@@ -1351,6 +1351,7 @@ export const commands = {
 					botMessage = m
 					gameChannel.stopTyping()
 					canvas = null
+					bg = null
 					ctx = null
 					buf = null
 				})
