@@ -1495,7 +1495,7 @@ export const commands = {
 			} else if ([0,1].includes(n)) {
 				msg.channel.send(`It's just ${n}.`)
 				return
-			} else if (n > 10**9 && msg.author.id != OWNER_ID) {
+			} else if (n > 10**9) {
 				msg.channel.send(`The number is too big!`)
 				return
 			}
