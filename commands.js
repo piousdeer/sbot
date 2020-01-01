@@ -1482,5 +1482,71 @@ export const commands = {
 				}
 			}
 		}
+	},
+	Dividers: {
+		r: /^(dividers|разложи|primecheck)[.!]?$/,
+		v: false,
+		f (msg, args) {
+			
+			let n = Math.abs(parseInt(args[0]))
+			if (n === NaN) {
+				msg.channel.send("Enter a number!")
+				return
+			} else if ([0,1].includes(n)) {
+				msg.channel.send(`It's just ${n}.`)
+				return
+			}
+
+			const powers = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+			let divs = {}
+			let startN = n
+
+			for (let i = 2; i <= startN; i++) {
+				if (n == 1) {
+					break;
+				}
+				let checking = true
+				while (checking) {
+					if (n % i == 0) {
+						if (divs[i]) {
+							divs[i]++
+						} else {
+							divs[i] = 1
+						}
+						n = n / i
+					} else {
+						checking = false
+					}
+				}
+			}
+
+			let divsCount = Object.keys(divs).length
+
+			if (divsCount) {
+				let textDivs = []
+
+				for (let d of Object.keys(divs)) {
+					let p = divs[d]
+					if (divsCount == 1 && p == 1) {
+						msg.channel.send(`${startN} is a prime number!`)
+						return
+					}
+
+					let tp = p.toString()
+					let td = d.toString()
+	
+					for (let i = 0; i < tp.length; i++) {
+						td += powers[tp[i]]
+					}
+	
+					textDivs.push(td)
+				}
+	
+				msg.channel.send(`${startN} = ${textDivs.join(" * ")}`)
+			} else {
+				msg.channel.send("Not valid number!")
+			}
+
+		}
 	}
 }
