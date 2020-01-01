@@ -1495,7 +1495,7 @@ export const commands = {
 			} else if ([0,1].includes(n)) {
 				msg.channel.send(`It's just ${n}.`)
 				return
-			} else if (n > 10**9) {
+			} else if (n > Number.MAX_SAFE_INTEGER) {
 				msg.channel.send(`The number is too big!`)
 				return
 			}
@@ -1503,9 +1503,15 @@ export const commands = {
 			const powers = "⁰¹²³⁴⁵⁶⁷⁸⁹"
 			let divs = {}
 			let startN = n
+			let maxCheck = Math.floor(Math.sqrt(n))
 
 			let start = new Date();
-			for (let i = 2; i <= startN; i++) {
+			
+			if (n % 2 == 0) {
+				divs[2] = 1
+				n = n / 2
+			}
+			for (let i = 3; i <= maxCheck; i += 2) {
 				if (n == 1) {
 					break;
 				}
@@ -1523,11 +1529,16 @@ export const commands = {
 					}
 				}
 			}
+			if (n != 1) {
+				divs[n] = 1
+				n = 1
+			}
+
 			let end = new Date();
 
 			let resultEmbed = {
 				footer: {
-					text: `Calculated in ${((end - start)/1000).toFixed(3)} seconds.`
+					text: `Calculated in ${end - start} ms.`
 				}
 			}
 
@@ -1543,12 +1554,13 @@ export const commands = {
 						msg.channel.send({embed: resultEmbed})
 						return
 					}
-
-					let tp = p.toString()
 					let td = d.toString()
-	
-					for (let i = 0; i < tp.length; i++) {
-						td += powers[tp[i]]
+
+					if (p != 1) {
+						let tp = p.toString()
+						for (let i = 0; i < tp.length; i++) {
+							td += powers[tp[i]]
+						}
 					}
 	
 					textDivs.push(td)
