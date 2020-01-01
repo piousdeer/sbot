@@ -1495,12 +1495,16 @@ export const commands = {
 			} else if ([0,1].includes(n)) {
 				msg.channel.send(`It's just ${n}.`)
 				return
+			} else if (n > 10**9 && msg.author.id != OWNER_ID) {
+				msg.channel.send(`The number is too big!`)
+				return
 			}
 
 			const powers = "⁰¹²³⁴⁵⁶⁷⁸⁹"
 			let divs = {}
 			let startN = n
 
+			let start = new Date();
 			for (let i = 2; i <= startN; i++) {
 				if (n == 1) {
 					break;
@@ -1519,6 +1523,13 @@ export const commands = {
 					}
 				}
 			}
+			let end = new Date();
+
+			let resultEmbed = {
+				footer: {
+					text: `Calculated in ${((end - start)/1000).toFixed(3)} seconds.`
+				}
+			}
 
 			let divsCount = Object.keys(divs).length
 
@@ -1528,7 +1539,8 @@ export const commands = {
 				for (let d of Object.keys(divs)) {
 					let p = divs[d]
 					if (divsCount == 1 && p == 1) {
-						msg.channel.send(`${startN} is a prime number!`)
+						resultEmbed.title = `${startN} is a prime number!`
+						msg.channel.send({embed: resultEmbed})
 						return
 					}
 
@@ -1542,7 +1554,8 @@ export const commands = {
 					textDivs.push(td)
 				}
 	
-				msg.channel.send(`${startN} = ${textDivs.join(" * ")}`)
+				resultEmbed.title = `${startN} = ${textDivs.join(" * ")}`
+				msg.channel.send({embed: resultEmbed})
 			} else {
 				msg.channel.send("Not valid number!")
 			}
