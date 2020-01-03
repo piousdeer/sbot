@@ -1507,10 +1507,21 @@ export const commands = {
 
 			let start = new Date();
 			
-			if (n % 2 == 0) {
-				divs[2] = 1
-				n = n / 2
+			let checkingTwo = true
+
+			while (checkingTwo) {
+				if (n % 2 == 0) {
+					if (divs[2]) {
+						divs[2]++
+					} else {
+						divs[2] = 1
+					}
+					n = n / 2
+				} else {
+					checkingTwo = false
+				}
 			}
+
 			for (let i = 3; i <= maxCheck; i += 2) {
 				if (n == 1) {
 					break;
