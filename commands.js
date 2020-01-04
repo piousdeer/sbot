@@ -1609,6 +1609,7 @@ export const commands = {
 			}
 
 			const powers = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+			let result
 
 			// теперь выписываем всё это
 			let str = ''
@@ -1623,7 +1624,7 @@ export const commands = {
 				} else
 				if (n - 1 == k) {
 					// если число простое
-					return (k + ' - простое число')
+					result = k + ' - простое число'
 				}
 				// приписываем множитель
 				str += n - 1
@@ -1632,7 +1633,7 @@ export const commands = {
 					str += Array.from((p[n]).toString()).map(x => powers[x]).join("")
 				}
 			}
-			let result = k + ' = ' + str
+			result = (result) ? result : k + ' = ' + str
 
 			let end = new Date()
 
