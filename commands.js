@@ -1487,101 +1487,163 @@ export const commands = {
 		r: /^(dividers|разложи|primecheck)[.!]?$/,
 		v: false,
 		f (msg, args) {
+			if (!args[0]) {
+				msg.channel.send('Введите число!')
+				return
+			}
 			
-			let n = Math.abs(parseInt(args[0]))
-			if (n === NaN) {
-				msg.channel.send("Enter a number!")
+			let start = new Date()
+			let a = args[0]
+
+			// code below by PLAYER_CHAR https://chaoscraft.ml/tools/numbers/
+
+			// если это десятичная дробь, то считаем десятки в минус
+			let ten = 0
+			let parts = a.split('.')
+			let ns = parts[0]
+			if (parts[1]) {
+				let frac = parts[1].replace(/0+$/, '')
+				ns += frac
+				ten = frac.length
+			}
+
+			// z - целое число, k - число для вывода в конце
+			let z = +ns
+			let k = String(z / Math.pow(10, ten))
+
+			if (!isFinite(z)) {
+				// ввели бред
+				msg.channel.send('Ты втираешь мне какую-то дичь')
 				return
-			} else if ([0,1].includes(n)) {
-				msg.channel.send(`It's just ${n}.`)
+			}
+			if (!Number.isSafeInteger(Math.floor(z))) {
+				// число большое, оно может округлиться
+				if (ten) {
+					msg.channel.send('Слишком много цифр, будут ошибки в округлении')
+				} else {
+					msg.channel.send('Число слишком большое')
+				}
 				return
-			} else if (n > Number.MAX_SAFE_INTEGER) {
-				msg.channel.send(`The number is too big!`)
+			}
+
+			// тривиальные варианты
+			if (z == 0) {
+				msg.channel.send('Введите число, отличное от нуля')
 				return
+			}
+			if (z == 1) {
+				msg.channel.send('1 не имеет простых делителей')
+				return
+			}
+
+			// p - ассоциативный массив простых чисел
+			// число "-1" в нём сортируется отстойно, сдвинем всё на единицу
+			let p = {}
+
+			// если z отрицательное, то кидаем сразу -1
+			if (z < 0) {
+				// да-да, мы сдвинули, 0 означает "-1"
+				p[0] = 1
+				z *= -1
+			}
+
+			// проверка, делится ли n на l
+			function divable(n, l) {
+				let s = n / l
+				return (s == Math.trunc(s))
+			}
+
+			// процедура деления z на n
+			function div(n) {
+				if (n > s) {
+					// дальше корня ничего не будет
+					if (z != 1) {
+						// выделяем оставшееся простое число
+						p[z + 1] = 1
+					}
+					// всё, доделились
+					throw 0
+				}
+				if (divable(z, n)) {
+					// если делится, то делим
+					let l = 0
+					do {
+						// делим его на n, пока делится
+						l++
+						z /= n
+					} while (divable(z, n))
+					
+					// записываем результат
+					p[n + 1] = l
+					if (z < 2) {
+						// всё, доделились
+						throw 0
+					}
+					s = Math.floor(Math.sqrt(z))
+				}
+			}
+
+			// n - текущее простое число
+			let n = 3
+			// s - предельное значение
+			let s = Math.floor(Math.sqrt(z))
+
+			// делим, пока не выделится всё
+			try {
+				// двойку проверяем отдельно
+				div(2)
+				while (true) {
+					// далее тупо проверяем все нечётные
+					div(n)
+					n += 2
+				}
+				// под конец div() рано или поздно выкинет исключение
+			} catch(e) {}
+
+			// расплачиваемся, если это была десятичная дробь
+			if (ten) {
+				// двойки
+				p[3] = p[3] ? p[3] - ten : -ten
+				// пятёрки
+				p[6] = p[6] ? p[6] - ten : -ten
 			}
 
 			const powers = "⁰¹²³⁴⁵⁶⁷⁸⁹"
-			let divs = {}
-			let startN = n
-			let maxCheck = Math.floor(Math.sqrt(n))
 
-			let start = new Date();
-			
-			let checkingTwo = true
-
-			while (checkingTwo) {
-				if (n % 2 == 0) {
-					if (divs[2]) {
-						divs[2]++
-					} else {
-						divs[2] = 1
-					}
-					n = n / 2
-				} else {
-					checkingTwo = false
+			// теперь выписываем всё это
+			let str = ''
+			for (n in p) {
+				if (!p[n]) {
+					// если 0.5 и тому подобное, то появится 5^0, которое не нужно
+					continue
+				}
+				if (str) {
+					// знак умножения между множителями
+					str += ' × '
+				} else
+				if (n - 1 == k) {
+					// если число простое
+					return (k + ' - простое число')
+				}
+				// приписываем множитель
+				str += n - 1
+				// пишем его степень
+				if (p[n] != 1) {
+					str += Array.from((p[n]).toString()).map(x => powers[x]).join("")
 				}
 			}
+			let result = k + ' = ' + str
 
-			for (let i = 3; i <= maxCheck; i += 2) {
-				if (n == 1) {
-					break;
-				}
-				let checking = true
-				while (checking) {
-					if (n % i == 0) {
-						if (divs[i]) {
-							divs[i]++
-						} else {
-							divs[i] = 1
-						}
-						n = n / i
-					} else {
-						checking = false
-					}
-				}
-			}
-			if (n != 1) {
-				divs[n] = 1
-				n = 1
-			}
-
-			let end = new Date();
+			let end = new Date()
 
 			let resultEmbed = {
+				title: result,
 				footer: {
-					text: `Calculated in ${end - start} ms.`
+					text: `Вычислено за ${end - start} мс`
 				}
 			}
 
-			let divsCount = Object.keys(divs).length
-
-			if (divsCount) {
-				let textDivs = []
-
-				for (let d of Object.keys(divs)) {
-					let p = divs[d]
-					if (divsCount == 1 && p == 1) {
-						resultEmbed.title = `${startN} is a prime number!`
-						msg.channel.send({embed: resultEmbed})
-						return
-					}
-					let td = d.toString()
-
-					if (p != 1) {
-						let tp = p.toString()
-						for (let i = 0; i < tp.length; i++) {
-							td += powers[tp[i]]
-						}
-					}
-	
-					textDivs.push(td)
-				}
-	
-				resultEmbed.title = `${startN} = ${textDivs.join(" * ")}`
-				msg.channel.send({embed: resultEmbed})
-			} else {
-				msg.channel.send("Not valid number!")
-			}
+			msg.channel.send({embed: resultEmbed})
 
 		}
 	}
