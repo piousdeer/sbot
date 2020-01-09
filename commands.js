@@ -1694,5 +1694,24 @@ export const commands = {
 			}
 
 		}
+	},
+	Uwuify: {
+		r: /^((uwu|owo)ify)[.!]?$/,
+		v: false,
+		f (msg, args) {
+			if (!args[0]) {
+				msg.channel.send('pwewase ewntew sowme tewxt uwu')
+				return
+			}
+
+			let t = args.join(" ")
+			t = t.replace(/th([aiueo])/g, 'd$1')
+			t = t.replace(/[rl]/g, 'w')
+			t = t.replace(/([aiueo])t/g, '$1wt')
+			t = t.replace(/\!/g, ' uwu')
+			t = t.replace(/\'/g, '')
+
+			msg.channel.send(t)
+		}
 	}
 }
