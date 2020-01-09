@@ -120,16 +120,16 @@ export const commands = {
 			name: "<описание пикчи> + прикреплённое изображение 📎",
 			value: "Предложить свой скриншот в Галерею (только в ЛС, [пример оформления](https://i.imgur.com/kus289H.png)).\nЕсли я поставил в ответ 📮 - отправка работает."
 		},
-		async f (msg, args, msgSimplifiedOrigCase) {
-			let imageParamsArray = msgSimplifiedOrigCase.match(/\S+ (\S+) ([\s\S]+)/)
+		async f (msg, args, origCaseParams) {
+			let imageParamsArray = origCaseParams.args
 		
-			if (!imageParamsArray) {
+			if (!imageParamsArray[1]) {
 				msg.react("📜")
 				msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.")
 				return
 			}
 		
-			let startLink = imageParamsArray[1]
+			let startLink = imageParamsArray[0]
 		
 			let imgurParams
 			let discordLink = ""
@@ -173,7 +173,8 @@ export const commands = {
 			let takenByRE = /(?:(?:скрин(?:шот)? )?снято?| ?by|takenby|from)\s*:?\s*(\S+)/i
 			let tagsRE = /(?:tags|т[еаэ]ги)(?:\s+)?:?/i
 			
-			let imageNote = imageParamsArray[2]
+			imageParamsArray.shift()
+			let imageNote = imageParamsArray.join(" ")
 			let customDate = ""
 			let takenBy, imageTitle, tagsRaw
 			
@@ -230,7 +231,7 @@ export const commands = {
 	EmojiList: {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
 		v: true,
-		f (msg, args, msgSimplifiedOrigCase, usedArrowButton) {
+		f (msg, args, origCaseParams, usedArrowButton) {
 			let defaultGuildId = "540145900526501899"
 			let fromWhichServer = client.guilds.get(defaultGuildId)
 			let askedServer = s.getGuild(args[0])
@@ -431,14 +432,14 @@ export const commands = {
 			value: "Глянуть чью-то авку.",
 			inline: true
 		},
-		async f (msg, args, msgSimplifiedOrigCase) {
+		async f (msg, args, origCaseParams) {
 			let user
 			if (args[0] == "random") {
 				user = client.users.filter(u => u.avatar).random()
 			} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 				user = client.users.get(BOT_ID)
 			} else if (args[0]) {
-				let username = s.getSimpleString(msgSimplifiedOrigCase.match(/\S+ (.+)/)[1])
+				let username = s.getSimpleString(origCaseParams.args.join(" "))
 				let result
 				let usernameId
 				// проверка на айди
@@ -523,7 +524,7 @@ export const commands = {
 	Homestuck: {
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
 		v: true,
-		async f (msg, args, msgSimplifiedOrigCase, usedArrowButton) {
+		async f (msg, args, origCaseParams, usedArrowButton) {
 			let page_number
 			let contentText = ""
 
@@ -763,12 +764,12 @@ export const commands = {
 	When: {
 		r: /^(когда)[.!]?$/,
 		v: true,
-		f (msg, args, msgSimplifiedOrigCase) {
+		f (msg, args, origCaseParams) {
 			if (!args[0]) {
 				return
 			}
 		
-			let questionOriginal = msgSimplifiedOrigCase.match(/\S+ ([\s\S]+)/)[1].replace(/[.!?]+$/, "")
+			let questionOriginal = origCaseParams.args.join(" ").replace(/[.!?]+$/, "")
 			let question = s.getSimpleString(questionOriginal)
 		
 			let epochStart = 17999
@@ -860,14 +861,14 @@ export const commands = {
 	Three: {
 		r: /^-?(\d)[.!]?$/,
 		v: true,
-		f (msg, args, msgSimplifiedOrigCase) {
+		f (msg, args, origCaseParams) {
 			if (!args[0]) {
 				args.unshift(msg.content.split(/\s+/).slice(-1)[0])
 				s.autoreact(msg, args, false)
 				return
 			}
 		
-			let num = parseInt(msgSimplifiedOrigCase.split(" ")[0])
+			let num = parseInt(origCaseParams.cmd)
 		
 			if (!num && num !== 0) {
 				return
@@ -907,14 +908,14 @@ export const commands = {
 	},
 	Rtfm: {
 		r: /^(rtfm|man|docs?)[.!]?$/,
-		async f (msg, args, msgSimplifiedOrigCase) {
+		async f (msg, args, origCaseParams) {
 			if (!args[0] || !args[1]) {
 				msg.channel.send("Укажите в команде, какие доки вам нужны (js, py, jda) и какой метод/событие ищите.")
 				return
 			}
 		
 			let lang = args[0]
-			let query = msgSimplifiedOrigCase.split(" ")[2]
+			let query = origCaseParams.args[1]
 		
 			let [, docsClass, docsMethod] = query.match(/^(\w+)(?:\.([\w\.]+))?/)
 			docsClass = docsClass[0].toUpperCase() + docsClass.slice(1);
@@ -1431,12 +1432,12 @@ export const commands = {
 	Sub: {
 		r: /^((un)?sub|(ан)?саб)[.!]?$/,
 		v: false,
-		async f (msg, args, msgSimplifiedOrigCase) {
+		async f (msg, args, origCaseParams) {
 			if (!args[0]) {
 				return
 			}
 			let isUserSubbing = true
-			if (msgSimplifiedOrigCase.match(/^(unsub|ансаб)/)) {
+			if (origCaseParams.cmd.match(/^(unsub|ансаб)/)) {
 				isUserSubbing = false
 			}
 			let subTarget

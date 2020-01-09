@@ -138,11 +138,16 @@ function processMessage(msg) {
 		components.shift()
 	}
 
-	let msgSimplifiedOrigCase = componentsOrigCase.join(" ")
-	let msgSimplifiedOrigPings = componentsOrigPings.join(" ")
 	let msgSimplified = components.join(" ")
 	let args = msgSimplified.split(/\s+/)
 	let cmd = args.shift()
+
+	let origCaseArgs = [...componentsOrigCase]
+	origCaseArgs.shift()
+	let origCaseParams = {
+		cmd: cmd,
+		args: origCaseArgs
+	}
 
 	if (!components.length) {
 		return
@@ -150,7 +155,7 @@ function processMessage(msg) {
 
 	// если команда найдена, запишем сообщение в лог
 	requestsCounter++
-	s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
+	s.sentLog(msg, componentsOrigPings.join(" "), logDateOptions)
 
 
 	// попробовать сменить раскладку на всякий случай
@@ -178,7 +183,7 @@ function processMessage(msg) {
 					})
 					.catch(error => console.log(error))
 			} else {
-				commands[i].f(msg, args, msgSimplifiedOrigCase)
+				commands[i].f(msg, args, origCaseParams)
 			}
 			return
 		}
@@ -188,19 +193,18 @@ function processMessage(msg) {
 	if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
 		let url = componentsOrigCase[0]
 		componentsOrigCase.shift()
-		commands.Send.f(msg, null, `send ${url} ${componentsOrigCase.join(" ")}`)
+		commands.Send.f(msg, null, {args: [url, componentsOrigCase.join(" ")]})
 		return
 	} else {
 		let isSentImageHere = false
 		if (msg.channel.type == "dm") {
 			msg.attachments.forEach(att => {
-				commands.Send.f(msg, null, `send ${att.url} ${msg.content.replace(/\s+/g, " ")}`)
+				commands.Send.f(msg, null, {args: [att.url, msg.content.replace(/\s+/g, " ")]})
 				isSentImageHere = true
 			})
 		}
 		if (isSentImageHere) {
 			requestsCounter++
-			s.sentLog(msg, msgSimplifiedOrigPings, logDateOptions)
 			return
 		}
 	}
