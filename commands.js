@@ -859,7 +859,7 @@ export const commands = {
 		}
 	},
 	Three: {
-		r: /^-?(\d)[.!]?$/,
+		r: /^-?(\d+)[.!]?$/,
 		v: true,
 		f (msg, args, origCaseParams) {
 			if (!args[0]) {
@@ -872,8 +872,6 @@ export const commands = {
 		
 			if (!num && num !== 0) {
 				return
-			} else if (num > 7) {
-				num = 7
 			} else if (num < 1) {
 				msg.channel.send("No emoji for you!")
 				return
@@ -902,8 +900,14 @@ export const commands = {
 			}
 		
 			let e = prefix + emoji.name + ":" + emoji.id + postfix
+			let result = e.repeat(num)
 			
-			msg.channel.send(e.repeat(num))
+			if (result.length <= 2000) {
+				msg.channel.send(result)
+			} else {
+				msg.channel.send("Too much!")
+			}
+			
 		}
 	},
 	Rtfm: {
