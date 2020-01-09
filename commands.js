@@ -1497,6 +1497,12 @@ export const commands = {
 
 			// code below by PLAYER_CHAR https://chaoscraft.ml/tools/numbers/
 
+			if (a.match(/e/i)) {
+				// экспоненциальная запись неудобна для проверки
+				msg.channel.send('Введите число в обычной форме!')
+				return
+			}
+
 			// если это десятичная дробь, то считаем десятки в минус
 			let ten = 0
 			let parts = a.split('.')
@@ -1630,7 +1636,7 @@ export const commands = {
 				str += n - 1
 				// пишем его степень
 				if (p[n] != 1) {
-					str += Array.from((p[n]).toString()).map(x => powers[x]).join("")
+					str += Array.from((p[n]).toString()).map(x => powers[x] ? powers[x] : '⁻').join("")
 				}
 			}
 			result = (result) ? result : k + ' = ' + str
