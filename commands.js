@@ -1672,24 +1672,24 @@ export const commands = {
 
 			// code below by PLAYER_CHAR
 
-            let expression = m.trim().replace(/\^/g, '**')
-            if (expression.match(/\/\*|\/\/|\*\//)) {
+			let expression = m.trim().replace(/\^/g, '**')
+			if (expression.match(/\/\*|\/\/|\*\//)) {
 				// ignore if there are comments
 				msg.channel.send("Уберите комментарии!")
-                return false
-            }
-            if (!expression) {
+				return false
+			}
+			if (!expression) {
 				// если при замене обнаружилось, что скобки сломаны
 				msg.channel.send("Ошибка в выражении!")
-                return false
-            }
-            // вычисляем
-            try {
-                let result = eval(expression); // eval = evil
-                if (typeof result === 'number') {
-                    msg.channel.send(String(parseFloat(result.toPrecision(15))))
-                }
-            } catch(e) {
+				return false
+			}
+			// вычисляем
+			try {
+				let result = eval(expression); // eval = evil
+				if (typeof result === 'number') {
+					msg.channel.send(String(parseFloat(result.toPrecision(15))))
+				}
+			} catch(e) {
 				msg.channel.send("Ошибка при вычислении!")
 			}
 
