@@ -1659,42 +1659,6 @@ export const commands = {
 
 		}
 	},
-	Calculate: {
-		r: /^((вы|[пс]о)считай|вычисли|реши|calc(ulate)?)[.!]?$/,
-		v: false,
-		f (msg, args, origCaseParams) {
-			if (!args[0]) {
-				msg.channel.send('Введите выражение!')
-				return
-			}
-
-			let m = origCaseParams.args.join("")
-
-			// code below by PLAYER_CHAR
-
-			let expression = m.trim().replace(/\^/g, '**')
-			if (expression.match(/\/\*|\/\/|\*\//)) {
-				// ignore if there are comments
-				msg.channel.send("Уберите комментарии!")
-				return false
-			}
-			if (!expression) {
-				// если при замене обнаружилось, что скобки сломаны
-				msg.channel.send("Ошибка в выражении!")
-				return false
-			}
-			// вычисляем
-			try {
-				let result = eval(expression); // eval = evil
-				if (typeof result === 'number') {
-					msg.channel.send(String(parseFloat(result.toPrecision(15))))
-				}
-			} catch(e) {
-				msg.channel.send("Ошибка при вычислении!")
-			}
-
-		}
-	},
 	Uwuify: {
 		r: /^((uwu|owo)ify)[.!]?$/,
 		v: false,
