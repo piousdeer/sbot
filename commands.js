@@ -1693,7 +1693,7 @@ export const commands = {
 				msg.channel.startTyping()
 			})
 
-			let nick = (msg.channel.type == "text") ? msg.member.nickname : msg.author.username
+			let nick = (msg.channel.type == "text") ? msg.member.displayName : msg.author.username
 
 			if (msg.attachments.size) {
 				let att = msg.attachments.first()
