@@ -7,8 +7,10 @@ import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
 import fs from "fs"
+import jimp from "jimp"
 
 const Canvas = require('canvas')
+const { Image } = require('canvas')
 Canvas.registerFont('fonts/KosugiMaru-Regular.ttf', { family: 'KosugiMaru' })
 
 export const commands = {
@@ -1676,6 +1678,155 @@ export const commands = {
 			t = t.replace(/\'/g, '')
 
 			msg.channel.send(t)
+		}
+	},
+	Coffee: {
+		r: /^(кофе|coff?ee?)[.!]?$/,
+		v: true,
+		async f (msg) {
+
+			let botMessage
+
+			await msg.channel.send("Заказ принят!").then(async (m) => {
+				botMessage = m
+				msg.channel.startTyping()
+			})
+
+			const canvas = Canvas.createCanvas(1280, 853)
+
+			function findIndex256(arr, v) {
+				let a = 0
+				let b = 256
+				while (b - a > 1) {
+					let c = (a + b) >> 1
+					if (arr[c] < v) {
+						a = c
+					} else {
+						b = c
+					}
+				}
+				return a
+			}
+
+			const imc = new Image()
+			imc.src = "https://cdn.discordapp.com/attachments/602935027306856449/665937097588473868/5RhrSmC0NHE.png"
+			imc.onload = async () => {
+				const imb = new Image()
+				imb.src = msg.author.avatarURL
+				imb.onload = async () => {
+					try {
+						botMessage.edit("Начинаю варить...")
+					} catch (err) {}
+
+					let x0 = 152
+					let x1 = 715
+					let y0 = 270
+					let y1 = 520
+					let w = x1 - x0
+					let h = y1 - y0
+					
+					let cuptop = canvas
+					cuptop.width = w
+					cuptop.height = h
+					let cuptopbm = cuptop.getContext('2d')
+					cuptopbm.filter = 'blur(1.1px)'
+					cuptopbm.drawImage(imb, 0, 0, w, h)
+					cuptopbm.filter = 'none'
+					cuptopbm.globalAlpha = 0.5
+					cuptopbm.drawImage(imb, 0, 0, w, h)
+					cuptopbm.globalAlpha = 1
+					let data = cuptopbm.getImageData(0, 0, w, h)
+					let dat = data.data
+					
+					let counts = new Float64Array(256)
+					let counttotal = 0.0
+					
+					for (let j = 0; j < h; j++) {
+						for (let i = 0; i < w; i++) {
+							// compute dist from center
+							let o = (i + j * w) << 2
+							let x = ((i + 0.5) / w) * 2 - 1
+							let y = ((j + 0.5) / h) * 2 - 1
+							let r2 = x * x + y * y
+							// set opacity
+							let q = r2 > 1 ? 0.0 : 1 - 3 * r2 ** 24 + 2 * r2 ** 36
+							let opacity = dat[o + 3] * q
+							dat[o + 3] = Math.round(opacity)
+							
+							// count
+							counttotal += opacity
+							counts[Math.round(dat[o] * 0.4 + dat[o + 1] * 0.4 + dat[o + 2] * 0.2)] += opacity
+						}
+					}
+					let countsum = 0.0
+					for (let i = 0; i < 256; i++) {
+						countsum += counts[i] / counttotal
+						counts[i] = countsum
+					}
+					let min = findIndex256(counts, 0.01) / 256
+					let med = findIndex256(counts, 0.50) / 256
+					let max = findIndex256(counts, 0.95) / 256
+					let median = ((min + 2 * med + max) / 4 - min) / (max - min)
+					
+					for (let j = 0; j < h; j++) {
+						for (let i = 0; i < w; i++) {
+							let o = (i + j * w) << 2
+							if (dat[o + 3] == 0) {
+								continue
+							}
+							// recolor
+							
+							let l = (dat[o] * 0.4 + dat[o + 1] * 0.4 + dat[o + 2] * 0.2) / 256
+							//l = (l - min) / (max - min)
+							l = l + (1 - max)
+							l = Math.max(Math.min(l, 1), 0)
+							l = l ** median
+							
+							let currRandom = 0
+							for (let k = 0; k < 40; k++) {
+								currRandom += Math.random()
+							}
+							currRandom = (currRandom - 20) / 10
+							l = Math.max(Math.min(1, l + 0.07 * currRandom), 0)
+							
+							let r = 0.25 + 0.65 * (1 - (1 - l) ** 1.5)
+							let g = 0.07 + 0.85 * l ** 1.25
+							let b = l ** 3
+							
+							dat[o + 0] = Math.round(r * 255)
+							dat[o + 1] = Math.round(g * 255)
+							dat[o + 2] = Math.round(b * 255)
+						}
+					}
+					
+					cuptopbm.putImageData(data, 0, 0)
+					
+					let result = Canvas.createCanvas(1280, 853)
+					result.width = imc.naturalWidth
+					result.height = imc.naturalHeight
+					let resultbm = result.getContext('2d')
+					resultbm.drawImage(imc, 0, 0)
+					resultbm.drawImage(cuptop, x0, y0, w, h)
+					
+					try {
+						botMessage.edit("Почти готово...")
+					} catch (err) {}
+
+					const buf = result.toBuffer('image/png')
+					msg.channel.send("Ваш кофе готов, держите <:hatKid:562284260149428224>", {
+						files: [{
+							attachment: buf,
+							name: "coffee.png"
+						}]
+					}).then(async () => {
+						msg.channel.stopTyping()
+						botMessage.delete()
+					})
+				}
+				imb.onerror = err => { throw err }
+			}
+			imc.onerror = err => { throw err }
+
 		}
 	}
 }
