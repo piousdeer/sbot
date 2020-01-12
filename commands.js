@@ -1683,14 +1683,26 @@ export const commands = {
 	Coffee: {
 		r: /^(кофе|coff?ee?)[.!]?$/,
 		v: true,
-		async f (msg) {
+		async f (msg, args, origCaseParams) {
 
 			let botMessage
+			let foamImageURL = msg.author.avatarURL
 
-			await msg.channel.send("Заказ принят!").then(async (m) => {
+			await msg.channel.send("Начинаю варить...").then(async (m) => {
 				botMessage = m
 				msg.channel.startTyping()
 			})
+
+			let nick = (msg.channel.type == "text") ? msg.member.nickname : msg.author.username
+
+			if (msg.attachments.size) {
+				let att = msg.attachments.first()
+				if (att.width) { // test if att is an image
+					foamImageURL = att.url
+				}
+			} else if (origCaseParams.args[0]) {
+				foamImageURL = origCaseParams.args[0]
+			}
 
 			const canvas = Canvas.createCanvas(1280, 853)
 
@@ -1712,10 +1724,10 @@ export const commands = {
 			imc.src = "https://cdn.discordapp.com/attachments/602935027306856449/665937097588473868/5RhrSmC0NHE.png"
 			imc.onload = async () => {
 				const imb = new Image()
-				imb.src = msg.author.avatarURL
+				imb.src = foamImageURL
 				imb.onload = async () => {
 					try {
-						botMessage.edit("Начинаю варить...")
+						botMessage.edit("Почти готово...")
 					} catch (err) {}
 
 					let x0 = 152
@@ -1808,12 +1820,8 @@ export const commands = {
 					resultbm.drawImage(imc, 0, 0)
 					resultbm.drawImage(cuptop, x0, y0, w, h)
 					
-					try {
-						botMessage.edit("Почти готово...")
-					} catch (err) {}
-
 					const buf = result.toBuffer('image/png')
-					msg.channel.send("Ваш кофе готов, держите <:hatKid:562284260149428224>", {
+					msg.channel.send(`Ваш кофе готов, ${nick}. Прошу... <:hatKid:562284260149428224>`, {
 						files: [{
 							attachment: buf,
 							name: "coffee.png"
@@ -1823,7 +1831,10 @@ export const commands = {
 						botMessage.delete()
 					})
 				}
-				imb.onerror = err => { throw err }
+				imb.onerror = err => { 
+					msg.channel.send("Ошибка с картинкой!")
+					throw err 
+				}
 			}
 			imc.onerror = err => { throw err }
 
