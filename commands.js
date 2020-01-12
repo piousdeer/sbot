@@ -1736,16 +1736,25 @@ export const commands = {
 					let y1 = 520
 					let w = x1 - x0
 					let h = y1 - y0
+
+					const sw = imb.width
+					const sh = imb.height
+					const sR = (sw/sh < 1) ? true : false
+
+					const sx = (sR) ? 0 : (sw-sh)/2
+					const sy = (sR) ? (sh-sw)/2 : 0
+					const sWidth = (sR) ? sw : sh
+					const sHeight = (sR) ? sw : sh
 					
 					let cuptop = canvas
 					cuptop.width = w
 					cuptop.height = h
 					let cuptopbm = cuptop.getContext('2d')
 					cuptopbm.filter = 'blur(1.1px)'
-					cuptopbm.drawImage(imb, 0, 0, w, h)
+					cuptopbm.drawImage(imb, sx, sy, sWidth, sHeight, 0, 0, w, h)
 					cuptopbm.filter = 'none'
 					cuptopbm.globalAlpha = 0.5
-					cuptopbm.drawImage(imb, 0, 0, w, h)
+					cuptopbm.drawImage(imb, sx, sy, sWidth, sHeight, 0, 0, w, h)
 					cuptopbm.globalAlpha = 1
 					let data = cuptopbm.getImageData(0, 0, w, h)
 					let dat = data.data
