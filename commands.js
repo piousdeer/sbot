@@ -1690,7 +1690,6 @@ export const commands = {
 
 			await msg.channel.send("Начинаю варить...").then(async (m) => {
 				botMessage = m
-				msg.channel.startTyping()
 			})
 
 			let nick = (msg.channel.type == "text") ? msg.member.displayName : msg.author.username
@@ -1836,7 +1835,6 @@ export const commands = {
 							name: "coffee.png"
 						}]
 					}).then(async () => {
-						msg.channel.stopTyping()
 						botMessage.delete()
 					})
 				}
