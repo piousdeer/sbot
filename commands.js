@@ -1061,6 +1061,9 @@ export const commands = {
 				msg.channel.send("Нужно прикрепить картинку к сообщению!")
 				return
 			}
+
+			msg.channel.startTyping()
+
 			let pal = []
 			for (let i = 0; i < args.length; i++) {
 				pal.push(parseInt(args[i].slice(-6), 16)*256 + 255)
@@ -1082,6 +1085,13 @@ export const commands = {
 							attachment: buf,
 							name: "recolored.png"
 						}]
+					})
+					.then(() => {
+						msg.channel.stopTyping()
+					})
+					.catch(error => {
+						msg.channel.stopTyping()
+						console.log(error)
 					})
 				})
 			})
