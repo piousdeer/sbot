@@ -987,11 +987,19 @@ export const commands = {
 			name: "палитра + прикреплённое изображение 📎",
 			value: "Считать цвета с картинки."
 		},
-		async f (msg) {
+		async f (msg, args) {
 			if (!msg.attachments.size) {
 				msg.channel.send("Нужно прикрепить картинку к сообщению!")
 				return
 			}
+
+			let cnum = parseInt(args[0])
+			if (!cnum || cnum < 1) {
+				cnum = 10
+			} else if (cnum > 100) {
+				cnum = 100
+			}
+			
 			msg.attachments.forEach(async (att) => {
 				let max = 128
 				let w = max
@@ -1005,11 +1013,13 @@ export const commands = {
 
 				await s.getMainColorFromImage(imagePreview, (color, palette) => {
 					let hexColors = []
+					let hexRows = []
 
-					let canvasW = 350
-					let canvasH = 50
-					let segmentW = Math.round(canvasW / palette.length) * 2
-					let segmentH = Math.round(canvasH / 2)
+					let rowLength = 5
+					let segmentW = 70
+					let segmentH = 25
+					let canvasW = segmentW * rowLength
+					let canvasH = Math.ceil(cnum / rowLength) * segmentH
 
 					const canvas = Canvas.createCanvas(canvasW, canvasH)
 					const ctx = canvas.getContext('2d')
@@ -1018,20 +1028,23 @@ export const commands = {
 						let tempHex = `00000${hex}`
 						hex = `#${tempHex.slice(-6)}`
 						hexColors.push(hex)
-						let x = i % 5
-						let y = Math.floor(i / 5)
+						let x = i % rowLength
+						let y = Math.floor(i / rowLength)
 						ctx.fillStyle = hex
 						ctx.fillRect(segmentW*x, segmentH*y, segmentW, segmentH)
 					}
 					const buf = canvas.toBuffer('image/png')
 
-					msg.channel.send(`\`\`\`${hexColors.slice(0,5).join(" ")}\n${hexColors.slice(5,10).join(" ")}\`\`\``, {
+					for (let i = 0; i < hexColors.length; i+=5) {
+						hexRows.push(hexColors.slice(i, i+5).join(" "))
+					}
+					msg.channel.send(`\`\`\`${hexRows.join("\n")}\`\`\``, {
 						files: [{
 							attachment: buf,
 							name: "palette.png"
 						}]
 					})
-				})
+				}, cnum)
 			})
 
 		}

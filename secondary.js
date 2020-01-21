@@ -315,13 +315,17 @@ export function grayFromRGBAHex(hex) {
 	let GrayHex = GrayHue*256*256*256 + GrayHue*256*256 + GrayHue*256 + 255
 	return GrayHex
 }
-export async function getMainColorFromImage(link, callback) {
+export async function getMainColorFromImage(link, callback, cnum) {
 	let dataset = []
 	try {
 		jimp.read(link)
 			.then(image => {
 				if (image.bitmap.width > 160) {
 					image.resize(160,jimp.AUTO)
+				}
+
+				if (!cnum) {
+					cnum = 10
 				}
 
 				image.scan(0, 0, image.bitmap.width, image.bitmap.height, function(x, y, idx) {
@@ -333,7 +337,7 @@ export async function getMainColorFromImage(link, callback) {
 						let color
 						let palette = []
 						if (dataset.length) {
-							let centroids = skmeans(dataset, 10, "kmpp", 100).centroids
+							let centroids = skmeans(dataset, cnum, "kmpp", 100).centroids
 							let hsvColors = []
 							for (let i = 0; i < centroids.length; i++) {
 								hsvColors.push(rgb2hsv(centroids[i]))
@@ -364,6 +368,7 @@ export async function getMainColorFromImage(link, callback) {
 	}
 }
 export async function recolorByPalette(link, pal, callback) {
+	let palnum = (pal.length > 20) ? pal.length : 20
 	await getMainColorFromImage(link, (color, paletteFromImage) => {
 		paletteFromImage.sort((a,b) => grayFromRGBAHex(b) - grayFromRGBAHex(a))
 		let paletteFromUser = pal
@@ -415,5 +420,5 @@ export async function recolorByPalette(link, pal, callback) {
 		} catch (err) {
 			console.log(err)
 		}
-	})
+	}, palnum)
 }
