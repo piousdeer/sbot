@@ -706,7 +706,7 @@ export const commands = {
 							d = new Date(d)
 						}
 						d.setHours(d.getHours() + 3)
-						totalSFTimes.push(`${d.toJSON().split(".")[0].replace(/T/, ' ')} МСК`)
+						totalSFTimes.push(`\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``)
 					}
 				}
 			})
