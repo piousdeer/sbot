@@ -240,7 +240,7 @@ client.on('ready', () => {
 	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("en-US", Object.assign(dateOptions, timeOptions))
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
-	client.user.setPresence({game: {name: `パドルパドル！！`, type: 0}})
+	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
 	BOT_ID = client.user.id
 	BOT_PREFIX = new RegExp(`^(?:${process.env.ACCEPTABLE_BOT_NICKNAME}|<@\!?${BOT_ID}>),?$`)
 
