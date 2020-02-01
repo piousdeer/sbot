@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient} from "./bot"
+import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, lum} from "./bot"
 import {imgDatabaseURL} from "./config"
 import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
@@ -1869,6 +1869,29 @@ export const commands = {
 			}
 			imc.onerror = err => { throw err }
 
+		}
+	},
+	Lum: {
+		r: /^(lum)[.!]?$/,
+		v: false,
+		async f (msg, args) {
+			if (!args[0]) {
+				msg.channel.send('need user id')
+				return
+			}
+			let uid = args[0]
+			if (msg.author.id == args[0]) {
+				msg.channel.send("Just now!")
+			} else {
+				lum.findOne({_id: uid}, (err, res) => {
+					if (err) throw err
+					if (res) {
+						msg.channel.send(res.m)
+					} else {
+						msg.channel.send("Not found that one!")
+					}
+				})
+			}
 		}
 	}
 }

@@ -6,7 +6,7 @@ import mongo from "mongodb"
 const dbURL = "mongodb://localhost:27017/";
 export const MongoClient = new mongo.MongoClient(dbURL, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let lum
+export let lum
 MongoClient.connect((err, db) => {
 	if (err) throw err
 	console.log("Successfully connected to mongo")
@@ -278,8 +278,8 @@ client.on('ready', () => {
 })
 client.on('message', msg => {
 	if (msg.guild && msg.guild.id == "540145900526501899") {
-		let uid = parseInt(msg.author.id)
-		let mid = parseInt(msg.id)
+		let uid = msg.author.id
+		let mid = msg.id
 		lum.findOne({_id: uid}, (err, res) => {
 			if (err) throw err
 			if (!res) {
