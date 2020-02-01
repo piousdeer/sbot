@@ -277,6 +277,9 @@ client.on('ready', () => {
 
 })
 client.on('message', msg => {
+	if (msg.author.bot) return
+	processMessage(msg)
+
 	if (msg.guild && msg.guild.id == "540145900526501899") {
 		let uid = msg.author.id
 		let mid = msg.id
@@ -289,9 +292,6 @@ client.on('message', msg => {
 			}
 		})
 	}
-
-	if (msg.author.bot) return
-	processMessage(msg)
 
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
