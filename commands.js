@@ -702,12 +702,7 @@ export const commands = {
 				if (arg.match(/\d{17,20}/)) {
 					let totalMatches = arg.match(/\d{17,20}/g)
 					for (let i in totalMatches) {
-						let d = new Date(1420070400000 + Number(totalMatches[i]) / 4194304)
-						if (!d.toJSON) {
-							d = new Date(d)
-						}
-						d.setHours(d.getHours() + 3)
-						totalSFTimes.push(`\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``)
+						totalSFTimes.push(s.sftime(totalMatches[i]))
 					}
 				}
 			})
@@ -1886,7 +1881,7 @@ export const commands = {
 				lum.findOne({_id: uid}, (err, res) => {
 					if (err) throw err
 					if (res) {
-						msg.channel.send(res.m)
+						msg.channel.send(s.sftime(res.m))
 					} else {
 						msg.channel.send("Not found that one!")
 					}

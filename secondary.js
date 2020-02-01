@@ -422,3 +422,11 @@ export async function recolorByPalette(link, pal, callback) {
 		}
 	}, palnum)
 }
+export function sftime(arg) {
+	let d = new Date(1420070400000 + Number(arg) / 4194304)
+	if (!d.toJSON) {
+		d = new Date(d)
+	}
+	d.setHours(d.getHours() + 3)
+	return `\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``
+}
