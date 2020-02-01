@@ -280,14 +280,13 @@ client.on('message', msg => {
 	if (msg.guild && msg.guild.id == "540145900526501899") {
 		let uid = msg.author.id
 		let mid = msg.id
-		lum.findOne({_id: uid}, (err, res) => {
+		lum.findOne({_id: uid}, async (err, res) => {
 			if (err) throw err
 			if (!res) {
-				lum.insertOne({_id: uid})
+				lum.insertOne({_id: uid, m: mid}, (err) => { if (err) throw err })
+			} else {
+				lum.updateOne({_id: uid}, {$set: {m : mid}}, (err) => {	if (err) throw err })
 			}
-			lum.updateOne({_id: uid}, {$set: {m : mid}}, (err) => {
-				if (err) throw err
-			})
 		})
 	}
 
