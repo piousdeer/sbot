@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, userDB, visibleServers} from "./bot"
+import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient} from "./bot"
 import {imgDatabaseURL} from "./config"
 import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
@@ -63,6 +63,7 @@ export const commands = {
 		f (msg) {
 			if (msg.author.id == OWNER_ID) {
 				console.log("Destroying client...")
+				MongoClient.close()
 				msg.author.send("🛌 🌌").then(() => {
 					client.destroy().then(() => {
 						console.log("Exiting process...")

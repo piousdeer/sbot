@@ -16,7 +16,9 @@
     "jimp": "^0.6.4",
     "skmeans": "^0.10.2",
     "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "mongodb": "^3.5.2",
+    "util-deprecate": "^1.0.2"
   },
   "engines": {
     "node": ">=6.0.0"

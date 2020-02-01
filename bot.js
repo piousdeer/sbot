@@ -2,6 +2,17 @@ import Discord from "discord.js"
 export const client = new Discord.Client()
 import fs from "fs"
 
+import mongo from "mongodb"
+const dbURL = "mongodb://localhost:27017/";
+export const MongoClient = new mongo.MongoClient(dbURL, { useNewUrlParser: true, useUnifiedTopology: true });
+
+let lum
+MongoClient.connect((err, db) => {
+	if (err) throw err
+	console.log("Successfully connected to mongo")
+	lum = db.db("sbot").collection("lastUserMessages")
+})
+
 import dotenv from "dotenv"
 dotenv.config()
 const TOKEN = process.env.BOT_TOKEN
@@ -266,8 +277,23 @@ client.on('ready', () => {
 
 })
 client.on('message', msg => {
+	if (msg.guild && msg.guild.id == "540145900526501899") {
+		let uid = parseInt(msg.author.id)
+		let mid = parseInt(msg.id)
+		lum.findOne({_id: uid}, (err, res) => {
+			if (err) throw err
+			if (!res) {
+				lum.insertOne({_id: uid})
+			}
+			lum.updateOne({_id: uid}, {$set: {m : mid}}, (err) => {
+				if (err) throw err
+			})
+		})
+	}
+
 	if (msg.author.bot) return
 	processMessage(msg)
+
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
 	if (um && um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Useless messages: ${um}`)
