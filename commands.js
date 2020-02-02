@@ -1824,22 +1824,54 @@ export const commands = {
 		v: false,
 		async f (msg, args, componentsOrigCase) {
 			if (!args[0]) {
-				msg.channel.send('Допишите айди юзера')
+				msg.channel.send('Допишите ник юзера')
 				return
 			}
-			let u = await s.findUser(componentsOrigCase.args)
-			let uid = u.id
-			if (msg.author.id == uid) {
-				msg.channel.send("Прямо сейчас!")
-			} else {
-				lum.findOne({_id: uid}, (err, res) => {
-					if (err) throw err
-					if (res) {
-						msg.channel.send(s.sftime(res.m).string)
-					} else {
-						msg.channel.send("Ничего не найдено!")
+			if (args[0] == "stats") {
+				lum.find({}).toArray((err, res) => {
+					for (let i = 0; i < res.length; i++) {
+						res[i].m = s.sftime(res[i].m).timestamp
 					}
+
+					res = res.sort((a,b) => a.m - b.m)
+					console.log(res)
+					
+					let days = 30
+					let pdays = Number(args[1])
+					if (pdays && pdays < 10000 && pdays > 0.001) days = pdays
+
+					let d = new Date()
+					let dd = d.setDate(d.getDate() - days)
+
+					let usersNotHere = 0
+					let coffeeGuild = client.guilds.get("540145900526501899")
+
+					for (let i = 0; i < res.length; i++) {
+						if (res[i].m > dd || i == res.length - 1) {
+							msg.channel.send(`${i - usersNotHere} юзеров не было видно уже ${days} дней.`)
+							break
+						}
+						if (!coffeeGuild.member(res[i]._id)) {
+							usersNotHere++
+						}
+					}
+					
 				})
+			} else {
+				let u = await s.findUser(componentsOrigCase.args)
+				let uid = u.id
+				if (msg.author.id == uid) {
+					msg.channel.send("Прямо сейчас!")
+				} else {
+					lum.findOne({_id: uid}, (err, res) => {
+						if (err) throw err
+						if (res) {
+							msg.channel.send(s.sftime(res.m).string)
+						} else {
+							msg.channel.send("Ничего не найдено!")
+						}
+					})
+				}
 			}
 		}
 	}
