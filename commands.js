@@ -441,53 +441,7 @@ export const commands = {
 			} else if ( ["sb", "sbot", "сб", "сбот"].includes(args[0]) ) {
 				user = client.users.get(BOT_ID)
 			} else if (args[0]) {
-				let username = s.getSimpleString(origCaseParams.args.join(" "))
-				let result
-				let usernameId
-				// проверка на айди
-				if (usernameId = username.match(/(?:<@\!?)?(\d+)>?/)) {
-					await client.fetchUser(usernameId[1]).then(user => {
-						result = user
-					})
-				// проверка на тег
-				} else if (username.split("#")[1]) {
-					client.users.forEach(u => {
-						if (username == u.tag.toLowerCase()) {
-							result = u
-						}
-					})
-				} else {
-					let isDisplayNameSuitable = false
-					let isDisplayNameCanBeSuitable = false
-			
-					client.guilds.forEach(guild => {
-						guild.members.forEach(member => {
-							if (member.user.avatar) {
-								if (username == s.getSimpleString(member.displayName)) {
-									result = member.user
-									isDisplayNameSuitable = true
-								} else if (s.getSimpleString(member.displayName).startsWith(username)) {
-									if (!isDisplayNameSuitable) {
-										result = member.user
-										isDisplayNameCanBeSuitable = true
-									}
-								} else if (member.nickname) {
-									if (username == s.getSimpleString(member.user.username)) {
-										if (!isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
-											result = member.user
-										}
-									} else if (s.getSimpleString(member.user.username).startsWith(username)) {
-										if (!result && !isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
-											result = member.user
-										}
-									}
-								}
-							}
-						})
-					})		
-				}
-			
-				user = result
+				user = await s.findUser(origCaseParams.args)
 			} else {
 				user = msg.author
 			}

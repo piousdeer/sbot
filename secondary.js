@@ -434,3 +434,50 @@ export function sftime(arg) {
 	}
 	return res
 }
+export async function findUser(args) {
+	let username = getSimpleString(args.join(" "))
+	let result
+	let usernameId
+	// проверка на айди
+	if (usernameId = username.match(/(?:<@\!?)?(\d{17,20})>?/)) {
+		await client.fetchUser(usernameId[1]).then(user => {
+			result = user
+		})
+	// проверка на тег
+	} else if (username.split("#")[1]) {
+		client.users.forEach(u => {
+			if (username == u.tag.toLowerCase()) {
+				result = u
+			}
+		})
+	} else {
+		let isDisplayNameSuitable = false
+		let isDisplayNameCanBeSuitable = false
+
+		client.guilds.forEach(guild => {
+			guild.members.forEach(member => {
+				if (username == getSimpleString(member.displayName)) {
+					result = member.user
+					isDisplayNameSuitable = true
+				} else if (getSimpleString(member.displayName).startsWith(username)) {
+					if (!isDisplayNameSuitable) {
+						result = member.user
+						isDisplayNameCanBeSuitable = true
+					}
+				} else if (member.nickname) {
+					if (username == getSimpleString(member.user.username)) {
+						if (!isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+							result = member.user
+						}
+					} else if (getSimpleString(member.user.username).startsWith(username)) {
+						if (!result && !isDisplayNameSuitable && !isDisplayNameCanBeSuitable) {
+							result = member.user
+						}
+					}
+				}
+			})
+		})		
+	}
+
+	return result
+}
