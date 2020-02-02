@@ -1866,24 +1866,24 @@ export const commands = {
 
 		}
 	},
-	Lum: {
-		r: /^(lum)[.!]?$/,
+	Seen: {
+		r: /^(seen|актив(ность)?)[.!]?$/,
 		v: false,
 		async f (msg, args) {
 			if (!args[0]) {
-				msg.channel.send('need user id')
+				msg.channel.send('Допишите айди юзера')
 				return
 			}
 			let uid = args[0]
 			if (msg.author.id == args[0]) {
-				msg.channel.send("Just now!")
+				msg.channel.send("Прямо сейчас!")
 			} else {
 				lum.findOne({_id: uid}, (err, res) => {
 					if (err) throw err
 					if (res) {
 						msg.channel.send(s.sftime(res.m))
 					} else {
-						msg.channel.send("Not found that one!")
+						msg.channel.send("Ничего не найдено!")
 					}
 				})
 			}
