@@ -7,7 +7,6 @@ import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
 import fs from "fs"
-import jimp from "jimp"
 
 const Canvas = require('canvas')
 const { Image } = require('canvas')
