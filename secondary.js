@@ -428,5 +428,9 @@ export function sftime(arg) {
 		d = new Date(d)
 	}
 	d.setHours(d.getHours() + 3)
-	return `\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``
+	let res = {
+		timestamp: d,
+		string: `\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``
+	}
+	return res
 }

@@ -701,7 +701,7 @@ export const commands = {
 				if (arg.match(/\d{17,20}/)) {
 					let totalMatches = arg.match(/\d{17,20}/g)
 					for (let i in totalMatches) {
-						totalSFTimes.push(s.sftime(totalMatches[i]))
+						totalSFTimes.push(s.sftime(totalMatches[i]).string)
 					}
 				}
 			})
