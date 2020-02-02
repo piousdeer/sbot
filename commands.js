@@ -1822,19 +1822,20 @@ export const commands = {
 	Seen: {
 		r: /^(seen|актив(ность)?)[.!]?$/,
 		v: false,
-		async f (msg, args) {
+		async f (msg, args, componentsOrigCase) {
 			if (!args[0]) {
 				msg.channel.send('Допишите айди юзера')
 				return
 			}
-			let uid = args[0]
-			if (msg.author.id == args[0]) {
+			let u = await s.findUser(componentsOrigCase.args)
+			let uid = u.id
+			if (msg.author.id == uid) {
 				msg.channel.send("Прямо сейчас!")
 			} else {
 				lum.findOne({_id: uid}, (err, res) => {
 					if (err) throw err
 					if (res) {
-						msg.channel.send(s.sftime(res.m))
+						msg.channel.send(s.sftime(res.m).string)
 					} else {
 						msg.channel.send("Ничего не найдено!")
 					}
