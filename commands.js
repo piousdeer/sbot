@@ -1828,33 +1828,52 @@ export const commands = {
 				return
 			}
 			if (args[0] == "stats") {
+				let coffeeGuild = client.guilds.get("540145900526501899")
+
+				let bots = 0
+				coffeeGuild.members.forEach((m) => {
+					if (m.user.bot) {
+						bots++
+					}
+				})
+
 				lum.find({}).toArray((err, res) => {
 					for (let i = 0; i < res.length; i++) {
 						res[i].m = s.sftime(res[i].m)
 					}
 
-					res = res.sort((a,b) => a.m - b.m)
-					
 					let days = 30
 					let pdays = Number(args[1])
-					if (pdays && pdays < 10000 && pdays > 0.001) days = pdays
+					if (pdays !== NaN && pdays < 100000 && pdays >= 0) days = pdays
 
 					let d = Date.now()
 					let dd = d - 1000*60*60*24*days
 
-					let usersNotHere = 0
-					let coffeeGuild = client.guilds.get("540145900526501899")
+					let inactive = []
 
-					for (let i = 0; i < res.length; i++) {
-						if (res[i].m > dd || i == res.length - 1) {
-							msg.channel.send(`${i - usersNotHere} юзеров не было видно уже ${days} дней.`)
-							console.log(days, new Date(dd), Number(res[i].m), i, res[i])
-							break
+					coffeeGuild.members.forEach((m) => {
+						if (!m.user.bot) {
+							let readOnly = true
+							for (let elem of res) {
+								if (elem._id == m.id) {
+									readOnly = false
+									if (elem.m < dd) {
+										inactive.push(elem)
+										break
+									}
+								}
+							}
+							if (readOnly) {
+								if (m.joinedTimestamp < dd) {
+									inactive.push({_id: m.id, m: m.joinedAt})
+									console.log({_id: m.id, m: m.joinedAt})
+								}
+							}
 						}
-						if (!coffeeGuild.member(res[i]._id)) {
-							usersNotHere++
-						}
-					}
+					})
+					inactive.sort((a,b) => a.m - b.m)
+
+					msg.channel.send(`${inactive.length} юзеров не было видно уже ${days} дней.`)
 					
 				})
 			} else {
