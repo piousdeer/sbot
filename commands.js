@@ -1847,9 +1847,9 @@ export const commands = {
 					let coffeeGuild = client.guilds.get("540145900526501899")
 
 					for (let i = 0; i < res.length; i++) {
-						if (res[i].m > dd || i == res.length - 1) {
+						if (Number(res[i].m) > dd || i == res.length - 1) {
 							msg.channel.send(`${i - usersNotHere} юзеров не было видно уже ${days} дней.`)
-							console.log(dd, i, res[i])
+							console.log(dd, Number(res[i].m), i, res[i])
 							break
 						}
 						if (!coffeeGuild.member(res[i]._id)) {
