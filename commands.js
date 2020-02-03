@@ -1830,7 +1830,7 @@ export const commands = {
 			if (args[0] == "stats") {
 				lum.find({}).toArray((err, res) => {
 					for (let i = 0; i < res.length; i++) {
-						res[i].m = s.sftime(res[i].m).timestamp
+						res[i].m = s.sftime(res[i].m)
 					}
 
 					res = res.sort((a,b) => a.m - b.m)
@@ -1840,7 +1840,6 @@ export const commands = {
 					if (pdays && pdays < 10000 && pdays > 0.001) days = pdays
 
 					let d = new Date()
-					d.setHours(d.getHours() + 3)
 					let dd = d.setDate(d.getDate() - days)
 
 					let usersNotHere = 0
@@ -1849,7 +1848,7 @@ export const commands = {
 					for (let i = 0; i < res.length; i++) {
 						if (Number(res[i].m) > dd || i == res.length - 1) {
 							msg.channel.send(`${i - usersNotHere} юзеров не было видно уже ${days} дней.`)
-							console.log(dd, Number(res[i].m), i, res[i])
+							console.log(days, dd, Number(res[i].m), i, res[i])
 							break
 						}
 						if (!coffeeGuild.member(res[i]._id)) {
@@ -1867,7 +1866,7 @@ export const commands = {
 					lum.findOne({_id: uid}, (err, res) => {
 						if (err) throw err
 						if (res) {
-							msg.channel.send(s.sftime(res.m).string)
+							msg.channel.send(s.timeToString(s.sftime(res.m)))
 						} else {
 							msg.channel.send("Ничего не найдено!")
 						}

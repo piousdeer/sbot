@@ -427,12 +427,10 @@ export function sftime(arg) {
 	if (!d.toJSON) {
 		d = new Date(d)
 	}
-	d.setHours(d.getHours() + 3)
-	let res = {
-		timestamp: d,
-		string: `\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``
-	}
-	return res
+	return d
+}
+export function timeToString(d) {
+	return `\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``
 }
 export async function findUser(args) {
 	let username = getSimpleString(args.join(" "))
