@@ -655,7 +655,7 @@ export const commands = {
 				if (arg.match(/\d{17,20}/)) {
 					let totalMatches = arg.match(/\d{17,20}/g)
 					for (let i in totalMatches) {
-						totalSFTimes.push(s.sftime(totalMatches[i]).string)
+						totalSFTimes.push(s.timeToString(s.sftime(totalMatches[i])))
 					}
 				}
 			})
@@ -1839,16 +1839,16 @@ export const commands = {
 					let pdays = Number(args[1])
 					if (pdays && pdays < 10000 && pdays > 0.001) days = pdays
 
-					let d = new Date()
-					let dd = d.setDate(d.getDate() - days)
+					let d = Date.now()
+					let dd = d - 1000*60*60*24*days
 
 					let usersNotHere = 0
 					let coffeeGuild = client.guilds.get("540145900526501899")
 
 					for (let i = 0; i < res.length; i++) {
-						if (Number(res[i].m) > dd || i == res.length - 1) {
+						if (res[i].m > dd || i == res.length - 1) {
 							msg.channel.send(`${i - usersNotHere} юзеров не было видно уже ${days} дней.`)
-							console.log(days, dd, Number(res[i].m), i, res[i])
+							console.log(days, new Date(dd), Number(res[i].m), i, res[i])
 							break
 						}
 						if (!coffeeGuild.member(res[i]._id)) {
