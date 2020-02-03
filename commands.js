@@ -1834,13 +1834,13 @@ export const commands = {
 					}
 
 					res = res.sort((a,b) => a.m - b.m)
-					console.log(res)
 					
 					let days = 30
 					let pdays = Number(args[1])
 					if (pdays && pdays < 10000 && pdays > 0.001) days = pdays
 
 					let d = new Date()
+					d.setHours(d.getHours() + 3)
 					let dd = d.setDate(d.getDate() - days)
 
 					let usersNotHere = 0
@@ -1849,6 +1849,7 @@ export const commands = {
 					for (let i = 0; i < res.length; i++) {
 						if (res[i].m > dd || i == res.length - 1) {
 							msg.channel.send(`${i - usersNotHere} юзеров не было видно уже ${days} дней.`)
+							console.log(dd, i, res[i])
 							break
 						}
 						if (!coffeeGuild.member(res[i]._id)) {
