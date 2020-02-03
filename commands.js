@@ -1864,16 +1864,14 @@ export const commands = {
 						}
 					})
 					inactive.sort((a,b) => a.m - b.m)
-					let textStats = inactive.map(x => `${coffeeGuild.member(x._id).user.tag} ${s.timeToString(x.m)}`).join('\n')
 					let resultEmbed = {
-						title: `${inactive.length} юзеров не было видно уже ${days} дней.`,
-						description: textStats
+						title: `${inactive.length} юзеров не было видно уже ${days} дней.`
 					}
-					msg.author.send({embed: resultEmbed})
-						.then(() => {
-							s.envelope(msg)
-						})
-						.catch(error => console.log(error))
+					if (inactive.length <= 15) {
+						let textStats = inactive.map(x => `${coffeeGuild.member(x._id).user.tag} ${s.timeToString(x.m)}`).join('\n')
+						resultEmbed.description = textStats
+					}
+					msg.channel.send({embed: resultEmbed})
 					
 				})
 			} else {
