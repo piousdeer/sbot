@@ -1869,7 +1869,11 @@ export const commands = {
 						title: `${inactive.length} юзеров не было видно уже ${days} дней.`,
 						description: textStats
 					}
-					msg.channel.send({embed: resultEmbed})
+					msg.author.send({embed: resultEmbed})
+						.then(() => {
+							s.envelope(msg)
+						})
+						.catch(error => console.log(error))
 					
 				})
 			} else {
