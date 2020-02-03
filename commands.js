@@ -1867,11 +1867,15 @@ export const commands = {
 					let resultEmbed = {
 						title: `${inactive.length} юзеров не было видно уже ${days} дней.`
 					}
-					if (inactive.length <= 15) {
-						let textStats = inactive.map(x => `${coffeeGuild.member(x._id).user.tag} ${s.timeToString(x.m)}`).join('\n')
+					let textStats = inactive.map(x => `${coffeeGuild.member(x._id).user.tag} ${s.timeToString(x.m)}`).join('\n')
+					if (textStats.length <= 2048) {
 						resultEmbed.description = textStats
 					}
-					msg.channel.send({embed: resultEmbed})
+					msg.author.send({embed: resultEmbed})
+						.then(() => {
+							s.envelope(msg)
+						})
+						.catch(error => console.log(error))
 					
 				})
 			} else {
