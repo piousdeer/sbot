@@ -1830,13 +1830,6 @@ export const commands = {
 			if (args[0] == "stats") {
 				let coffeeGuild = client.guilds.get("540145900526501899")
 
-				let bots = 0
-				coffeeGuild.members.forEach((m) => {
-					if (m.user.bot) {
-						bots++
-					}
-				})
-
 				lum.find({}).toArray((err, res) => {
 					for (let i = 0; i < res.length; i++) {
 						res[i].m = s.sftime(res[i].m)
@@ -1866,14 +1859,17 @@ export const commands = {
 							if (readOnly) {
 								if (m.joinedTimestamp < dd) {
 									inactive.push({_id: m.id, m: m.joinedAt})
-									console.log({_id: m.id, m: m.joinedAt})
 								}
 							}
 						}
 					})
 					inactive.sort((a,b) => a.m - b.m)
-
-					msg.channel.send(`${inactive.length} юзеров не было видно уже ${days} дней.`)
+					let textStats = inactive.map(x => `${coffeeGuild.member(x._id).user.tag} ${s.timeToString(x.m)}`).join('\n')
+					let resultEmbed = {
+						title: `${inactive.length} юзеров не было видно уже ${days} дней.`,
+						description: textStats
+					}
+					msg.channel.send({embed: resultEmbed})
 					
 				})
 			} else {
