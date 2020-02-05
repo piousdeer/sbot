@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, lum} from "./bot"
+import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, lum, imageRegex} from "./bot"
 import {imgDatabaseURL} from "./config"
 import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
@@ -1660,10 +1660,6 @@ export const commands = {
 			let botMessage
 			let foamImageURL = msg.author.avatarURL
 
-			await msg.channel.send("Начинаю варить...").then(async (m) => {
-				botMessage = m
-			})
-
 			let nick = (msg.channel.type == "text") ? msg.member.displayName : msg.author.username
 
 			if (msg.attachments.size) {
@@ -1692,14 +1688,17 @@ export const commands = {
 			}
 
 			const imc = new Image()
-			imc.src = "https://cdn.discordapp.com/attachments/602935027306856449/665937097588473868/5RhrSmC0NHE.png"
 			imc.onload = async () => {
 				const imb = new Image()
 				imb.src = foamImageURL
+				if (!foamImageURL.match(imageRegex)) {
+					msg.channel.send("Принимаем только картинки.")
+					return
+				}
 				imb.onload = async () => {
-					try {
-						botMessage.edit("Почти готово...")
-					} catch (err) {}
+					await msg.channel.send("Начинаю варить...").then(async (m) => {
+						botMessage = m
+					})
 
 					let x0 = 152
 					let x1 = 715
@@ -1810,12 +1809,12 @@ export const commands = {
 						botMessage.delete()
 					})
 				}
-				imb.onerror = err => { 
-					msg.channel.send("Ошибка с картинкой!")
+				imb.onerror = err => {
 					throw err 
 				}
 			}
 			imc.onerror = err => { throw err }
+			imc.src = "pics/coffeecup.png"
 
 		}
 	},

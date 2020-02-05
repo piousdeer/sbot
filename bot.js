@@ -41,6 +41,7 @@ const floodRate = 5 * 1000;
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
 
+export const imageRegex = /^http.+\.(png|jpe?g|bmp|gif|webp)/
 let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
 function processMessage(msg) {
@@ -201,7 +202,7 @@ function processMessage(msg) {
 	}
 
 	// проверяем на отправку пикчи в Галерею
-	if (components[0].match(/^http.+\.(png|jpe?g|bmp|gif|webp)/)) {
+	if (components[0].match(imageRegex)) {
 		let url = componentsOrigCase[0]
 		componentsOrigCase.shift()
 		commands.Send.f(msg, null, {args: [url, componentsOrigCase.join(" ")]})
