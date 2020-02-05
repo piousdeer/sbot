@@ -1634,11 +1634,11 @@ export const commands = {
 		}
 	},
 	Uwuify: {
-		r: /^((uwu|owo)ify)[.!]?$/,
+		r: /^((uwu|owo)(ify)?)[.!]?$/,
 		v: false,
 		f (msg, args) {
 			if (!args[0]) {
-				msg.channel.send('pwewase ewntew sowme tewxt uwu')
+				msg.channel.send('pwease entew some text uwu')
 				return
 			}
 
