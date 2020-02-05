@@ -430,6 +430,7 @@ export function sftime(arg) {
 	return d
 }
 export function timeToString(d) {
+	d.setHours(d.getHours() + 3)
 	return `\`${d.toJSON().replace(/T/, ' ').replace(/Z/, '')} МСК\``
 }
 export async function findUser(args) {
