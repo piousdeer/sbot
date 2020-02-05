@@ -7,10 +7,12 @@ const dbURL = "mongodb://localhost:27017/";
 export const MongoClient = new mongo.MongoClient(dbURL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 export let lum
+export let jdb
 MongoClient.connect((err, db) => {
 	if (err) throw err
 	console.log("Successfully connected to mongo")
 	lum = db.db("sbot").collection("lastUserMessages")
+	jdb = db.db("sbot").collection("jlptProgress")
 })
 
 import dotenv from "dotenv"

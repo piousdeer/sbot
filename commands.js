@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, lum, imageRegex} from "./bot"
+import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, lum, jdb, imageRegex} from "./bot"
 import {imgDatabaseURL} from "./config"
 import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
@@ -1196,214 +1196,221 @@ export const commands = {
 
 			const filter = (m) => m.author.id == msg.author.id;
 
-			let userPath = `jap_users/${msg.author.id}.json`
 			let userData
-			if (fs.existsSync(userPath)) {
-				userData = JSON.parse(fs.readFileSync(`jap_users/${msg.author.id}.json`))
-			} else {
-				userData = {
-					"studied": [],
-					"problemed": {}
-				}
-			}
 
-			let studied = new Set(userData.studied)
-
-			while (isGameRunning) {
-
-				let num
-				let probArr = Object.keys(userData.problemed)
-
-				if (!probArr.length || (studied.size + probArr.length) % newWordsToAddCount) {
-					num = Math.floor(Math.random() * kanji.length)
+			const uid = msg.author.id
+			jdb.findOne({_id: uid}, async (err, res) => {
+				if (res) {
+					userData = res.progress
 				} else {
-					if (Math.random() > 0.2 || !studied.size) {
-						num = s.getRandomElem(probArr)
-					} else {
-						num = s.getRandomElem(Array.from(studied))
+					userData = {
+						"studied": [],
+						"problemed": {}
 					}
 				}
 
-				let k = kanji[num]
+				let studied = new Set(userData.studied)
 
-				let hir = [...hiragana.syl]
-				hir.push('ゃゅょ')
-				let kat = [...katakana.syl]
-				kat.push('ャュョ')
-				let lat = [...kanalat]
-				lat.push(['ya', 'yu', 'yo'])
+				while (isGameRunning) {
 
-				let romaji = []
+					let num
+					let probArr = Object.keys(userData.problemed)
 
-				for (let i = 0; i < k.r.length; i++) {
-					let rvar = k.r[i]
-					let rvarRomaji = ''
-					let tsuRepeating = false
-					for (let j = 0; j < rvar.length; j++) {
-						if (['っ', 'ッ'].includes(rvar[j])) {
-							tsuRepeating = true
-							continue;
+					if (!probArr.length || (studied.size + probArr.length) % newWordsToAddCount) {
+						num = Math.floor(Math.random() * kanji.length)
+					} else {
+						if (Math.random() > 0.2 || !studied.size) {
+							num = s.getRandomElem(probArr)
+						} else {
+							num = s.getRandomElem(Array.from(studied))
 						}
-						if (rvar[j] == 'ー') {
-							rvarRomaji += rvarRomaji.slice(-1)
-							continue;
-						}
-						for (let x = 0; x < hir.length; x++) {
-							for (let y = 0; y < hir[x].length; y++) {
-								if ([hir[x][y], kat[x][y]].includes(rvar[j])) {
-									if (tsuRepeating) {
-										rvarRomaji += lat[x][y][0]
-										tsuRepeating = false
-									}
-									if (x == hir.length - 1) { // check if it's lowered vowel
-										if (rvarRomaji.slice(-1) != 'n') {
-											rvarRomaji = rvarRomaji.slice(0, -1)
+					}
+
+					let k = kanji[num]
+
+					let hir = [...hiragana.syl]
+					hir.push('ゃゅょ')
+					let kat = [...katakana.syl]
+					kat.push('ャュョ')
+					let lat = [...kanalat]
+					lat.push(['ya', 'yu', 'yo'])
+
+					let romaji = []
+
+					for (let i = 0; i < k.r.length; i++) {
+						let rvar = k.r[i]
+						let rvarRomaji = ''
+						let tsuRepeating = false
+						for (let j = 0; j < rvar.length; j++) {
+							if (['っ', 'ッ'].includes(rvar[j])) {
+								tsuRepeating = true
+								continue;
+							}
+							if (rvar[j] == 'ー') {
+								rvarRomaji += rvarRomaji.slice(-1)
+								continue;
+							}
+							for (let x = 0; x < hir.length; x++) {
+								for (let y = 0; y < hir[x].length; y++) {
+									if ([hir[x][y], kat[x][y]].includes(rvar[j])) {
+										if (tsuRepeating) {
+											rvarRomaji += lat[x][y][0]
+											tsuRepeating = false
 										}
-										if (rvarRomaji.match(/(sh|ch|j)$/)) {
-											rvarRomaji += lat[x][y][1]
+										if (x == hir.length - 1) { // check if it's lowered vowel
+											if (rvarRomaji.slice(-1) != 'n') {
+												rvarRomaji = rvarRomaji.slice(0, -1)
+											}
+											if (rvarRomaji.match(/(sh|ch|j)$/)) {
+												rvarRomaji += lat[x][y][1]
+											} else {
+												rvarRomaji += lat[x][y]
+											}
 										} else {
 											rvarRomaji += lat[x][y]
 										}
-									} else {
-										rvarRomaji += lat[x][y]
 									}
 								}
 							}
 						}
+						romaji.push(rvarRomaji)
 					}
-					romaji.push(rvarRomaji)
-				}
 
-				// canvas start
+					// canvas start
 
-				const canw = k.s.length*cardFontSize + (canh - cardFontSize)
+					const canw = k.s.length*cardFontSize + (canh - cardFontSize)
 
-				const canvas = Canvas.createCanvas(canw, canh)
-				const ctx = canvas.getContext('2d')
-	
-				let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
-				if (imageInfo.error) throw Error(imageInfo.error)
-				const bg = await Canvas.loadImage(imageInfo.url)
-	
-				const bgw = bg.width
-				const bgh = bg.height
-	
-				const bgRatio = bgw/bgh
-				const canvasRatio = canw/canh
-	
-				if (bgRatio < canvasRatio) {
-					ctx.drawImage(bg, 0, (bgh-bgw/canvasRatio)/2, bgw, bgw/canvasRatio, 0, 0, canw, canh)
-				} else {
-					ctx.drawImage(bg, (bgw-bgh*canvasRatio)/2, 0, bgh*canvasRatio, bgh, 0, 0, canw, canh)
-				}
-				
-	
-				ctx.font = `${cardFontSize}px "KosugiMaru"`
-				ctx.textAlign = "center"
-				ctx.textBaseline = "middle"
-				ctx.fillStyle = 'rgba(114, 137, 218, 0.3)';
-				ctx.fillRect(0, 0, canw, canh);
-				ctx.fillStyle = 'white'
-				ctx.fillText(k.s, canw/2, canh/2)
-				ctx.strokeStyle = 'black';
-				ctx.lineWidth = 1;
-				ctx.strokeText(k.s, canw/2, canh/2);
-				const buf = canvas.toBuffer('image/png')
-				
-				// canvas end
-
-				let hintText = `${k.r.join(", ")}, ${k.m[0]}`
-				if (studied.has(num) || userData.problemed[num] >= timesToShowHint) {
-					hintText = `||\` ${hintText} \`||`
-				}
-
-				const embed = {
-					title: messageForPreviousGuess,
-					description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/${k.s}) \n\n${hintText}`,
-					image: {
-						url: 'attachment://neko.png'
-					},
-					footer: {
-						icon_url: msg.author.avatarURL,
-						text: `${msg.author.tag} - ${score}/${rounds}`
+					const canvas = Canvas.createCanvas(canw, canh)
+					const ctx = canvas.getContext('2d')
+		
+					let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
+					if (imageInfo.error) throw Error(imageInfo.error)
+					const bg = await Canvas.loadImage(imageInfo.url)
+		
+					const bgw = bg.width
+					const bgh = bg.height
+		
+					const bgRatio = bgw/bgh
+					const canvasRatio = canw/canh
+		
+					if (bgRatio < canvasRatio) {
+						ctx.drawImage(bg, 0, (bgh-bgw/canvasRatio)/2, bgw, bgw/canvasRatio, 0, 0, canw, canh)
+					} else {
+						ctx.drawImage(bg, (bgw-bgh*canvasRatio)/2, 0, bgh*canvasRatio, bgh, 0, 0, canw, canh)
 					}
-				}
+					
+		
+					ctx.font = `${cardFontSize}px "KosugiMaru"`
+					ctx.textAlign = "center"
+					ctx.textBaseline = "middle"
+					ctx.fillStyle = 'rgba(114, 137, 218, 0.3)';
+					ctx.fillRect(0, 0, canw, canh);
+					ctx.fillStyle = 'white'
+					ctx.fillText(k.s, canw/2, canh/2)
+					ctx.strokeStyle = 'black';
+					ctx.lineWidth = 1;
+					ctx.strokeText(k.s, canw/2, canh/2);
+					const buf = canvas.toBuffer('image/png')
+					
+					// canvas end
 
-				let botmsgToDelete = botMessage
-				await gameChannel.send({
-					embed: embed,
-					files: [{
-						attachment: buf,
-						name: 'neko.png'
-					}]
-				}).then(async (m) => {
-					botMessage = m
-					gameChannel.stopTyping()
-				})
-				.catch(error => console.log(error))
+					let hintText = `${k.r.join(", ")}, ${k.m[0]}`
+					if (studied.has(num) || userData.problemed[num] >= timesToShowHint) {
+						hintText = `||\` ${hintText} \`||`
+					}
 
-				if (!firstQuestion && s.deleteUserMessage(userAnswerMessage, 0)) {
-					await botmsgToDelete.delete()
-				} else {
-					firstQuestion = false
-				}
-				
-				await gameChannel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
-					.then(collected => {
-						gameChannel.startTyping()
-						const m = collected.first()
-						userAnswerMessage = m
-						if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
-							score++
-							messageForPreviousGuess = `Right!`
-
-							if (!studied.has(num)) {
-								let p = userData.problemed[num]
-
-								p = (p) ? ++p : 1
-								
-								if (p >= timesToAnswer) {
-									studied.add(num)
-									delete userData.problemed[num]
-								} else {
-									userData.problemed[num] = p
-								}
-							}
-							
-						} else {
-							wrongSet.add(k.s)
-							messageForPreviousGuess = `Nope.`
-
-							userData.problemed[num] = 0
-							studied.delete(num)
+					const embed = {
+						title: messageForPreviousGuess,
+						description: `You have ${secondsToWait} seconds!\n[jisho](https://jisho.org/search/${k.s}) \n\n${hintText}`,
+						image: {
+							url: 'attachment://neko.png'
+						},
+						footer: {
+							icon_url: msg.author.avatarURL,
+							text: `${msg.author.tag} - ${score}/${rounds}`
 						}
-					})
-					.catch(collected => {
-						isGameRunning = false
+					}
+
+					let botmsgToDelete = botMessage
+					await gameChannel.send({
+						embed: embed,
+						files: [{
+							attachment: buf,
+							name: 'neko.png'
+						}]
+					}).then(async (m) => {
+						botMessage = m
 						gameChannel.stopTyping()
-						userDB[msg.author.id].learningKanji = false
-						const gameoverEmbed = {
-							title: "Time's up!"
-						}
-						if (rounds) {
-							gameoverEmbed.description = `Result: ${(score/rounds*100).toFixed(2)}%`
-							if (wrongSet.size) {
-								gameoverEmbed.description += ` \nTo learn: \n${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/'+x+')').join("　")}`
-							}
-						}
+					})
+					.catch(error => console.log(error))
 
-						msg.reply({embed: gameoverEmbed})
+					if (!firstQuestion && s.deleteUserMessage(userAnswerMessage, 0)) {
+						await botmsgToDelete.delete()
+					} else {
+						firstQuestion = false
+					}
+					
+					await gameChannel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
+						.then(collected => {
+							gameChannel.startTyping()
+							const m = collected.first()
+							userAnswerMessage = m
+							if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
+								score++
+								messageForPreviousGuess = `Right!`
 
-						userData.studied = Array.from(studied)
-						fs.writeFile(userPath, JSON.stringify(userData, null, 4), err => {
-							if (err) {
-								console.log("error on writing to file!")
+								if (!studied.has(num)) {
+									let p = userData.problemed[num]
+
+									p = (p) ? ++p : 1
+									
+									if (p >= timesToAnswer) {
+										studied.add(num)
+										delete userData.problemed[num]
+									} else {
+										userData.problemed[num] = p
+									}
+								}
+								
+							} else {
+								wrongSet.add(k.s)
+								messageForPreviousGuess = `Nope.`
+
+								userData.problemed[num] = 0
+								studied.delete(num)
 							}
 						})
-					});
+						.catch(collected => {
+							isGameRunning = false
+							gameChannel.stopTyping()
+							userDB[msg.author.id].learningKanji = false
+							const gameoverEmbed = {
+								title: "Time's up!"
+							}
+							if (rounds) {
+								gameoverEmbed.description = `Result: ${(score/rounds*100).toFixed(2)}%`
+								if (wrongSet.size) {
+									gameoverEmbed.description += ` \nTo learn: \n${Array.from(wrongSet).map(x=>'['+x+']'+'(https://jisho.org/search/'+x+')').join("　")}`
+								}
+							}
 
-				rounds++
-			}	
+							msg.reply({embed: gameoverEmbed})
+
+							userData.studied = Array.from(studied)
+
+							if (!res) {
+								jdb.insertOne({_id: uid, progress: userData}, (err) => { if (err) throw err })
+							} else {
+								jdb.updateOne({_id: uid}, {$set: {progress: userData}}, (err) => { if (err) throw err })
+							}
+						});
+
+					rounds++
+				}	
+
+			})
+
+			
 
 		}
 	},
