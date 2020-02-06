@@ -5,14 +5,11 @@ import fs from "fs"
 import mongo from "mongodb"
 const dbURL = "mongodb://localhost:27017/";
 export const MongoClient = new mongo.MongoClient(dbURL, { useNewUrlParser: true, useUnifiedTopology: true });
-
-export let lum
-export let jdb
-MongoClient.connect((err, db) => {
+export let db
+MongoClient.connect((err, res) => {
 	if (err) throw err
 	console.log("Successfully connected to mongo")
-	lum = db.db("sbot").collection("lastUserMessages")
-	jdb = db.db("sbot").collection("jlptProgress")
+	db = res.db("sbot")
 })
 
 import dotenv from "dotenv"
@@ -286,6 +283,7 @@ client.on('message', msg => {
 	if (msg.guild && msg.guild.id == "540145900526501899") {
 		let uid = msg.author.id
 		let mid = msg.id
+		let lum = db.collection("lastUserMessages")
 		lum.findOne({_id: uid}, async (err, res) => {
 			if (err) throw err
 			if (!res) {

@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, lum, jdb, imageRegex} from "./bot"
+import {client, OWNER_ID, BOT_ID, userDB, visibleServers, MongoClient, db, imageRegex} from "./bot"
 import {imgDatabaseURL} from "./config"
 import {hiragana, katakana, kanalat, kanji} from "./japdata"
 
@@ -1199,6 +1199,7 @@ export const commands = {
 			let userData
 
 			const uid = msg.author.id
+			let jdb = db.collection("jlptProgress")
 			jdb.findOne({_id: uid}, async (err, res) => {
 				if (res) {
 					userData = res.progress
@@ -1833,9 +1834,10 @@ export const commands = {
 				msg.channel.send('Допишите ник юзера')
 				return
 			}
+			let lum = db.collection("lastUserMessages")
 			if (args[0] == "stats") {
 				let coffeeGuild = client.guilds.get("540145900526501899")
-
+				
 				lum.find({}).toArray((err, res) => {
 					for (let i = 0; i < res.length; i++) {
 						res[i].m = s.sftime(res[i].m)
