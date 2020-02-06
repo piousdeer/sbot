@@ -12,7 +12,7 @@ export const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 export const botsChannels = [
 	{
 		g: "110107304413638656",
-		c: "334369998866874369"
+		c: "525254813131210752"
 	},
 	{
 		g: "540145900526501899",
