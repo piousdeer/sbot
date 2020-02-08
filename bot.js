@@ -40,7 +40,7 @@ const floodRate = 5 * 1000;
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
 
-export const imageRegex = /^http.+\.(png|jpe?g|bmp|gif|webp)/
+export const imageRegex = /^http.+\.(png|jpe?g|bmp|gif|webp)/i
 let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
 function processMessage(msg) {
