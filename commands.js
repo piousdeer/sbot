@@ -1903,5 +1903,47 @@ export const commands = {
 				}
 			}
 		}
+	},
+	Skin: {
+		r: /^(skin|скин)[.!]?$/,
+		v: false,
+		async f (msg, args) {
+			if (!args[0]) {
+				msg.channel.send('Нужен никнейм.')
+				return
+			}
+
+			let nick = args[0]
+			let { body: playerInfo } = await got(`https://api.mojang.com/users/profiles/minecraft/${nick}`, { json: true })
+			if (playerInfo.error) throw Error(playerInfo.error)
+
+			if (!playerInfo) {
+				msg.channel.send(`По нику ${nick} ничего не найдено.`)
+				return
+			}
+
+			let uuid = playerInfo.id
+			let { body: skinInfo } = await got(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { json: true })
+			if (skinInfo.error) throw Error(skinInfo.error)
+
+			try {
+				let b64 = skinInfo.properties[0].value
+				let skinValueData = JSON.parse(Buffer.from(b64, 'base64').toString('utf-8'))
+				let skinURL = skinValueData.textures.SKIN.url
+
+				msg.channel.send({embed: {
+					title: playerInfo.name,
+					url: skinURL,
+					image: {
+						url: skinURL
+					}
+				}})
+			} catch (err) {
+				console.log(err)
+				console.log(skinInfo)
+			}
+
+
+		}
 	}
 }
