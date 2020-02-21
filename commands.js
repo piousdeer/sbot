@@ -1918,7 +1918,7 @@ export const commands = {
 			if (playerInfo.error) throw Error(playerInfo.error)
 
 			if (!playerInfo) {
-				msg.channel.send(`По нику ${nick} ничего не найдено.`)
+				msg.channel.send(`Игрок с ником \`${nick}\` не найден.`)
 				return
 			}
 
@@ -1929,10 +1929,16 @@ export const commands = {
 			try {
 				let b64 = skinInfo.properties[0].value
 				let skinValueData = JSON.parse(Buffer.from(b64, 'base64').toString('utf-8'))
+
+				if (!Object.keys(skinValueData.textures).length) {
+					msg.channel.send(`У игрока \`${playerInfo.name}\` нет скина :(`)
+					return
+				}
+
 				let skinURL = skinValueData.textures.SKIN.url
 
 				msg.channel.send({embed: {
-					title: playerInfo.name,
+					title: playerInfo.name.replace(/_/g, "\\_"),
 					url: skinURL,
 					image: {
 						url: skinURL
