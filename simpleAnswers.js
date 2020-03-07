@@ -33,7 +33,7 @@ export const simpleAnswers = [
 			"Посмотри Жожу \nhttps://anilist.co/anime/14719/JoJo-no-Kimyou-na-Bouken/",
 			"Посмотри Психопасс \nhttps://anilist.co/anime/13601/PSYCHOPASS/",
 			"Посмотри Танечку \nhttps://anilist.co/anime/21613/Youjo-Senki/",
-			"Установи Arch Linux",
+			"Установи Arch Linux \nhttps://wiki.archlinux.org/index.php/Installation_guide",
 			"Установи на мобилку F-Droid (аппстор опенсурсных приложений) \nhttps://f-droid.org/",
 			"Поучаствуй в проекте Common Voice от Мозиллы \nhttps://voice.mozilla.org/ru/",
 			"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
