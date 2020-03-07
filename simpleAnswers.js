@@ -24,7 +24,7 @@ export const simpleAnswers = [
 		t: ["Я – просто скрипт."]
 	},
 	{
-		r: /^((мне )?ску[чшщ]н[оа])/,
+		r: /^((мне )?ску+[чшщ]н[оа]+)/,
 		t: [
 			"Придумай текстовый квест и закодь его в бота.\nhttps://discordapp.com/developers/applications/",
 			"Как насчёт выучить новый язык?\nhttps://invite.duolingo.com/BDHTZTB5CWWKTTJB3BBQBELDDY",
