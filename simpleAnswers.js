@@ -26,11 +26,18 @@ export const simpleAnswers = [
 	{
 		r: /^((мне )?ску[чшщ]н[оа])/,
 		t: [
-			"Придумай какую-нибудь игру и закодь бота для неё.\nhttps://discordapp.com/developers/applications/",
+			"Придумай текстовый квест и закодь его в бота.\nhttps://discordapp.com/developers/applications/",
 			"Как насчёт выучить новый язык?\nhttps://invite.duolingo.com/BDHTZTB5CWWKTTJB3BBQBELDDY",
 			"Посмотри Revolution OS https://youtu.be/n1F_MfLRlX0?t=394",
-			"Посмотри Коносубу",
-			"Посмотри Жожу"
+			"Посмотри Коносубу \nhttps://anilist.co/anime/21202/Kono-Subarashii-Sekai-ni-Shukufuku-wo/",
+			"Посмотри Жожу \nhttps://anilist.co/anime/14719/JoJo-no-Kimyou-na-Bouken/",
+			"Посмотри Психопасс \nhttps://anilist.co/anime/13601/PSYCHOPASS/",
+			"Посмотри Танечку \nhttps://anilist.co/anime/21613/Youjo-Senki/",
+			"Установи Arch Linux",
+			"Установи на мобилку F-Droid (аппстор опенсурсных приложений) \nhttps://f-droid.org/",
+			"Поучаствуй в проекте Common Voice от Мозиллы \nhttps://voice.mozilla.org/ru/",
+			"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
+			"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8"
 		]
 	}
 ]
