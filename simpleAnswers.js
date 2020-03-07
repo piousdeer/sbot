@@ -37,7 +37,9 @@ export const simpleAnswers = [
 			"Установи на мобилку F-Droid (аппстор опенсурсных приложений) \nhttps://f-droid.org/",
 			"Поучаствуй в проекте Common Voice от Мозиллы \nhttps://voice.mozilla.org/ru/",
 			"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
-			"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8"
+			"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8",
+			"Как насчёт немного CTF-задачек? \nhttps://www.root-me.org/?lang=en",
+			"Напиши нейронную сеть. \nhttps://www.tensorflow.org/tutorials"
 		]
 	}
 ]
