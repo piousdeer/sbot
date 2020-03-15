@@ -41,5 +41,9 @@ export const simpleAnswers = [
 			"Как насчёт немного CTF-задачек? \nhttps://www.root-me.org/?lang=en",
 			"Напиши нейронную сеть. \nhttps://www.tensorflow.org/tutorials"
 		]
+	},
+	{
+		r: /^((кинь |share |give )?(со?у?рс|исходн(ый|ики)|гитхаб|git(hub)?|source|sauce)( код| code)?)/,
+		t: ["https://github.com/Rult/sbot"]
 	}
 ]
