@@ -26,9 +26,9 @@ export const simpleAnswers = [
 	{
 		r: /^((мне )?ску+[чшщ]н[оа]+)/,
 		t: [
-			"Придумай текстовый квест и закодь его в бота.\nhttps://discordapp.com/developers/applications/",
-			"Как насчёт выучить новый язык?\nhttps://invite.duolingo.com/BDHTZTB5CWWKTTJB3BBQBELDDY",
-			"Посмотри Revolution OS https://youtu.be/n1F_MfLRlX0?t=394",
+			"Придумай текстовый квест и закодь его в бота \nhttps://discordapp.com/developers/applications/",
+			"Как насчёт выучить новый язык? \nhttps://invite.duolingo.com/BDHTZTB5CWWKTTJB3BBQBELDDY",
+			"Посмотри Revolution OS \nhttps://youtu.be/n1F_MfLRlX0?t=394",
 			"Посмотри Коносубу \nhttps://anilist.co/anime/21202/Kono-Subarashii-Sekai-ni-Shukufuku-wo/",
 			"Посмотри Жожу \nhttps://anilist.co/anime/14719/JoJo-no-Kimyou-na-Bouken/",
 			"Посмотри Психопасс \nhttps://anilist.co/anime/13601/PSYCHOPASS/",
@@ -39,11 +39,12 @@ export const simpleAnswers = [
 			"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
 			"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8",
 			"Как насчёт немного CTF-задачек? \nhttps://www.root-me.org/?lang=en",
-			"Напиши нейронную сеть. \nhttps://www.tensorflow.org/tutorials"
+			"Напиши нейронную сеть \nhttps://www.tensorflow.org/tutorials",
+			"Выучи уже английский наконец \nhttps://habr.com/ru/post/493522/"
 		]
 	},
 	{
-		r: /^((кинь |share |give )?(со?у?рс|исходн(ый|ики)|гитхаб|git(hub)?|source|sauce)( код| code)?)/,
+		r: /^((с?кинь |share |give )?(со?у?рс|исходн(ый|ики)|гитхаб|git(hub)?|source|sauce|код|code)( код| code)?)/,
 		t: ["https://github.com/Rult/sbot"]
 	}
 ]

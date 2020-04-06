@@ -1420,6 +1420,7 @@ export const commands = {
 		v: false,
 		async f (msg, args, origCaseParams) {
 			if (!args[0]) {
+				msg.reply(`Выберите подписку: \`кино\` \`аниме\``)
 				return
 			}
 			let isUserSubbing = true
