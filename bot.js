@@ -280,20 +280,6 @@ client.on('message', msg => {
 	if (msg.author.bot) return
 	processMessage(msg)
 
-	if (msg.guild && msg.guild.id == "540145900526501899") {
-		let uid = msg.author.id
-		let mid = msg.id
-		let lum = db.collection("lastUserMessages")
-		lum.findOne({_id: uid}, async (err, res) => {
-			if (err) throw err
-			if (!res) {
-				lum.insertOne({_id: uid, m: mid}, (err) => { if (err) throw err })
-			} else {
-				lum.updateOne({_id: uid}, {$set: {m : mid}}, (err) => {	if (err) throw err })
-			}
-		})
-	}
-
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
 	if (um && um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Useless messages: ${um}`)
