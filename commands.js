@@ -172,8 +172,8 @@ export const commands = {
 		
 
 			let dateRE = /\d{4}[-_\.\/\\]\d{2}[-_\.\/\\]\d{2}/i
-			let takenByRE = /(?:(?:скрин(?:шот)? )?снято?| ?by|takenby|from)\s*:?\s*(\S+)/i
-			let tagsRE = /(?:tags|т[еаэ]ги)(?:\s+)?:?/i
+			let takenByRE = /(?:(?:скрин(?:шот)? )?снято?| ?by|takenby|from)[:\s]+\s*(\S+)/i
+			let tagsRE = /(?:tags|т[еаэ]ги)[:\s]+\s*/i
 			
 			imageParamsArray.shift()
 			let imageNote = imageParamsArray.join(" ")
