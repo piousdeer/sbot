@@ -26,21 +26,25 @@ export const simpleAnswers = [
 	{
 		r: /^((мне )?ску+[чшщ]н[оа]+)/,
 		t: [
-			"Придумай текстовый квест и закодь его в бота \nhttps://discordapp.com/developers/applications/",
-			"Как насчёт выучить новый язык? \nhttps://invite.duolingo.com/BDHTZTB5CWWKTTJB3BBQBELDDY",
 			"Посмотри Revolution OS \nhttps://youtu.be/n1F_MfLRlX0?t=394",
 			"Посмотри Коносубу \nhttps://anilist.co/anime/21202/Kono-Subarashii-Sekai-ni-Shukufuku-wo/",
 			"Посмотри Жожу \nhttps://anilist.co/anime/14719/JoJo-no-Kimyou-na-Bouken/",
 			"Посмотри Психопасс \nhttps://anilist.co/anime/13601/PSYCHOPASS/",
 			"Посмотри Танечку \nhttps://anilist.co/anime/21613/Youjo-Senki/",
-			"Установи Arch Linux \nhttps://wiki.archlinux.org/index.php/Installation_guide",
-			"Установи на мобилку F-Droid (аппстор опенсурсных приложений) \nhttps://f-droid.org/",
+			"Поиграй в Шляпу во Времени \nhttps://store.steampowered.com/app/253230/A_Hat_in_Time/",
+			"Поиграй в Вальхаллу \nhttps://store.steampowered.com/app/447530/VA11_HallA_Cyberpunk_Bartender_Action/",
+			"Поиграй в Античембер \nhttps://store.steampowered.com/app/219890/Antichamber/",
+			"Поиграй в Притчу Стэнли \nhttps://store.steampowered.com/app/221910/The_Stanley_Parable/",
+			"Установи Арч на виртуалку \nhttps://wiki.archlinux.org/index.php/Installation_guide",
 			"Поучаствуй в проекте Common Voice от Мозиллы \nhttps://voice.mozilla.org/ru/",
 			"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
 			"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8",
-			"Как насчёт немного CTF-задачек? \nhttps://www.root-me.org/?lang=en",
-			"Напиши нейронную сеть \nhttps://www.tensorflow.org/tutorials",
-			"Выучи уже английский наконец \nhttps://habr.com/ru/post/493522/"
+			"Попробуй себя в кибербезопасности \nhttps://www.root-me.org/?lang=en",
+			"Время научиться учить английский правильно \nhttps://habr.com/ru/post/493522/",
+			"Почитай Хабр \nhttps://habr.com/ru/",
+			"Почитай мангу \nhttps://f-droid.org/en/packages/eu.kanade.tachiyomi/",
+			"Организуй или начни отложенные дела \nhttps://f-droid.org/en/packages/org.tasks/",
+			"Напиши что-нибудь на мобилку \nhttps://metanit.com/java/android/1.2.php"
 		]
 	},
 	{
