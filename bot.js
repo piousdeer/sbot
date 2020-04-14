@@ -118,26 +118,28 @@ function processMessage(msg) {
 	score += floodRate
 	udata.ftime = now + score
 	
-	if (udata.fchills >= floodChillsMax) {
-		return
-	}
-	if (score > floodMax) {
-		if (udata.fchills == floodChillsMax - 1) {
-			console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | ${msg.author.tag} is flooding now!!`)
-			msg.channel.send(s.getRandomElem([
-				"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
-				"Дудос проведён успешно! <:sho:355426437639176194>",
-				"CPU usage 🔥 JUMPS 📈 to 100% \n❄ Initiating cooling system... ❄"
-			]))
-		} else {
-			msg.channel.send(s.getRandomElem([
-				"Постой! Не так быстро.",
-				"no flood allowed here",
-				"<:cracker:357960229259837440> <:SPAM:533333156644913152>"
-			]))
+	if (uid != OWNER_ID) {
+		if (udata.fchills >= floodChillsMax) {
+			return
 		}
-		udata.fchills++
-		return
+		if (score > floodMax) {
+			if (udata.fchills == floodChillsMax - 1) {
+				console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | ${msg.author.tag} is flooding now!!`)
+				msg.channel.send(s.getRandomElem([
+					"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
+					"Дудос проведён успешно! <:sho:355426437639176194>",
+					"CPU usage 🔥 JUMPS 📈 to 100% \n❄ Initiating cooling system... ❄"
+				]))
+			} else {
+				msg.channel.send(s.getRandomElem([
+					"Постой! Не так быстро.",
+					"no flood allowed here",
+					"<:cracker:357960229259837440> <:SPAM:533333156644913152>"
+				]))
+			}
+			udata.fchills++
+			return
+		}
 	}
 
 	// если юзер не флудит, можем идти дальше...
