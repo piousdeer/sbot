@@ -811,7 +811,6 @@ export const commands = {
 	},
 	Three: {
 		r: /^-?(\d+)[.!]?$/,
-		v: true,
 		f (msg, args, origCaseParams) {
 			if (!args[0]) {
 				args.unshift(msg.content.split(/\s+/).slice(-1)[0])

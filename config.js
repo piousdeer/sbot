@@ -11,10 +11,6 @@ export let dateOptions = {
 export const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 export const botsChannels = [
 	{
-		g: "110107304413638656",
-		c: "525254813131210752"
-	},
-	{
 		g: "540145900526501899",
 		c: "600294780144189481"
 	},
