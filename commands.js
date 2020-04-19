@@ -226,6 +226,65 @@ export const commands = {
 				.catch(error => console.log(error))
 		}
 	},
+	Skin: {
+		r: /^(skin|скин)[.!]?$/,
+		v: false,
+		d: {
+			name: "скин [ник]",
+			value: "Ваш скин в майнкрафте.",
+			inline: true
+		},
+		async f (msg, args) {
+
+			let nick = args[0]
+
+			if (!nick) {
+				msg.channel.send('Нужен никнейм.')
+				return
+			}
+			if (!nick.match(/^\w+$/)) {
+				msg.channel.send('Ник может состоять только из латинских букв, цифр и знака `_`.')
+				return
+			}
+
+			let { body: playerInfo } = await got(`https://api.mojang.com/users/profiles/minecraft/${nick}`, { json: true })
+			if (playerInfo.error) throw Error(playerInfo.error)
+
+			if (!playerInfo) {
+				msg.channel.send(`Игрок с ником \`${nick}\` не найден.`)
+				return
+			}
+
+			let uuid = playerInfo.id
+			let { body: skinInfo } = await got(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { json: true })
+			if (skinInfo.error) throw Error(skinInfo.error)
+
+			try {
+				let b64 = skinInfo.properties[0].value
+				let skinValueData = JSON.parse(Buffer.from(b64, 'base64').toString('utf-8'))
+
+				if (!Object.keys(skinValueData.textures).length) {
+					msg.channel.send(`У игрока \`${playerInfo.name}\` нет скина :(`)
+					return
+				}
+
+				let skinURL = skinValueData.textures.SKIN.url
+
+				msg.channel.send({embed: {
+					title: playerInfo.name.replace(/_/g, "\\_"),
+					url: skinURL,
+					image: {
+						url: skinURL
+					}
+				}})
+			} catch (err) {
+				console.log(err)
+				console.log(skinInfo)
+			}
+
+
+		}
+	},
 	React: {
 		r: /^([пpрr]|поставь|отреагируй|реакция|react(ion)?)$/,
 		f (msg, args) {
@@ -1845,65 +1904,6 @@ export const commands = {
 			}
 			imc.onerror = err => { throw err }
 			imc.src = "pics/coffeecup.png"
-
-		}
-	},
-	Skin: {
-		r: /^(skin|скин)[.!]?$/,
-		v: false,
-		d: {
-			name: "скин [ник]",
-			value: "Ваш скин в майнкрафте.",
-			inline: true
-		},
-		async f (msg, args) {
-
-			let nick = args[0]
-
-			if (!nick) {
-				msg.channel.send('Нужен никнейм.')
-				return
-			}
-			if (!nick.match(/^\w+$/)) {
-				msg.channel.send('Ник может состоять только из латинских букв, цифр и знака `_`.')
-				return
-			}
-
-			let { body: playerInfo } = await got(`https://api.mojang.com/users/profiles/minecraft/${nick}`, { json: true })
-			if (playerInfo.error) throw Error(playerInfo.error)
-
-			if (!playerInfo) {
-				msg.channel.send(`Игрок с ником \`${nick}\` не найден.`)
-				return
-			}
-
-			let uuid = playerInfo.id
-			let { body: skinInfo } = await got(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { json: true })
-			if (skinInfo.error) throw Error(skinInfo.error)
-
-			try {
-				let b64 = skinInfo.properties[0].value
-				let skinValueData = JSON.parse(Buffer.from(b64, 'base64').toString('utf-8'))
-
-				if (!Object.keys(skinValueData.textures).length) {
-					msg.channel.send(`У игрока \`${playerInfo.name}\` нет скина :(`)
-					return
-				}
-
-				let skinURL = skinValueData.textures.SKIN.url
-
-				msg.channel.send({embed: {
-					title: playerInfo.name.replace(/_/g, "\\_"),
-					url: skinURL,
-					image: {
-						url: skinURL
-					}
-				}})
-			} catch (err) {
-				console.log(err)
-				console.log(skinInfo)
-			}
-
 
 		}
 	}
