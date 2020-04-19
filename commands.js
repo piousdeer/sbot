@@ -1008,7 +1008,7 @@ export const commands = {
 		r: /^(kana|кана)[.!]?$/,
 		v: true,
 		d: {
-			name: "кана [хирагана|катакана]>",
+			name: "кана [хирагана|катакана]",
 			value: "Подучить кану.",
 			inline: true
 		},
