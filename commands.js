@@ -1004,125 +1004,6 @@ export const commands = {
 			
 		}
 	},
-	Palette: {
-		r: /^(палитра|palette)[.!]?$/,
-		v: true,
-		d: {
-			name: "палитра + прикреплённое изображение 📎",
-			value: "Считать цвета с картинки.",
-			inline: true
-		},
-		async f (msg, args) {
-			if (!msg.attachments.size) {
-				msg.channel.send("Нужно прикрепить картинку к сообщению!")
-				return
-			}
-
-			let cnum = parseInt(args[0])
-			if (!cnum || cnum < 1) {
-				cnum = 10
-			} else if (cnum > 100) {
-				cnum = 100
-			}
-			
-			msg.attachments.forEach(async (att) => {
-				let max = 128
-				let w = max
-				let h = max
-				if (att.width > att.height) {
-					h = Math.round(att.height / (att.width / max))
-				} else {
-					w = Math.round(att.width / (att.height / max))
-				}
-				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
-
-				await s.getMainColorFromImage(imagePreview, (color, palette) => {
-					let hexColors = []
-					let hexRows = []
-
-					let rowLength = 5
-					let segmentW = 70
-					let segmentH = 25
-					let canvasW = segmentW * rowLength
-					let canvasH = Math.ceil(cnum / rowLength) * segmentH
-
-					const canvas = Canvas.createCanvas(canvasW, canvasH)
-					const ctx = canvas.getContext('2d')
-					for (let i = 0; i < palette.length; i++) {
-						let hex = palette[i].toString(16)
-						let tempHex = `00000${hex}`
-						hex = `#${tempHex.slice(-6)}`
-						hexColors.push(hex)
-						let x = i % rowLength
-						let y = Math.floor(i / rowLength)
-						ctx.fillStyle = hex
-						ctx.fillRect(segmentW*x, segmentH*y, segmentW, segmentH)
-					}
-					const buf = canvas.toBuffer('image/png')
-
-					for (let i = 0; i < hexColors.length; i+=5) {
-						hexRows.push(hexColors.slice(i, i+5).join(" "))
-					}
-					msg.channel.send(`\`\`\`${hexRows.join("\n")}\`\`\``, {
-						files: [{
-							attachment: buf,
-							name: "palette.png"
-						}]
-					})
-				}, cnum)
-			})
-
-		}
-	},
-	Recolor: {
-		r: /^(реколор|recolor)[.!]?$/,
-		v: true,
-		async f (msg, args) {
-			if (!args.length) {
-				msg.channel.send("Нужно указать цвета! Например, `#d51a24 #7ca4af #f8dfa8 #05324a`")
-				return
-			}
-			if (!msg.attachments.size) {
-				msg.channel.send("Нужно прикрепить картинку к сообщению!")
-				return
-			}
-
-			msg.channel.startTyping()
-
-			let pal = []
-			for (let i = 0; i < args.length; i++) {
-				pal.push(parseInt(args[i].slice(-6), 16)*256 + 255)
-			}
-			msg.attachments.forEach(async (att) => {
-				let max = 1024
-				let w = max
-				let h = max
-				if (att.width > att.height) {
-					h = Math.round(att.height / (att.width / max))
-				} else {
-					w = Math.round(att.width / (att.height / max))
-				}
-				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
-
-				await s.recolorByPalette(imagePreview, pal, buf => {
-					msg.channel.send({
-						files: [{
-							attachment: buf,
-							name: "recolored.png"
-						}]
-					})
-					.then(() => {
-						msg.channel.stopTyping()
-					})
-					.catch(error => {
-						msg.channel.stopTyping()
-						console.log(error)
-					})
-				})
-			})
-
-		}
-	},
 	Kana: {
 		r: /^(kana|кана)[.!]?$/,
 		v: true,
@@ -1905,6 +1786,125 @@ export const commands = {
 			}
 			imc.onerror = err => { throw err }
 			imc.src = "pics/coffeecup.png"
+
+		}
+	},
+	Palette: {
+		r: /^(палитра|palette)[.!]?$/,
+		v: true,
+		d: {
+			name: "палитра + прикреплённое изображение 📎",
+			value: "Считать цвета с картинки.",
+			inline: true
+		},
+		async f (msg, args) {
+			if (!msg.attachments.size) {
+				msg.channel.send("Нужно прикрепить картинку к сообщению!")
+				return
+			}
+
+			let cnum = parseInt(args[0])
+			if (!cnum || cnum < 1) {
+				cnum = 10
+			} else if (cnum > 100) {
+				cnum = 100
+			}
+			
+			msg.attachments.forEach(async (att) => {
+				let max = 128
+				let w = max
+				let h = max
+				if (att.width > att.height) {
+					h = Math.round(att.height / (att.width / max))
+				} else {
+					w = Math.round(att.width / (att.height / max))
+				}
+				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+
+				await s.getMainColorFromImage(imagePreview, (color, palette) => {
+					let hexColors = []
+					let hexRows = []
+
+					let rowLength = 5
+					let segmentW = 70
+					let segmentH = 25
+					let canvasW = segmentW * rowLength
+					let canvasH = Math.ceil(cnum / rowLength) * segmentH
+
+					const canvas = Canvas.createCanvas(canvasW, canvasH)
+					const ctx = canvas.getContext('2d')
+					for (let i = 0; i < palette.length; i++) {
+						let hex = palette[i].toString(16)
+						let tempHex = `00000${hex}`
+						hex = `#${tempHex.slice(-6)}`
+						hexColors.push(hex)
+						let x = i % rowLength
+						let y = Math.floor(i / rowLength)
+						ctx.fillStyle = hex
+						ctx.fillRect(segmentW*x, segmentH*y, segmentW, segmentH)
+					}
+					const buf = canvas.toBuffer('image/png')
+
+					for (let i = 0; i < hexColors.length; i+=5) {
+						hexRows.push(hexColors.slice(i, i+5).join(" "))
+					}
+					msg.channel.send(`\`\`\`${hexRows.join("\n")}\`\`\``, {
+						files: [{
+							attachment: buf,
+							name: "palette.png"
+						}]
+					})
+				}, cnum)
+			})
+
+		}
+	},
+	Recolor: {
+		r: /^(реколор|recolor)[.!]?$/,
+		v: true,
+		async f (msg, args) {
+			if (!args.length) {
+				msg.channel.send("Нужно указать цвета! Например, `#d51a24 #7ca4af #f8dfa8 #05324a`")
+				return
+			}
+			if (!msg.attachments.size) {
+				msg.channel.send("Нужно прикрепить картинку к сообщению!")
+				return
+			}
+
+			msg.channel.startTyping()
+
+			let pal = []
+			for (let i = 0; i < args.length; i++) {
+				pal.push(parseInt(args[i].slice(-6), 16)*256 + 255)
+			}
+			msg.attachments.forEach(async (att) => {
+				let max = 1024
+				let w = max
+				let h = max
+				if (att.width > att.height) {
+					h = Math.round(att.height / (att.width / max))
+				} else {
+					w = Math.round(att.width / (att.height / max))
+				}
+				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+
+				await s.recolorByPalette(imagePreview, pal, buf => {
+					msg.channel.send({
+						files: [{
+							attachment: buf,
+							name: "recolored.png"
+						}]
+					})
+					.then(() => {
+						msg.channel.stopTyping()
+					})
+					.catch(error => {
+						msg.channel.stopTyping()
+						console.log(error)
+					})
+				})
+			})
 
 		}
 	},
