@@ -230,7 +230,7 @@ export const commands = {
 		r: /^(skin|скин)[.!]?$/,
 		v: false,
 		d: {
-			name: "скин [ник]",
+			name: "скин <ник>",
 			value: "Ваш скин в майнкрафте.",
 			inline: true
 		},
@@ -1126,7 +1126,7 @@ export const commands = {
 		r: /^(kana|кана)[.!]?$/,
 		v: true,
 		d: {
-			name: "кана <хирагана|катакана>",
+			name: "кана [хирагана|катакана]>",
 			value: "Подучить кану.",
 			inline: true
 		},
