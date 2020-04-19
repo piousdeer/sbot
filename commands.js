@@ -77,7 +77,7 @@ export const commands = {
 		v: true,
 		d: {
 			name: "имг [теги через пробел]",
-			value: "Рандомная пикча из [Галереи](https://stilltest.tk/gallery/).",
+			value: "Рандомная пикча из [Галереи Околорандомья](https://stilltest.tk/gallery/).",
 			inline: true
 		},
 		async f (msg, args) {
@@ -118,10 +118,12 @@ export const commands = {
 	},
 	Send: {
 		r: /^(отправ(ит)?ь|предложи(ть)?|пришли|прислать|send)$/,
+		/*
 		d: {
 			name: "<описание пикчи> + прикреплённое изображение 📎",
 			value: "Предложить свой скриншот в Галерею (только в ЛС, [пример оформления](https://i.imgur.com/kus289H.png)).\nЕсли я поставил в ответ 📮 - отправка работает."
 		},
+		*/
 		async f (msg, args, origCaseParams) {
 			let imageParamsArray = origCaseParams.args
 		
@@ -479,6 +481,11 @@ export const commands = {
 	},
 	Homestuck: {
 		r: /^(hs|хс|хоумстак|homestuck)[.!]?$/,
+		d: {
+			name: "хс [номер_страницы]",
+			value: "Почитать [Хоумстак](https://www.homestuck.com/).",
+			inline: true
+		},
 		v: true,
 		async f (msg, args, origCaseParams, usedArrowButton) {
 			let page_number
@@ -648,7 +655,12 @@ export const commands = {
 		}
 	},
 	SnowflakeTime: {
-		r: /^(снежинк[аи]|sftime)[.!]?$/,
+		r: /^(снежинк[аи]|sftime|сфтайм)[.!]?$/,
+		d: {
+			name: "снежинка <дискорд-айди>",
+			value: "Время снежинки.",
+			inline: true
+		},
 		f (msg, args) {
 			let totalSFTimes = []
 			args.forEach(arg => {
@@ -758,6 +770,11 @@ export const commands = {
 	IronDoor: {
 		r: /^(железнаядверь|жд)[.!]?$/,
 		v: true,
+		d: {
+			name: "жд <вопрос с ответом да/нет>",
+			value: "Обратиться к мудрости Железной Двери.",
+			inline: true
+		},
 		f (msg, args) {
 			if (!args[0]) {
 				return
@@ -1158,8 +1175,8 @@ export const commands = {
 		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
 		v: true,
 		d: {
-			name: "kanji [seconds]",
-			value: "JLPT N5 vocabulary test!",
+			name: "кандзи [секунды]",
+			value: "Тест на слова из JLPT N5!",
 			inline: true
 		},
 		async f (msg, args) {
@@ -1663,6 +1680,11 @@ export const commands = {
 	Coffee: {
 		r: /^(кофе|coff?ee?)[.!]?$/,
 		v: true,
+		d: {
+			name: "кофе",
+			value: "Заказать кофе.",
+			inline: true
+		},
 		async f (msg, args, origCaseParams) {
 
 			let botMessage
@@ -1829,13 +1851,24 @@ export const commands = {
 	Skin: {
 		r: /^(skin|скин)[.!]?$/,
 		v: false,
+		d: {
+			name: "скин [ник]",
+			value: "Ваш скин в майнкрафте.",
+			inline: true
+		},
 		async f (msg, args) {
-			if (!args[0]) {
+
+			let nick = args[0]
+
+			if (!nick) {
 				msg.channel.send('Нужен никнейм.')
 				return
 			}
+			if (!nick.match(/^\w+$/)) {
+				msg.channel.send('Ник может состоять только из латинских букв, цифр и знака `_`.')
+				return
+			}
 
-			let nick = args[0]
 			let { body: playerInfo } = await got(`https://api.mojang.com/users/profiles/minecraft/${nick}`, { json: true })
 			if (playerInfo.error) throw Error(playerInfo.error)
 
