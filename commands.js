@@ -721,6 +721,10 @@ export const commands = {
 			inline: true
 		},
 		f (msg, args) {
+			if (!args[0]) {
+				msg.channel.send('Введите дискорд-айди!')
+				return
+			}
 			let totalSFTimes = []
 			args.forEach(arg => {
 				if (arg.match(/\d{17,20}/)) {
