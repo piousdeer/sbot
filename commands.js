@@ -1302,7 +1302,6 @@ export const commands = {
 						}]
 					}).then(async (m) => {
 						botMessage = m
-						gameChannel.stopTyping()
 					})
 					.catch(error => console.log(error))
 
@@ -1314,7 +1313,6 @@ export const commands = {
 					
 					await gameChannel.awaitMessages(filter, { max: 1, time: secondsToWait*1000 })
 						.then(collected => {
-							gameChannel.startTyping()
 							const m = collected.first()
 							userAnswerMessage = m
 							if (k.r.includes(m.content) || romaji.includes(m.content) || k.m.includes(m.content)) {
@@ -1344,7 +1342,6 @@ export const commands = {
 						})
 						.catch(collected => {
 							isGameRunning = false
-							gameChannel.stopTyping()
 							userDB[msg.author.id].learningKanji = false
 							const gameoverEmbed = {
 								title: "Time's up!"
@@ -1876,8 +1873,6 @@ export const commands = {
 				return
 			}
 
-			msg.channel.startTyping()
-
 			let pal = []
 			for (let i = 0; i < args.length; i++) {
 				pal.push(parseInt(args[i].slice(-6), 16)*256 + 255)
@@ -1900,11 +1895,8 @@ export const commands = {
 							name: "recolored.png"
 						}]
 					})
-					.then(() => {
-						msg.channel.stopTyping()
-					})
+					.then(() => {})
 					.catch(error => {
-						msg.channel.stopTyping()
 						console.log(error)
 					})
 				})
