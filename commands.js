@@ -1173,6 +1173,11 @@ export const commands = {
 
 				let studied = new Set(userData.studied)
 
+				let nekopics = []
+				fs.readdirSync("./nekopics/").forEach(file => {
+					nekopics.push(file)
+				});
+
 				while (isGameRunning) {
 
 					let num
@@ -1245,9 +1250,7 @@ export const commands = {
 					const canvas = Canvas.createCanvas(canw, canh)
 					const ctx = canvas.getContext('2d')
 		
-					let { body: imageInfo } = await got(`https://neko-love.xyz/api/v1/neko`, { json: true })
-					if (imageInfo.error) throw Error(imageInfo.error)
-					const bg = await Canvas.loadImage(imageInfo.url)
+					const bg = await Canvas.loadImage(`nekopics/${s.getRandomElem(nekopics)}`)
 		
 					const bgw = bg.width
 					const bgh = bg.height
