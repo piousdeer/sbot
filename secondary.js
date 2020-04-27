@@ -1,5 +1,4 @@
 import {client} from "./bot"
-import {botsChannels} from "./config"
 
 import got from "got"
 import jimp from "jimp"
@@ -43,17 +42,6 @@ export function deleteUserMessage(msg, time) {
 	} else {
 		return false
 	}
-}
-export function isThisBotsChannel(msg) {
-	let ch = msg.channel
-	if (ch.type == "text") {
-		for (let i = 0; i < botsChannels.length; i++) {
-			if (ch.guild.id == botsChannels[i].g && ch.id != botsChannels[i].c) {
-				return false
-			}
-		}
-	}
-	return true
 }
 export function removeElementsByValue(arr) {
     let what, a = arguments, L = a.length, ax;

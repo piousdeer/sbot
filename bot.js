@@ -189,15 +189,7 @@ function processMessage(msg) {
 	// ищем команду в регулярках
 	for (let i in commands) {
 		if (cmd.match(commands[i].r) || (cmdLayoutSwitched.match(commands[i].r) && (cmd[0].match(/[а-я]/i) || !s.autoreact(msg, [cmd].concat(args), true)))) {
-			if (commands[i].v && !s.isThisBotsChannel(msg)) {
-				msg.react("#⃣")
-					.then(() => {
-						msg.react("🤖")
-					})
-					.catch(error => console.log(error))
-			} else {
-				commands[i].f(msg, args, origCaseParams)
-			}
+			commands[i].f(msg, args, origCaseParams)
 			return
 		}
 	}
