@@ -907,29 +907,33 @@ export const commands = {
 				return
 			}
 		
-			let emojiName = s.getEmojiName(args[0])
-			let guildName
-			let guildCheck
-		
-			if (guildCheck = emojiName.match(/^([^:]+)(?::(\S+))$/)) {
-				emojiName = guildCheck[1]
-				guildName = guildCheck[2]
-			}
-		
-			let emoji = s.findEmoji(emojiName, guildName)
-		
-			if (!emoji) {
-				msg.react('604015450304806952')
-				return
-			}
+			let e = ''
+			for (let arg of args) {
+				let emojiName = s.getEmojiName(arg)
+				let guildName
+				let guildCheck
+			
+				if (guildCheck = emojiName.match(/^([^:]+)(?::(\S+))$/)) {
+					emojiName = guildCheck[1]
+					guildName = guildCheck[2]
+				}
+			
+				let emoji = s.findEmoji(emojiName, guildName)
+			
+				if (!emoji) {
+					msg.react('604015450304806952')
+					return
+				}
 
-			let prefix = "<:"
-			let postfix = "> "
-			if (emoji.animated) {
-				prefix = "<a:"
+				let prefix = "<:"
+				let postfix = "> "
+				if (emoji.animated) {
+					prefix = "<a:"
+				}
+			
+				e += prefix + emoji.name + ":" + emoji.id + postfix
 			}
-		
-			let e = prefix + emoji.name + ":" + emoji.id + postfix
+			
 			let result = e.repeat(num)
 			
 			if (result.length <= 2000) {
