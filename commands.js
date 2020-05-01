@@ -1945,8 +1945,13 @@ export const commands = {
 		r: /^(rulet|рулет)[.!]?$/,
 		v: true,
 		f (msg, args) {
-			let size = (args[0]) ? args[0] : 7
+			let size = (args[0]) ? Number(args[0]) : 7
 			let maxSize = 15
+
+			if (!size) {
+				msg.channel.send("can i offer you a nice egg in this trying time? 🥚")
+				return
+			}
 
 			size = ~~size // cast to integer
 	
