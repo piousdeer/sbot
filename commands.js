@@ -1940,5 +1940,66 @@ export const commands = {
 
 			msg.channel.send(s.getRandomElem(boringTasks))
 		}
+	},
+	Rulet: { // by PLAYER_CHAR
+		r: /^(rulet|рулет)[.!]?$/,
+		v: true,
+		f (msg, args) {
+			let size = (args[0]) ? args[0] : 7
+			let maxSize = 15
+
+			size = ~~size // cast to integer
+	
+			let negative = size < 0
+			size = size < 0 ? -size : size
+			size = size > maxSize ? maxSize : size
+			let startSize = size > 1 ? 2 : size
+			let ruletic = [new Array(startSize).fill(1)]
+			
+			// add layer by layer
+			for (let currSize = startSize; currSize < size; currSize++) {
+				let width = ruletic[0].length
+				
+				let nachinka = new Array(width).fill(0)
+				nachinka[0] = 1
+				ruletic.push(nachinka)
+				
+				let corka = new Array(width).fill(1)
+				ruletic.push(corka)
+				
+				// rotate 90 degrees clockwise
+				ruletic = ruletic[0].map((_, i) => ruletic.map(row => row[i]).reverse())
+			}
+			
+			let chars = ['░', '█']
+			if (negative) {
+				chars = chars.reverse()
+			}
+			let outerChar = ' '
+			
+			// convert numbers to chars
+			let width = ruletic[0].length
+			let height = ruletic.length
+			ruletic = ruletic.map((row, j) => row.map((n, i) => {
+				let primary = chars[n]
+				let outer = i == 0 || i == width - 1
+				let rBorder = (i != 0) && (row[i - 1] == n)
+				let lBorder = (i != width - 1) && (row[i + 1] == n)
+				if ((rBorder && lBorder) || size <= 2) {
+					// inside the line
+					rBorder = false
+					lBorder = false
+				}
+				if ((i <= 1) && (j == height - 1) && (i != width - 1)) {
+					// left bottom corner
+					lBorder = true
+				}
+				let secondary = outer ? outerChar : chars[1 - n]
+				let brick = (lBorder ? secondary : primary) + (rBorder ? secondary : primary)
+				return brick
+			}))
+			
+			msg.channel.send(`\`\`\`${ruletic.map(x => x.join('')).join('\n')}\`\`\``)
+		}
 	}
 }
