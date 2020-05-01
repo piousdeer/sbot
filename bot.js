@@ -245,7 +245,9 @@ client.on('ready', () => {
 	let readyTimeString = new Date(client.readyTimestamp).toLocaleString("en-US", Object.assign(dateOptions, timeOptions))
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
-	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
+	let startFetching = new Date()
+	let channelsCount = 0
+	client.user.setPresence({game: {name: `reloading...`, type: 0}})
 	BOT_ID = client.user.id
 	BOT_PREFIX = new RegExp(`^(?:${process.env.ACCEPTABLE_BOT_NICKNAME}|<@\!?${BOT_ID}>),?$`)
 
@@ -257,6 +259,7 @@ client.on('ready', () => {
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
 				if (channel.permissionsFor(client.user).has("READ_MESSAGES")) {
+					channelsCount++
 					channel.fetchMessages({limit: 5})
 						.then(() => {})
 						.catch(error => console.log(error))
@@ -264,6 +267,10 @@ client.on('ready', () => {
 			}
 		})
 	})
+
+	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
+	let endFetching = new Date()
+	console.log(`${channelsCount} channels fetched in ${(endFetching - startFetching)/1000} seconds.`)
 
 	visibleServers = visibleServers.sort((a, b) => {
 		return parseInt(a) - parseInt(b);
