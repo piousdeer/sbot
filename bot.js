@@ -254,6 +254,11 @@ client.on('ready', () => {
 	BOT_ID = client.user.id
 	BOT_PREFIX = new RegExp(`^(?:${process.env.ACCEPTABLE_BOT_NICKNAME}|<@\!?${BOT_ID}>),?$`)
 
+	function setActiveStatus() {
+		console.log(`${chCountTotal} channels fetched in ${(new Date() - startFetching)/1000} seconds.`)
+		client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
+	}
+
 	// кэширование сообщений для реакций и сбор айдишников серверов
 	client.guilds.forEach(guild => {
 		if (guild.emojis.size) {
@@ -267,12 +272,16 @@ client.on('ready', () => {
 						.then(() => {
 							chCountAsync++
 							if (chCountAsync === chCountTotal) {
-								let endFetching = new Date()
-								console.log(`${chCountTotal} channels fetched in ${(endFetching - startFetching)/1000} seconds.`)
-								client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
+								setActiveStatus()
 							}
 						})
-						.catch(error => console.log(error))
+						.catch(error => {
+							chCountTotal = --chCount
+							if (chCountAsync === chCountTotal) {
+								setActiveStatus()
+							}
+							console.log(error)
+						})
 				}
 			}
 		})
