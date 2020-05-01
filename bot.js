@@ -246,7 +246,10 @@ client.on('ready', () => {
 	console.log(`${client.user.tag} entered Discord \non ${readyTimeString}\n`)
 
 	let startFetching = new Date()
-	let channelsCount = 0
+	let chCount = 0
+	let chCountTotal
+	let chCountAsync = 0
+
 	client.user.setPresence({game: {name: `reloading...`, type: 0}})
 	BOT_ID = client.user.id
 	BOT_PREFIX = new RegExp(`^(?:${process.env.ACCEPTABLE_BOT_NICKNAME}|<@\!?${BOT_ID}>),?$`)
@@ -259,18 +262,23 @@ client.on('ready', () => {
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
 				if (channel.permissionsFor(client.user).has("READ_MESSAGES")) {
-					channelsCount++
+					chCount++
 					channel.fetchMessages({limit: 5})
-						.then(() => {})
+						.then(() => {
+							chCountAsync++
+							if (chCountAsync === chCountTotal) {
+								let endFetching = new Date()
+								console.log(`${chCountTotal} channels fetched in ${(endFetching - startFetching)/1000} seconds.`)
+								client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
+							}
+						})
 						.catch(error => console.log(error))
 				}
 			}
 		})
 	})
 
-	client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
-	let endFetching = new Date()
-	console.log(`${channelsCount} channels fetched in ${(endFetching - startFetching)/1000} seconds.`)
+	chCountTotal = chCount
 
 	visibleServers = visibleServers.sort((a, b) => {
 		return parseInt(a) - parseInt(b);
