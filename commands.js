@@ -7,6 +7,7 @@ import got from "got"
 import Cheerio from "cheerio"
 import Intl from "intl"
 import fs from "fs"
+import crypto from "crypto"
 
 const Canvas = require('canvas')
 const { Image } = require('canvas')
@@ -798,17 +799,15 @@ export const commands = {
 			let questionOriginal = origCaseParams.args.join(" ").replace(/[.!?]+$/, "")
 			let question = s.getSimpleString(questionOriginal)
 		
-			let epochStart = 17999
+			let epochStart = 18424
 			let epochEnd = 65573
 			let T = epochEnd - epochStart
 		
-			let days = Math.floor(Math.pow(((s.hashCode(question) % T) / T), 6) * T) + epochStart
+			let hex = crypto.createHash('md5').update(question).digest("hex")
+
+			let days = Math.floor(Math.pow(((parseInt(hex, 16) % T) / T), 6) * T) + epochStart
 			if (question.match(/(железн(ая|ой|ую) двер(ь|и)|конец света|армагеддон|апокалипсис)/)) {
 				days = epochEnd
-			}
-		
-			let whenEmbed = {
-				title: "Когда " + questionOriginal + "?",
 			}
 		
 			let dateOptions = {year: "numeric", month: "long", day: "numeric"}
@@ -825,9 +824,11 @@ export const commands = {
 			} else {
 				dateText = new Intl.DateTimeFormat("ru", dateOptions).format(new Date(days*86400*1000))
 			}
-			whenEmbed.description = "🗓 " + dateText
+			let whenEmbed = {
+				description: "🗓 " + dateText
+			}
 		
-			msg.channel.send({embed: whenEmbed})
+			msg.reply({embed: whenEmbed})
 		}
 	},
 	IronDoor: {
