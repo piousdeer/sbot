@@ -793,6 +793,7 @@ export const commands = {
 		v: true,
 		f (msg, args, origCaseParams) {
 			if (!args[0]) {
+				msg.reply("Мир опустеет 14 июля 2149 года. Тогда и появится Железная Дверь. \nВозможно, вы хотели спросить что-то конкретное?")
 				return
 			}
 		
