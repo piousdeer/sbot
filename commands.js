@@ -989,13 +989,17 @@ export const commands = {
 					prefix = "<a:"
 				}
 				
-				let emojiText = prefix + emoji.name + ":" + emoji.id + postfix
+				let emojiText = prefix + emoji.name + ':' + emoji.id + postfix
 				
-				let servText = emoji.guild.id + " | " + emoji.guild.name
+				let servText = emoji.guild.name
+				
+				if (args[1] && args[1] == 'serv_id') {
+					servText += ' (' + emoji.guild.id + ')'
+				}
 
 				let itemText = '\n' + emojiText + ' `' + emoji.name + '` ' + servText
 				
-				if (results.length + itemText.length >= 2000 - 4) {
+				if (results.length + itemText.length >= 2000 - 10) {
 					results += '\n...'
 					break
 				}
