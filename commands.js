@@ -1954,13 +1954,13 @@ export const commands = {
 			let size = (args[0]) ? Number(args[0]) : 7
 			let maxSize = 15
 
+			size = ~~size // cast to integer
+	
 			if (!size) {
 				msg.channel.send("can i offer you a nice egg in this trying time? 🥚")
 				return
 			}
 
-			size = ~~size // cast to integer
-	
 			let negative = size < 0
 			size = size < 0 ? -size : size
 			size = size > maxSize ? maxSize : size
