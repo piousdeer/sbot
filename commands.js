@@ -2012,10 +2012,28 @@ export const commands = {
 			let size = (args[0]) ? Number(args[0]) : 7
 			let maxSize = 15
 
+			if (Number.isNaN(size)) {
+				let bananaRulet = 'A baNaNa rulet specially for you! ```' + `
+   ██████████ 
+ ███🍌🍌🍌███ 
+███🍌████🍌███
+██🍌██🍌██🍌██
+██🍌███🍌🍌███
+ ██🍌████████ 
+` + '```'
+				
+				msg.channel.send(bananaRulet)
+				return
+			}
+			if (size == 0) {
+				msg.channel.send("can i offer you a nice egg in this trying time? 🥚")
+				return
+			}
+
 			size = ~~size // cast to integer
 	
 			if (!size) {
-				msg.channel.send("can i offer you a nice egg in this trying time? 🥚")
+				msg.channel.send("Invalid rulet size!")
 				return
 			}
 
