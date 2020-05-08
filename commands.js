@@ -991,14 +991,7 @@ export const commands = {
 				
 				let emojiText = prefix + emoji.name + ":" + emoji.id + postfix
 				
-				let servText = ''
-				client.guilds.forEach(key => {
-					for (let otherEmoji of key.emojis) {
-						if (otherEmoji.id == emoji.id) {
-							servText = key.id + " | " + key.name
-						}
-					}
-				})
+				let servText = emoji.guild.id + " | " + emoji.guild.name
 
 				let itemText = '\n' + emojiText + ' `' + emoji.name + '` ' + servText
 				
