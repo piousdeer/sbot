@@ -946,6 +946,64 @@ export const commands = {
 			
 		}
 	},
+	EmojiMatch: {
+		r: /^(эмод[жз]и(лист|м[эа]тч)|(match|find)(emojis?)?)$/,
+		f (msg, args, origCaseParams) {
+			if (!args[0]) {
+				args.unshift(msg.content.split(/\s+/).slice(-1)[0])
+				s.autoreact(msg, args, false)
+				return
+			}
+			
+			let emojiName = args[0]
+			
+			let emojisFull = []
+			let emojisStarts = []
+			let emojisIncludes = []
+			
+			client.emojis.forEach(key => {
+				let currName = key.name.toLowerCase()
+				if (emojiName == currName) {
+					emojisFull.push(key)
+				} else if (currName.startsWith(emojiName)) {
+					emojisStarts.push(key)
+				} else if (currName.includes(emojiName)) {
+					emojisIncludes.push(key)
+				}
+			})
+			
+			let emojis = emojisFull.concat(emojisStarts, emojisIncludes)
+			
+			if (emojis.length == 0) {
+				// nothing found at all
+				msg.react('604015450304806952')
+				return
+			}
+			
+			let results = 'Поиск по `' + emojiName + '`:'
+			
+			for (let emoji of emojis) {
+				let prefix = "<:"
+				let postfix = "> "
+				if (emoji.animated) {
+					prefix = "<a:"
+				}
+				
+				let emojiText = prefix + emoji.name + ":" + emoji.id + postfix
+				let itemText = '\n' + emojiText + ' `' + emoji.name + '`'
+				// todo: show this emoji's server name
+				
+				if (results.length + itemText.length >= 2000 - 4) {
+					results += '\n...'
+					break
+				}
+				
+				results += itemText
+			}
+			
+			msg.channel.send(results)
+		}
+	},
 	Rtfm: {
 		r: /^(rtfm|man|docs?)[.!]?$/,
 		async f (msg, args, origCaseParams) {
