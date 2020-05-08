@@ -990,8 +990,17 @@ export const commands = {
 				}
 				
 				let emojiText = prefix + emoji.name + ":" + emoji.id + postfix
-				let itemText = '\n' + emojiText + ' `' + emoji.name + '`'
-				// todo: show this emoji's server name
+				
+				let servText = ''
+				client.guilds.forEach(key => {
+					for (let otherEmoji of key.emojis) {
+						if (otherEmoji.id == emoji.id) {
+							servText = key.id + " | " + key.name
+						}
+					}
+				})
+
+				let itemText = '\n' + emojiText + ' `' + emoji.name + '` ' + servText
 				
 				if (results.length + itemText.length >= 2000 - 4) {
 					results += '\n...'
