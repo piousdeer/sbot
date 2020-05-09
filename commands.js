@@ -1879,7 +1879,7 @@ export const commands = {
 
 			let cnum = parseInt(args[0])
 			if (!cnum || cnum < 1) {
-				cnum = 10
+				cnum = 20
 			} else if (cnum > 100) {
 				cnum = 100
 			}
