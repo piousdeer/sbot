@@ -1978,7 +1978,7 @@ export const commands = {
 		}
 	},
 	Boring: {
-		r: /^(ску+[чшщ]н[оа]+|bo+ri+ng|груст?н[оа]|д[еи]пресс?ия)[.!]?$/,
+		r: /^(ску+[чшщ]н[оа]+|груст?н[оа]|д[еи]пресс?ия)[.!]?$/,
 		v: false,
 		d: {
 			name: "скучно",
@@ -1987,7 +1987,6 @@ export const commands = {
 		},
 		f (msg) {
 			let boringTasks = [
-				"Посмотри Revolution OS \nhttps://youtu.be/n1F_MfLRlX0?t=394",
 				"Посмотри Коносубу \nhttps://anilist.co/anime/21202/Kono-Subarashii-Sekai-ni-Shukufuku-wo/",
 				"Посмотри Жожу \nhttps://anilist.co/anime/14719/JoJo-no-Kimyou-na-Bouken/",
 				"Посмотри Психопасс \nhttps://anilist.co/anime/13601/PSYCHOPASS/",
@@ -2000,11 +1999,7 @@ export const commands = {
 				"Поучаствуй в проекте Common Voice от Мозиллы \nhttps://voice.mozilla.org/ru/",
 				"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
 				"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8",
-				"Попробуй себя в кибербезопасности \nhttps://www.root-me.org/?lang=en",
 				"Время научиться учить английский правильно \nhttps://habr.com/ru/post/493522/",
-				"Почитай Хабр \nhttps://habr.com/ru/",
-				"Почитай мангу \nhttps://f-droid.org/en/packages/eu.kanade.tachiyomi/",
-				"Организуй или начни отложенные дела \nhttps://f-droid.org/en/packages/org.tasks/",
 				"Напиши что-нибудь на мобилку \nhttps://metanit.com/java/android/1.2.php"
 			]
 
