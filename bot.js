@@ -45,40 +45,6 @@ let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмить
 
 function processMessage(msg) {
 	
-	// рассылка кино-уведомлений
-	if (msg.channel.id == '540156381479567371') {
-		let pingedUsers = new Set([])
-		let data = JSON.parse(fs.readFileSync('cinemadata.json'))
-		let embed = {
-			description: msg.cleanContent,
-			footer: {
-				text: msg.author.tag,
-				icon_url: msg.author.avatarURL
-			}
-		}
-		if (msg.attachments.size) {
-			let att = msg.attachments.first()
-			if (att.width) { // test if att is an image
-				embed.image = {
-					url: att.url
-				}
-			}
-		}
-		msg.mentions.roles.forEach(role => {
-			if (data[role.id]) {
-				embed.color = data[role.id].color
-				for (const item of data[role.id].users) {
-					if (!pingedUsers.has(item)) {
-						pingedUsers.add(item)
-						client.fetchUser(item).then(user => {
-							user.send({embed: embed});
-						})
-					}
-				}
-			}
-		})
-	}
-
 	// разбиение сообщения на компоненты
 	let componentsOrigCase = msg.content.split(/\s+/)
 	let componentsOrigPings = msg.cleanContent.split(/\s+/)

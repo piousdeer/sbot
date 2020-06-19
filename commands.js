@@ -783,14 +783,12 @@ export const commands = {
 				uptimeResult = `Я только зашёл.`
 			}
 
-			let subData = JSON.parse(fs.readFileSync('cinemadata.json'))
-		
 			const statsEmbed = {
 				color: 0x888888,
 				title: "Статистика",
 				description: uptimeResult,
 				footer: {
-					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size} | 👥 ${client.users.size} | 📽️ ${subData["565291444705689612"].users.length} | ⛩️ ${subData["577130367304204288"].users.length}`
+					text: `${process.env.npm_package_version} | 🗄 ${client.guilds.size} | 😶 ${client.emojis.size} | 👥 ${client.users.size}`
 				}
 			}
 		
@@ -1453,62 +1451,6 @@ export const commands = {
 
 			
 
-		}
-	},
-	Sub: {
-		r: /^((un)?sub|(ан)?саб)[.!]?$/,
-		v: false,
-		async f (msg, args, origCaseParams) {
-			if (!args[0]) {
-				msg.reply(`Выберите подписку: \`кино\` \`аниме\``)
-				return
-			}
-			let isUserSubbing = true
-			if (origCaseParams.cmd.match(/^(unsub|ансаб)/)) {
-				isUserSubbing = false
-			}
-			let subTarget
-			switch (args[0]) {
-				case "кино":
-				case "kino":
-					subTarget = "565291444705689612"
-					break;
-				case "аниме":
-				case "anime":
-					subTarget = "577130367304204288"
-					break;
-				default:
-					break;
-			}
-			let data = JSON.parse(fs.readFileSync('cinemadata.json'))
-			let users = new Set(data[subTarget].users)
-			let subName = data[subTarget].name
-			let uid = msg.author.id
-			if (isUserSubbing) {
-				if (users.has(uid)) {
-					msg.reply(`Вы уже подписаны на ${subName}!`)
-				} else {
-					users.add(uid)
-					data[subTarget].users = Array.from(users)
-					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
-						if (!err) {
-							msg.reply(`Теперь вы подписаны на ${subName}!`)
-						}
-					})
-				}
-			} else {
-				if (!users.has(uid)) {
-					msg.reply(`Вы и так не подписаны на ${subName}!`)
-				} else {
-					users.delete(uid)
-					data[subTarget].users = Array.from(users)
-					fs.writeFile("cinemadata.json", JSON.stringify(data, null, 2), err => {
-						if (!err) {
-							msg.reply(`Теперь вы отписаны от ${subName}!`)
-						}
-					})
-				}
-			}
 		}
 	},
 	Dividers: {
