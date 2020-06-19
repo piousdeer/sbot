@@ -531,8 +531,17 @@ export const commands = {
 	},
 	Invite: {
 		r: /^(приглашение|инвайт|invite)[.!]?$/,
-		f (msg) {
-			msg.author.send("Ты можешь пустить меня на свой сервер с помощью этой ссылки: \n<https://discordapp.com/api/oauth2/authorize?client_id=" + BOT_ID + "&scope=bot&permissions=0>")
+		f (msg, args) {
+			let id_to_invite = BOT_ID
+			console.log(args[0])
+			if (!isNaN(args[0])) {
+				id_to_invite = args[0]
+			}
+			let text_who_to_invite = "меня"
+			if (id_to_invite != BOT_ID) {
+				text_who_to_invite = "его"
+			}
+			msg.author.send(`Ты можешь пустить ${text_who_to_invite} на свой сервер с помощью этой ссылки: \n<https://discordapp.com/api/oauth2/authorize?scope=bot&permissions=0&client_id=${id_to_invite}>`)
 				.then(() => {
 					s.envelope(msg)
 				})
