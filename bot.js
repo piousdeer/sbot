@@ -2,16 +2,6 @@ import Discord from "discord.js"
 export const client = new Discord.Client()
 import fs from "fs"
 
-import mongo from "mongodb"
-const dbURL = "mongodb://localhost:27017/";
-export const MongoClient = new mongo.MongoClient(dbURL, { useNewUrlParser: true, useUnifiedTopology: true });
-export let db
-MongoClient.connect((err, res) => {
-	if (err) throw err
-	console.log("Successfully connected to mongo")
-	db = res.db("sbot")
-})
-
 import dotenv from "dotenv"
 dotenv.config()
 const TOKEN = process.env.BOT_TOKEN
