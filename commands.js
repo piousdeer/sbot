@@ -1193,6 +1193,7 @@ export const commands = {
 
 		}
 	},
+	/* to rework without using mongodb (or to remove)
 	Jwords: {
 		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
 		v: true,
@@ -1453,6 +1454,7 @@ export const commands = {
 
 		}
 	},
+	*/
 	Dividers: {
 		r: /^(dividers|разложи|primecheck)[.!]?$/,
 		v: false,
