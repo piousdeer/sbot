@@ -181,23 +181,31 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		let currentEmoji = findEmoji(whoNeedsToReactToSomething[user.id], whichGuildThisUserMeans[user.id])
 
 		messageReaction.message.react(currentEmoji)
-		clearTimeout(timeoutForAutoReact)
+			.then(() => {
+				clearTimeout(timeoutForAutoReact)
 
-		delete whoNeedsToReactToSomething[user.id]
-		delete whichGuildThisUserMeans[user.id]
+				delete whoNeedsToReactToSomething[user.id]
+				delete whichGuildThisUserMeans[user.id]
 
-		let timerForDeletingAutoReaction = setTimeout(() => {
-			messageReaction.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
-		}, 25000)
+				let time = 15*1000
+		
+				let timerForDeletingAutoReaction = setTimeout(() => {
+					messageReaction.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
+				}, time)
+		
+				messageReaction.message.awaitReactions((messageReactionAwaited, user) => {
+					if (user.id == currentUser.id && messageReactionAwaited.emoji.id == currentEmoji.id) {
+						messageReactionAwaited.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
+						clearTimeout(timerForDeletingAutoReaction)
+					}
+				}, { time: time })
 
-		messageReaction.message.awaitReactions((messageReactionAwaited, user) => {
-			if (user.id == currentUser.id && messageReactionAwaited.emoji.id == currentEmoji.id) {
-				messageReactionAwaited.message.reactions.get(messageReactionAwaited.emoji.name + ":" + messageReactionAwaited.emoji.id).remove(client.user)
-				clearTimeout(timerForDeletingAutoReaction)
-			}
-		}, { time: 25000 })
+				return true
+			})
+			.catch(() => {
+				user.send("Проблемы с правами канала 🤷‍♀️")
+			})
 
-		return true
 	} else {
 		return false
 	}

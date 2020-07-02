@@ -222,7 +222,8 @@ client.on('ready', () => {
 		}
 		guild.channels.forEach(channel => {
 			if (channel.type == "text") {
-				if (channel.permissionsFor(client.user).has("READ_MESSAGES")) {
+				let perms = channel.permissionsFor(client.user)
+				if (perms.has(["READ_MESSAGES", "ADD_REACTIONS"])) {
 					chCount++
 					channel.fetchMessages({limit: 5})
 						.then(() => {
