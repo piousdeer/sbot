@@ -308,7 +308,7 @@ export const commands = {
 		}
 	},
 	Sticker: {
-		r: /^(с(тикер)?|sticker|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
+		r: /^(с(тикер)?|s(ticker)?|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
 		v: true,
 		async f (msg, args) {
 			if (!args[0]) {
