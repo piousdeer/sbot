@@ -180,12 +180,12 @@ export function checkReactionForAutoreact(messageReaction, user) {
 		let currentUser = client.users.get(user.id)
 		let currentEmoji = findEmoji(whoNeedsToReactToSomething[user.id], whichGuildThisUserMeans[user.id])
 
+		delete whoNeedsToReactToSomething[user.id]
+		delete whichGuildThisUserMeans[user.id]
+
 		messageReaction.message.react(currentEmoji)
 			.then(() => {
 				clearTimeout(timeoutForAutoReact)
-
-				delete whoNeedsToReactToSomething[user.id]
-				delete whichGuildThisUserMeans[user.id]
 
 				let time = 15*1000
 		
