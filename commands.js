@@ -710,8 +710,14 @@ export const commands = {
 			value: "Обратиться к мудрости Железной Двери.",
 			inline: true
 		},
-		f (msg, args) {
+		f (msg, args, origCaseParams) {
 			if (!args[0]) {
+				return
+			}
+
+			if (args[0] == "когда") {
+				origCaseParams.args.shift()
+				commands.When.f(msg, args, origCaseParams)
 				return
 			}
 		
