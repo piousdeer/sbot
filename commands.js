@@ -351,44 +351,6 @@ export const commands = {
 			})
 		}
 	},
-	Servers: {
-		r: /^(сервер[аы]|servers)[.!]?$/,
-		f (msg, args) {
-			let embed = {
-				color: 0x888888,
-				description: ""
-			}
-		
-			let showAllServers = false
-			if (msg.author.id == OWNER_ID && args[0] == "all") {
-				showAllServers = true
-			}
-		
-			let serversArray = []
-			let counter = 0
-			client.guilds.forEach(key => {
-				if (showAllServers || key.emojis.size) {
-					counter++
-					serversArray.push(key.id + " | " + key.name)
-				}
-			})
-			serversArray.sort((a, b) => {
-				return Number(a.split(" | ")[0]) - Number(b.split(" | ")[0])
-			})
-			embed.description += `\`\`\`${serversArray.join("\n")}\`\`\``
-			embed.title = counter + " серверов"
-		
-			if (!showAllServers) {
-				embed.title += " с эмоджи"
-			}
-		
-			msg.author.send({embed: embed})
-				.then(() => {
-					s.envelope(msg)
-				})
-				.catch(error => console.log(error))
-		}
-	},
 	Avatar: {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
 		v: true,
