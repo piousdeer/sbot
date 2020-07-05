@@ -1743,42 +1743,41 @@ export const commands = {
 				imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
 			}
 
-				await s.getMainColorFromImage(imagePreview, (color, palette) => {
-					let hexColors = []
-					let hexRows = []
+			await s.getMainColorFromImage(imagePreview, (color, palette) => {
+				let hexColors = []
+				let hexRows = []
 
-					let rowLength = 5
-					let segmentW = 70
-					let segmentH = 25
-					let canvasW = segmentW * rowLength
-					let canvasH = Math.ceil(cnum / rowLength) * segmentH
+				let rowLength = 5
+				let segmentW = 70
+				let segmentH = 25
+				let canvasW = segmentW * rowLength
+				let canvasH = Math.ceil(cnum / rowLength) * segmentH
 
-					const canvas = Canvas.createCanvas(canvasW, canvasH)
-					const ctx = canvas.getContext('2d')
-					for (let i = 0; i < palette.length; i++) {
-						let hex = palette[i].toString(16)
-						let tempHex = `00000${hex}`
-						hex = `#${tempHex.slice(-6)}`
-						hexColors.push(hex)
-						let x = i % rowLength
-						let y = Math.floor(i / rowLength)
-						ctx.fillStyle = hex
-						ctx.fillRect(segmentW*x, segmentH*y, segmentW, segmentH)
-					}
-					const buf = canvas.toBuffer('image/png')
+				const canvas = Canvas.createCanvas(canvasW, canvasH)
+				const ctx = canvas.getContext('2d')
+				for (let i = 0; i < palette.length; i++) {
+					let hex = palette[i].toString(16)
+					let tempHex = `00000${hex}`
+					hex = `#${tempHex.slice(-6)}`
+					hexColors.push(hex)
+					let x = i % rowLength
+					let y = Math.floor(i / rowLength)
+					ctx.fillStyle = hex
+					ctx.fillRect(segmentW*x, segmentH*y, segmentW, segmentH)
+				}
+				const buf = canvas.toBuffer('image/png')
 
-					for (let i = 0; i < hexColors.length; i+=5) {
-						hexRows.push(hexColors.slice(i, i+5).join(" "))
-					}
-					msg.channel.send(`\`\`\`${hexRows.join("\n")}\`\`\``, {
-						files: [{
-							attachment: buf,
-							name: "palette.png"
-						}]
-					})
-				}, cnum)
+				for (let i = 0; i < hexColors.length; i+=5) {
+					hexRows.push(hexColors.slice(i, i+5).join(" "))
+				}
+				msg.channel.send(`\`\`\`${hexRows.join("\n")}\`\`\``, {
+					files: [{
+						attachment: buf,
+						name: "palette.png"
+					}]
+				})
+			}, cnum)
 			
-
 		}
 	},
 	Recolor: {
