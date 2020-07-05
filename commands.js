@@ -1056,6 +1056,13 @@ export const commands = {
 
 		}
 	},
+	Jwords: {
+		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
+		v: false,
+		f (msg) {
+			msg.channel.send("under construction")
+		}
+	},
 	/* to rework without using mongodb (or to remove)
 	Jwords: {
 		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
