@@ -359,7 +359,7 @@ export const commands = {
 			value: "Глянуть чью-то авку.",
 			inline: true
 		},
-		async f (msg, args, origCaseParams) {
+		async f (msg, args, origCaseParams, justGetLinks) {
 			let user
 			if (args[0] == "random") {
 				user = client.users.filter(u => u.avatar).random()
@@ -373,12 +373,15 @@ export const commands = {
 		
 			if (!(user && user.avatar)) {
 				msg.react("604015450304806952")
-				return
+				return false
 			}
 		
 			let fullSizeLink = user.avatarURL.split("?size=")[0] + "?size=2048"
-		
 			let link = user.avatarURL.split("?size=")[0] + "?size=128"
+
+			if (justGetLinks) {
+				return [fullSizeLink, link]
+			}
 
 			await s.getMainColorFromImage(link, color => {
 				msg.channel.send({embed: {
@@ -1564,11 +1567,16 @@ export const commands = {
 			const imc = new Image()
 			imc.onload = async () => {
 				const imb = new Image()
-				imb.src = foamImageURL
 				if (!foamImageURL.match(imageRegex)) {
-					msg.channel.send("Принимаем только картинки.")
-					return
+					let avatarLinks = await commands.Avatar.f(msg, args, origCaseParams, true)
+					if (avatarLinks) {
+						foamImageURL = avatarLinks[0]
+					} else {
+						msg.channel.send("Принимаем только картинки.")
+						return
+					}
 				}
+				imb.src = foamImageURL
 				imb.onload = async () => {
 					await msg.channel.send("Начинаю варить...").then(async (m) => {
 						botMessage = m
@@ -1700,10 +1708,19 @@ export const commands = {
 			value: "Считать цвета с картинки.",
 			inline: true
 		},
-		async f (msg, args) {
+		async f (msg, args, origCaseParams) {
+			let usingAvatar = false
+			let imagePreview
+
 			if (!msg.attachments.size) {
-				msg.channel.send("Нужно прикрепить картинку к сообщению!")
-				return
+				let avatarLinks = await commands.Avatar.f(msg, args, origCaseParams, true)
+				if (avatarLinks) {
+					usingAvatar = true
+					imagePreview = avatarLinks[1]
+				} else {
+					msg.channel.send("Нужно прикрепить картинку к сообщению!")
+					return
+				}
 			}
 
 			let cnum = parseInt(args[0])
@@ -1712,8 +1729,9 @@ export const commands = {
 			} else if (cnum > 100) {
 				cnum = 100
 			}
-			
-			msg.attachments.forEach(async (att) => {
+
+			if (!usingAvatar) {
+				let att = msg.attachments.first()			
 				let max = 128
 				let w = max
 				let h = max
@@ -1722,7 +1740,8 @@ export const commands = {
 				} else {
 					w = Math.round(att.width / (att.height / max))
 				}
-				let imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+				imagePreview = `https://media.discordapp.net/attachments/${msg.channel.id}/${att.id}/${att.filename}?width=${w}&height=${h}`
+			}
 
 				await s.getMainColorFromImage(imagePreview, (color, palette) => {
 					let hexColors = []
@@ -1758,7 +1777,7 @@ export const commands = {
 						}]
 					})
 				}, cnum)
-			})
+			
 
 		}
 	},
