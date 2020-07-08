@@ -714,9 +714,7 @@ export const commands = {
 			inline: true
 		},
 		f (msg, args, origCaseParams) {
-			if (!args[0]) {
-				return
-			}
+			let answer = "..."
 
 			if (args[0] == "когда") {
 				origCaseParams.args.shift()
@@ -759,10 +757,14 @@ export const commands = {
 				"Вероятность - нулевая.",
 				"Вселенная так не думает."
 			]
+
+			if (args[0]) {
+				answer = s.getRandomElem(possibleAnswers)
+			}
 		
 			let embed = {
 				author: {
-					name: s.getRandomElem(possibleAnswers),
+					name: answer,
 					icon_url: "https://i.imgur.com/P8IAywM.png"
 				}
 			}
