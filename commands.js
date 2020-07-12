@@ -397,7 +397,6 @@ export const commands = {
 		r: /^(приглашение|инвайт|invite)[.!]?$/,
 		f (msg, args) {
 			let id_to_invite = BOT_ID
-			console.log(args[0])
 			if (!isNaN(args[0])) {
 				id_to_invite = args[0]
 			}
