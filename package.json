@@ -1,18 +1,19 @@
 {
   "name": "sbot",
-  "version": "1.15.1",
+  "version": "1.15.2",
   "scripts": {
     "start": "node -r esm bot.js"
   },
   "dependencies": {
     "canvas": "^2.6.0",
     "cheerio": "^1.0.0-rc.2",
+    "lodash": "^4.17.19",
     "discord.js": "^11.4.2",
     "dotenv": "^6.2.0",
     "esm": "^3.2.4",
     "got": "^9.6.0",
     "intl": "^1.2.5",
-    "jimp": "^0.6.4",
+    "jimp": "^0.14.0",
     "skmeans": "^0.10.2",
     "util-deprecate": "^1.0.2"
   },
