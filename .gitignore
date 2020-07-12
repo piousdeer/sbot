@@ -1,8 +1,4 @@
-# Don't track content of these folders
+# Don't track these
 node_modules/
 .env
 npm-debug.log
-pnpm-debug.log
-cinemadata.json
-jap_users/
-nekopics/
