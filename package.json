@@ -5,7 +5,6 @@
     "start": "node -r esm bot.js"
   },
   "dependencies": {
-    "@types/node": "^12.6.9",
     "canvas": "^2.6.0",
     "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.4.2",
@@ -15,7 +14,6 @@
     "intl": "^1.2.5",
     "jimp": "^0.6.4",
     "skmeans": "^0.10.2",
-    "mongodb": "^3.5.2",
     "util-deprecate": "^1.0.2"
   },
   "engines": {
