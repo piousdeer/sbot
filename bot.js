@@ -231,7 +231,7 @@ client.on('ready', () => {
 			guild.channels.forEach(channel => {
 				if (channel.type == "text") {
 					let perms = channel.permissionsFor(client.user)
-					if (perms.has(["READ_MESSAGES", "ADD_REACTIONS"])) {
+					if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
 						chCount++
 						channel.fetchMessages({limit: 5})
 							.then(() => {
@@ -245,7 +245,7 @@ client.on('ready', () => {
 								if (chCountAsync === chCountTotal) {
 									setActiveStatus()
 								}
-								console.log(error)
+								console.log(`Channel ${channel.name} (${channel.id}) from ${channel.guild.name} (${channel.guild.id}) is invalid!`)
 							})
 					}
 				}
