@@ -1,6 +1,5 @@
 import Discord from "discord.js"
 export const client = new Discord.Client()
-import fs from "fs"
 
 import dotenv from "dotenv"
 dotenv.config()
