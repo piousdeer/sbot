@@ -1,7 +1,6 @@
 import * as s from "./secondary"
 import {client, OWNER_ID, BOT_ID, visibleServers, imageRegex} from "./bot"
 import {imgDatabaseURL} from "./config"
-import {hiragana, katakana, kanalat} from "./japdata"
 
 import got from "got"
 import Cheerio from "cheerio"

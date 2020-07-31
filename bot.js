@@ -59,11 +59,6 @@ function processMessage(msg) {
 	}
 	const udata = userDB[uid]
 
-	// проверяем, нужно ли сейчас обрабатывать команды в лс
-	if (msg.channel.type == "dm" && userDB[uid].learningKanji) {
-		return;
-	}
-	
 	// антифлуд
 	let score = udata.ftime - now
 	if (score < 0) {
