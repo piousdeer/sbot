@@ -16,7 +16,17 @@ if (!(TOKEN && OWNER_ID)) {
 
 import * as s from "./secondary"
 import {commands} from "./commands"
-import {timeOptions, dateOptions} from "./config"
+
+const timeOptions = {
+	hour: "2-digit",
+	minute: "2-digit",
+	hour12: false,
+	timeZone: "Europe/Moscow"
+}
+let dateOptions = {
+	month: "2-digit",
+	day: "2-digit"
+}
 
 let logDateOptions = Object.assign(dateOptions, timeOptions)
 export let visibleServers = []

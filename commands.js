@@ -1,6 +1,5 @@
 import * as s from "./secondary"
 import {client, OWNER_ID, BOT_ID, visibleServers, userDB} from "./bot"
-import {imgDatabaseURL} from "./config"
 
 import got from "got"
 import Cheerio from "cheerio"
@@ -11,6 +10,7 @@ const Canvas = require('canvas')
 const { Image } = require('canvas')
 
 const imageRegex = /^http.+\.(png|jpe?g|bmp|gif|webp)/i
+const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 
 export const commands = {
 	Help: {
