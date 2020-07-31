@@ -149,26 +149,6 @@ function processMessage(msg) {
 		}
 	}
 
-	// проверяем на отправку пикчи в Галерею
-	if (components[0].match(imageRegex)) {
-		let url = componentsOrigCase[0]
-		componentsOrigCase.shift()
-		commands.Send.f(msg, null, {args: [url, componentsOrigCase.join(" ")]})
-		return
-	} else {
-		let isSentImageHere = false
-		if (msg.channel.type == "dm") {
-			msg.attachments.forEach(att => {
-				commands.Send.f(msg, null, {args: [att.url, msg.content.replace(/\s+/g, " ")]})
-				isSentImageHere = true
-			})
-		}
-		if (isSentImageHere) {
-			requestsCounter++
-			return
-		}
-	}
-
 	// попробовать "общение", если команда не найдена
 	for (let i of simpleAnswers) {
 		if (msgSimplified.match(i.r)) {

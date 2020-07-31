@@ -40,21 +40,6 @@ export const commands = {
 			msg.channel.send({embed: helpEmbed})
 		}
 	},
-	Ping: {
-		r: /^(пинг|ping)[.!]?$/,
-		v: true,
-		f (msg) {
-			let pongText = "🏓 Понг!"
-			msg.channel.send(pongText)
-				.then((pong) => {
-					let userTime = msg.createdTimestamp / 1000
-					let botTime = pong.createdTimestamp / 1000
-					let pongTime = (botTime - userTime).toFixed(3)
-					pong.edit(`${pongText} ${pongTime} сек`)
-				})
-				.catch(error => console.log(error))
-		}
-	},
 	Destroy: {
 		r: /^(дестрой)[.!]?$/,
 		v: true,
@@ -112,18 +97,6 @@ export const commands = {
 			} catch (err) {
 				await msg.react("604015450304806952")
 			}
-		}
-	},
-	Send: {
-		r: /^(отправ(ит)?ь|предложи(ть)?|пришли|прислать|send)$/,
-		/*
-		d: {
-			name: "<описание пикчи> + прикреплённое изображение 📎",
-			value: "Предложить свой скриншот в Галерею (только в ЛС, [пример оформления](https://i.imgur.com/kus289H.png)).\nЕсли я поставил в ответ 📮 - отправка работает."
-		},
-		*/
-		async f (msg) {
-			msg.channel.send('Галерея заброшена. Новые пикчи более не принимаются. <:img:604015450304806952>')
 		}
 	},
 	Skin: {
@@ -954,121 +927,6 @@ export const commands = {
 				msg.channel.send(`Документации на такое нет...`)
 			}
 			
-		}
-	},
-	Kana: {
-		r: /^(kana|кана)[.!]?$/,
-		v: true,
-		d: {
-			name: "кана [хирагана|катакана]",
-			value: "Подучить кану.",
-			inline: true
-		},
-		async f (msg, args) {
-			let k = hiragana
-			if (["katakana", "катакана"].includes(args[0])) {
-				k = katakana
-			}
-
-			let firstQuestion = true
-			let botMessage
-			let isGameRunning = true
-
-			let score = 0
-			let rounds = 0
-			let wrongMap = []
-
-			let secondsToWait = 15
-			if (args[1] && Number(args[1])) {
-				secondsToWait = Number(args[1])
-			}
-
-			let buttons = ["1️⃣", "2️⃣", "3️⃣", "4️⃣"]
-			const filter = (reaction, user) => buttons.includes(reaction.emoji.name) && user.id == msg.author.id;
-			
-			while (isGameRunning) {
-
-				let con = Math.floor(k.syl.length*Math.random())
-				let vow = Math.floor(k.syl[con].length*Math.random())
-
-				let res = k.syl[con][vow]
-
-				let pos = Math.floor(4*Math.random())
-
-				let crow = [...kanalat[con]]
-				let reslat = crow[vow]
-
-				let opts = crow
-				opts.splice(vow, 1)
-				opts = s.shuffle(opts).slice(0,3)
-				
-				opts.splice(pos, 0, reslat)
-
-				const embed = {
-					title: res,
-					description: `${opts.join(" ").toUpperCase()} \n\nУ вас ${secondsToWait} секунд!\n[Шпаргалка](https://docs.google.com/spreadsheets/d/1GdpF_ameYIvhFTT2Ji_MNisDS7qCLENoxMllR59q6Zg/edit?usp=drivesdk)`,
-					footer: {
-						icon_url: msg.author.avatarURL,
-						text: `${msg.author.tag} - ${score}/${rounds}`
-					}
-				}
-				
-				if (firstQuestion) {
-					await msg.channel.send({embed: embed}).then(async (m) => {
-						firstQuestion = false
-						botMessage = m
-
-						for (let i = 0; i < 4; i++) {
-							await m.react(buttons[i])
-						}
-					})
-					.catch(error => console.log(error))
-				} else {
-					await botMessage.edit({embed: embed})
-				}
-				
-				await botMessage.awaitReactions(filter, { max: 1, time: secondsToWait*1000 })
-					.then(collected => {
-						const reaction = collected.first()
-						if (botMessage.channel.type == "text" && botMessage.member.hasPermission('MANAGE_MESSAGES')) {
-							reaction.remove(msg.author.id)
-						}
-						if (buttons.indexOf(reaction.emoji.name) == pos) {
-							score++
-						} else {
-							wrongMap[con] = []
-							wrongMap[con][vow] = true
-						}
-					})
-					.catch(collected => {
-						isGameRunning = false
-						let wrongGuesses = []
-						for (let i = 0; i < wrongMap.length; i++) {
-							if (wrongMap[i]) {
-								for (let j = 0; j < wrongMap[i].length; j++) {
-									if (wrongMap[i][j]) {
-										wrongGuesses.push(`${k.syl[i][j]} ||${kanalat[i][j]}||`)
-									}
-								}
-							}
-						}
-						let gameoverText = "Время вышло!"
-						if (wrongGuesses.length) {
-							gameoverText += ` \nПодучить: ${wrongGuesses.join(" ")}`
-						}
-						msg.reply(gameoverText)
-					});
-
-				rounds++
-			}	
-
-		}
-	},
-	Jwords: {
-		r: /^(jwords|jlpt|kanji|кан(д?[жз])и)[.!]?$/,
-		v: false,
-		f (msg) {
-			msg.channel.send("under construction")
 		}
 	},
 	Dividers: {
