@@ -15,7 +15,6 @@ const imgDatabaseURL = "https://chaoscraft.ml/files/gallery/"
 export const commands = {
 	Help: {
 		r: /^(х[еэ]лп|помо(щь|ги)|команды|help|comm?ands?)[.!]?$/,
-		v: true,
 		f (msg) {
 			const helpLines = [
 				"Чтобы спросить что-либо, обратись ко мне по имени и введи команду.",
@@ -43,7 +42,6 @@ export const commands = {
 	},
 	Destroy: {
 		r: /^(дестрой)[.!]?$/,
-		v: true,
 		f (msg) {
 			if (msg.author.id == OWNER_ID) {
 				console.log("Destroying client...")
@@ -58,7 +56,6 @@ export const commands = {
 	},
 	Img: {
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
-		v: true,
 		d: {
 			name: "имг [теги через пробел]",
 			value: "Рандомная пикча из [Галереи Околорандомья](https://stilltest.tk/gallery/).",
@@ -102,7 +99,6 @@ export const commands = {
 	},
 	Skin: {
 		r: /^(skin|скин)[.!]?$/,
-		v: false,
 		d: {
 			name: "скин <ник>",
 			value: "Ваш скин в майнкрафте.",
@@ -203,7 +199,6 @@ export const commands = {
 	},
 	EmojiList: {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
-		v: true,
 		f (msg, args, origCaseParams, usedArrowButton) {
 			let defaultGuildId = "343851676404547585"
 			let fromWhichServer = client.guilds.get(defaultGuildId)
@@ -317,7 +312,6 @@ export const commands = {
 	},
 	Sticker: {
 		r: /^(с(тикер)?|s(ticker)?|э(мо(д[жз]|ж)и)?линк|e(moji)?link)$/,
-		v: true,
 		async f (msg, args) {
 			if (!args[0]) {
 				msg.react("📜")
@@ -361,7 +355,6 @@ export const commands = {
 	},
 	Avatar: {
 		r: /^(ав(атар(ка)?|к?а)|ava(tar)?|pfp)[.!]?$/,
-		v: true,
 		d: {
 			name: "ава [никнейм или айди юзера]",
 			value: "Глянуть чью-то авку.",
@@ -428,7 +421,6 @@ export const commands = {
 			value: "Почитать [Хоумстак](https://www.homestuck.com/).",
 			inline: true
 		},
-		v: true,
 		async f (msg, args, origCaseParams, usedArrowButton) {
 			let page_number
 			let contentText = ""
@@ -624,7 +616,6 @@ export const commands = {
 	},
 	Stats: {
 		r: /^(stats|статы|статистика|ап(тайм)?|up(time)?)[.!]?$/,
-		v: true,
 		f (msg) {
 			let uptimeResult
 			let u = client.uptime
@@ -670,7 +661,6 @@ export const commands = {
 	},
 	When: {
 		r: /^(когда)[.!]?$/,
-		v: true,
 		f (msg, args, origCaseParams) {
 			if (!origCaseParams.args[0]) {
 				msg.reply("Мир опустеет 14 июля 2149 года. Тогда и появится Железная Дверь. \nВозможно, вы хотели спросить что-то конкретное?")
@@ -714,7 +704,6 @@ export const commands = {
 	},
 	IronDoor: {
 		r: /^(железнаядверь|жд)[.!]?$/,
-		v: true,
 		d: {
 			name: "жд <вопрос с ответом да/нет>",
 			value: "Обратиться к мудрости Железной Двери.",
@@ -968,7 +957,6 @@ export const commands = {
 	},
 	Dividers: {
 		r: /^(dividers|разложи|primecheck)[.!]?$/,
-		v: false,
 		f (msg, args) {
 			if (!args[0]) {
 				msg.channel.send('Введите число!')
@@ -1139,7 +1127,6 @@ export const commands = {
 	},
 	Uwuify: {
 		r: /^((uwu|owo)(ify)?)[.!]?$/,
-		v: false,
 		f (msg, args) {
 			if (!args[0]) {
 				msg.channel.send('pwease entew some text uwu')
@@ -1158,7 +1145,6 @@ export const commands = {
 	},
 	Coffee: {
 		r: /^(кофе|coff?ee?)[.!]?$/,
-		v: true,
 		d: {
 			name: "кофе",
 			value: "Заказать кофе.",
@@ -1334,7 +1320,6 @@ export const commands = {
 	},
 	Palette: {
 		r: /^(палитра|palette)[.!]?$/,
-		v: true,
 		d: {
 			name: "палитра + прикреплённое изображение 📎",
 			value: "Считать цвета с картинки.",
@@ -1414,7 +1399,6 @@ export const commands = {
 	},
 	Recolor: {
 		r: /^(реколор|recolor)[.!]?$/,
-		v: true,
 		async f (msg, args) {
 			if (!args.length) {
 				msg.channel.send("Нужно указать цвета! Например, `#d51a24 #7ca4af #f8dfa8 #05324a`")
@@ -1458,7 +1442,6 @@ export const commands = {
 	},
 	Boring: {
 		r: /^(ску+[чшщ]н[оа]+|груст?н[оа]|д[еи]пресс?ия)[.!]?$/,
-		v: false,
 		d: {
 			name: "скучно",
 			value: "Найти себе занятие.",
@@ -1487,7 +1470,6 @@ export const commands = {
 	},
 	Rulet: { // by PLAYER_CHAR
 		r: /^(rulet|рулет)[.!]?$/,
-		v: true,
 		f (msg, args) {
 			let size = (args[0]) ? Number(args[0]) : 7
 			let maxSize = 15
