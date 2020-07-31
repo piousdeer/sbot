@@ -23,7 +23,7 @@ export let visibleServers = []
 let requestsCounter = 0
 let messagesCounter = 0
 
-let userDB = {}
+export let userDB = {}
 const floodRate = 5 * 1000; 
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
@@ -274,12 +274,12 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	}
 }
 function checkReactionForAutoreact(messageReaction, user) {
-	if (whoNeedsToReactToSomething[user.id]) {
+	console.log(user.id)
+	if (userDB[user.id] && userDB[user.id].reactionRequest) {
 		let currentUser = client.users.get(user.id)
-		let currentEmoji = s.findEmoji(whoNeedsToReactToSomething[user.id], whichGuildThisUserMeans[user.id])
+		let currentEmoji = userDB[user.id].reactionRequest
 
-		delete whoNeedsToReactToSomething[user.id]
-		delete whichGuildThisUserMeans[user.id]
+		userDB[user.id].reactionRequest = null
 
 		messageReaction.message.react(currentEmoji)
 			.then(() => {

@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, visibleServers, whoNeedsToReactToSomething, whichGuildThisUserMeans} from "./bot"
+import {client, OWNER_ID, BOT_ID, visibleServers, userDB} from "./bot"
 import {imgDatabaseURL} from "./config"
 
 import got from "got"
@@ -166,6 +166,8 @@ export const commands = {
 				msg.react("📜")
 				return false
 			}
+
+			s.deleteUserMessage(msg)
 		
 			let emojiName
 			let guildName
@@ -180,8 +182,15 @@ export const commands = {
 				emojiName = guildCheck[1]
 				guildName = guildCheck[2]
 			}
+
+			let emoji = s.findEmoji(emojiName, guildName)
 		
-			if (!s.findEmoji(emojiName, guildName)) {
+			if (emoji) {
+				userDB[msg.author.id].reactionRequest = emoji
+				console.log(userDB)
+				msg.react("👌")
+				return true
+			} else {
 				if (isCommandCanBeAnEmoji) {
 					msg.react(getRandomElem(emojiError))
 				} else {
@@ -189,14 +198,7 @@ export const commands = {
 				}
 				return false
 			}
-		
-			msg.react("👌")
-		
-			whoNeedsToReactToSomething[msg.author.id] = emojiName
-			whichGuildThisUserMeans[msg.author.id] = guildName
 			
-			s.deleteUserMessage(msg)
-			return true
 		}
 	},
 	EmojiList: {
