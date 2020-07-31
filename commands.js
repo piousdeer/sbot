@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, visibleServers} from "./bot"
+import {client, OWNER_ID, BOT_ID, visibleServers, whoNeedsToReactToSomething, whichGuildThisUserMeans} from "./bot"
 import {imgDatabaseURL} from "./config"
 
 import got from "got"
@@ -161,8 +161,42 @@ export const commands = {
 	},
 	React: {
 		r: /^([пpрr]|поставь|отреагируй|реакция|react(ion)?)$/,
-		f (msg, args) {
-			s.autoreact(msg, args, false) // функция вынесена, так как к ней нужен доступ и без команды
+		f (msg, args, origCaseParams, isCommandCanBeAnEmoji) {
+			if (!args[0]) {
+				msg.react("📜")
+				return false
+			}
+		
+			let emojiName
+			let guildName
+		
+			let guildCheck
+		
+			emojiName = s.getEmojiName(args.join(" "))
+		
+			let emojiError = ["👋", "😶", "🤔", "351002389991653378", "358952906248028160", "357960229259837440", "520641845634531328"]
+		
+			if (guildCheck = emojiName.match(/^([^:]+)(?::([\S\s]+))$/)) {
+				emojiName = guildCheck[1]
+				guildName = guildCheck[2]
+			}
+		
+			if (!s.findEmoji(emojiName, guildName)) {
+				if (isCommandCanBeAnEmoji) {
+					msg.react(getRandomElem(emojiError))
+				} else {
+					msg.react("604015450304806952")
+				}
+				return false
+			}
+		
+			msg.react("👌")
+		
+			whoNeedsToReactToSomething[msg.author.id] = emojiName
+			whichGuildThisUserMeans[msg.author.id] = guildName
+			
+			s.deleteUserMessage(msg)
+			return true
 		}
 	},
 	EmojiList: {

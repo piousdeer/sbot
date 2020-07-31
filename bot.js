@@ -30,6 +30,10 @@ const floodChillsMax = 2;
 
 let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
+let timeoutForAutoReact
+export let whoNeedsToReactToSomething = {}
+export let whichGuildThisUserMeans = {}
+
 function processMessage(msg) {
 	
 	// разбиение сообщения на компоненты
@@ -136,14 +140,14 @@ function processMessage(msg) {
 
 	// ищем команду в регулярках
 	for (let i in commands) {
-		if (cmd.match(commands[i].r) || (cmdLayoutSwitched.match(commands[i].r) && (cmd[0].match(/[а-я]/i) || !s.autoreact(msg, [cmd].concat(args), true)))) {
+		if (cmd.match(commands[i].r) || (cmdLayoutSwitched.match(commands[i].r) && (cmd[0].match(/[а-я]/i) || !commands.React.f(msg, [cmd].concat(args), true)))) {
 			commands[i].f(msg, args, origCaseParams)
 			return
 		}
 	}
 
 	// попробовать найти реакцию
-	if (s.autoreact(msg, [cmd].concat(args), true)) {
+	if (commands.React.f(msg, [cmd].concat(args), true)) {
 		return
 	} 
 
@@ -269,11 +273,46 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 		}
 	}
 }
+function checkReactionForAutoreact(messageReaction, user) {
+	if (whoNeedsToReactToSomething[user.id]) {
+		let currentUser = client.users.get(user.id)
+		let currentEmoji = s.findEmoji(whoNeedsToReactToSomething[user.id], whichGuildThisUserMeans[user.id])
+
+		delete whoNeedsToReactToSomething[user.id]
+		delete whichGuildThisUserMeans[user.id]
+
+		messageReaction.message.react(currentEmoji)
+			.then(() => {
+				clearTimeout(timeoutForAutoReact)
+
+				let time = 15*1000
+		
+				let timerForDeletingAutoReaction = setTimeout(() => {
+					messageReaction.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
+				}, time)
+		
+				messageReaction.message.awaitReactions((messageReactionAwaited, user) => {
+					if (user.id == currentUser.id && messageReactionAwaited.emoji.id == currentEmoji.id) {
+						messageReactionAwaited.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
+						clearTimeout(timerForDeletingAutoReaction)
+					}
+				}, { time: time })
+
+				return true
+			})
+			.catch(() => {
+				user.send("Проблемы с правами канала 🤷‍♀️")
+			})
+
+	} else {
+		return false
+	}
+}
 client.on('messageReactionAdd', (messageReaction, user) => {
 	let msg = messageReaction.message
 	let msgReaction = messageReaction.emoji.name
 
-	if (s.checkReactionForAutoreact(messageReaction, user)) {
+	if (checkReactionForAutoreact(messageReaction, user)) {
 		return
 	} else if (msgReaction == "❌" && [BOT_ID, OWNER_ID].includes(msg.author.id) && user.id == OWNER_ID) {
 		if (msg.channel.id != "526441608250392577") {

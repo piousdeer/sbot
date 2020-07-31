@@ -4,9 +4,6 @@ import got from "got"
 import jimp from "jimp"
 import skmeans from "skmeans"
 
-let timeoutForAutoReact
-let whoNeedsToReactToSomething = {}
-let whichGuildThisUserMeans = {}
 
 // general methods
 
@@ -133,81 +130,6 @@ export function getEmojiName(emojiText) {
 		return emojiRaw[1]
 	} else {
 		return emojiText
-	}
-}
-
-// reaction methods
-
-export function autoreact(msg, args, isCommandCanBeAnEmoji) {
-	if (!args[0]) {
-		msg.react("📜")
-		return false
-	}
-
-	let emojiName
-	let guildName
-
-	let guildCheck
-
-	emojiName = getEmojiName(args.join(" "))
-
-	let emojiError = ["👋", "😶", "🤔", "351002389991653378", "358952906248028160", "357960229259837440", "520641845634531328"]
-
-	if (guildCheck = emojiName.match(/^([^:]+)(?::([\S\s]+))$/)) {
-		emojiName = guildCheck[1]
-		guildName = guildCheck[2]
-	}
-
-	if (!findEmoji(emojiName, guildName)) {
-		if (isCommandCanBeAnEmoji) {
-			msg.react(getRandomElem(emojiError))
-		} else {
-			msg.react("604015450304806952")
-		}
-		return false
-	}
-
-	msg.react("👌")
-
-	whoNeedsToReactToSomething[msg.author.id] = emojiName
-	whichGuildThisUserMeans[msg.author.id] = guildName
-	
-	deleteUserMessage(msg)
-	return true
-}
-export function checkReactionForAutoreact(messageReaction, user) {
-	if (whoNeedsToReactToSomething[user.id]) {
-		let currentUser = client.users.get(user.id)
-		let currentEmoji = findEmoji(whoNeedsToReactToSomething[user.id], whichGuildThisUserMeans[user.id])
-
-		delete whoNeedsToReactToSomething[user.id]
-		delete whichGuildThisUserMeans[user.id]
-
-		messageReaction.message.react(currentEmoji)
-			.then(() => {
-				clearTimeout(timeoutForAutoReact)
-
-				let time = 15*1000
-		
-				let timerForDeletingAutoReaction = setTimeout(() => {
-					messageReaction.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
-				}, time)
-		
-				messageReaction.message.awaitReactions((messageReactionAwaited, user) => {
-					if (user.id == currentUser.id && messageReactionAwaited.emoji.id == currentEmoji.id) {
-						messageReactionAwaited.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
-						clearTimeout(timerForDeletingAutoReaction)
-					}
-				}, { time: time })
-
-				return true
-			})
-			.catch(() => {
-				user.send("Проблемы с правами канала 🤷‍♀️")
-			})
-
-	} else {
-		return false
 	}
 }
 
