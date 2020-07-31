@@ -755,7 +755,7 @@ export const commands = {
 				}
 			}
 		
-			msg.channel.send({embed: embed})
+			msg.reply({embed: embed})
 		}
 	},
 	Three: {
