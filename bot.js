@@ -284,7 +284,6 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	}
 }
 function checkReactionForAutoreact(messageReaction, user) {
-	console.log(user.id)
 	if (userDB[user.id] && userDB[user.id].reactionRequest) {
 		let currentUser = client.users.get(user.id)
 		let currentEmoji = userDB[user.id].reactionRequest
