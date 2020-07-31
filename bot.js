@@ -16,7 +16,6 @@ if (!(TOKEN && OWNER_ID)) {
 
 import * as s from "./secondary"
 import {commands} from "./commands"
-import {simpleAnswers} from "./simpleAnswers"
 import {timeOptions, dateOptions} from "./config"
 
 let logDateOptions = Object.assign(dateOptions, timeOptions)
@@ -139,18 +138,6 @@ function processMessage(msg) {
 	for (let i in commands) {
 		if (cmd.match(commands[i].r) || (cmdLayoutSwitched.match(commands[i].r) && (cmd[0].match(/[а-я]/i) || !s.autoreact(msg, [cmd].concat(args), true)))) {
 			commands[i].f(msg, args, origCaseParams)
-			return
-		}
-	}
-
-	// попробовать "общение", если команда не найдена
-	for (let i of simpleAnswers) {
-		if (msgSimplified.match(i.r)) {
-			if (i.e) {
-				msg.react(s.getRandomElem(i.e))
-			} else if (i.t) {
-				msg.channel.send(s.getRandomElem(i.t))
-			}
 			return
 		}
 	}
