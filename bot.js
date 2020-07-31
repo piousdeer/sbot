@@ -299,35 +299,6 @@ client.on('guildDelete', (guild) => {
 	}
 	console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Bot was kicked from ${guild.name} (${guild.id})`)
 })
-client.on('guildMemberAdd', member => {
-	if (member.guild.id == "540145900526501899") {
-		let welcomeLines = [
-			`Какой-то ПЕК-НЕК ${member} зашёл к нам на чай! <:peckneck:652869904856514574>`,
-			`Добро пожаловать в наш филиал #творчества, ${member}! <a:aKanayaThinking:652870040923799585>`,
-			`${member}, какова цель вашего визита? Покажите визу <:tanyaVisa:652869921532936203>`,
-			`Рады видеть вас в нашем заведении, ${member}! <:dorothy:652869953002668072>`,
-			`Добро пожаловать в фан-клуб Тарковского, ${member}! <:tarkovsky:652869970119884810>`,
-			`${member}, ｗ ｅ ｌ ｃ ｏ ｍ ｅ <a:peaceAndTranquility:652870064864886794>`
-		]
-		let channel = client.channels.get("540145900979355658")
-		let welcomeRandom = s.getRandomElem(welcomeLines)
-		if (member.user.bot) {
-			member.addRole("600294051962421258")
-				.then(() => {})
-				.catch(error => console.log(error))
-			channel.send(welcomeRandom + `\nБоты живут тут - <#600294780144189481>`)
-		} else {
-			channel.send(welcomeRandom + `\nРоль для киношек можно получить тут - <#565292229657100289>`)
-		}
-		
-	}
-})
-client.on('guildMemberRemove', member => {
-	if (member.guild.id == "540145900526501899") {
-		let channel = client.channels.get("540145900979355658")
-		channel.send(`<:f_:604654351591407617> ${member.user.tag}`);
-	}
-})
 
 function login() {
     client.login(TOKEN).catch(() => setTimeout(login, 5000))

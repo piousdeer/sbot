@@ -169,7 +169,7 @@ export const commands = {
 		r: /^(э(мо(д[жз]|ж)и)?|смайл(ики|ы)|emoji(s|list)?)[.!]?$/,
 		v: true,
 		f (msg, args, origCaseParams, usedArrowButton) {
-			let defaultGuildId = "540145900526501899"
+			let defaultGuildId = "343851676404547585"
 			let fromWhichServer = client.guilds.get(defaultGuildId)
 			let askedServer = s.getGuild(args[0])
 			let numberOfCurrentGuild = visibleServers.indexOf(defaultGuildId) + 1
