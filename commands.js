@@ -784,7 +784,7 @@ export const commands = {
 		f (msg, args, origCaseParams) {
 			if (!args[0]) {
 				args.unshift(msg.content.split(/\s+/).slice(-1)[0])
-				s.autoreact(msg, args, false)
+				commands.React.f(msg, args, false)
 				return
 			}
 		
@@ -839,7 +839,7 @@ export const commands = {
 		f (msg, args, origCaseParams) {
 			if (!args[0]) {
 				args.unshift(msg.content.split(/\s+/).slice(-1)[0])
-				s.autoreact(msg, args, false)
+				commands.React.f(msg, args, false)
 				return
 			}
 			

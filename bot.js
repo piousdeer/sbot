@@ -40,10 +40,6 @@ const floodChillsMax = 2;
 
 let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
-let timeoutForAutoReact
-export let whoNeedsToReactToSomething = {}
-export let whichGuildThisUserMeans = {}
-
 function processMessage(msg) {
 	
 	// разбиение сообщения на компоненты
@@ -292,8 +288,6 @@ function checkReactionForAutoreact(messageReaction, user) {
 
 		messageReaction.message.react(currentEmoji)
 			.then(() => {
-				clearTimeout(timeoutForAutoReact)
-
 				let time = 15*1000
 		
 				let timerForDeletingAutoReaction = setTimeout(() => {
