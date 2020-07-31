@@ -6,7 +6,7 @@ dotenv.config()
 const TOKEN = process.env.BOT_TOKEN
 export const OWNER_ID = process.env.OWNER_ID
 export let BOT_ID
-export let BOT_PREFIX
+let BOT_PREFIX
 
 if (!(TOKEN && OWNER_ID)) {
 	console.log("Can't get some env variable!")
@@ -29,7 +29,6 @@ const floodRate = 5 * 1000;
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
 
-export const imageRegex = /^http.+\.(png|jpe?g|bmp|gif|webp)/i
 let layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
 function processMessage(msg) {

@@ -1,5 +1,5 @@
 import * as s from "./secondary"
-import {client, OWNER_ID, BOT_ID, visibleServers, imageRegex} from "./bot"
+import {client, OWNER_ID, BOT_ID, visibleServers} from "./bot"
 import {imgDatabaseURL} from "./config"
 
 import got from "got"
@@ -9,6 +9,8 @@ import crypto from "crypto"
 
 const Canvas = require('canvas')
 const { Image } = require('canvas')
+
+const imageRegex = /^http.+\.(png|jpe?g|bmp|gif|webp)/i
 
 export const commands = {
 	Help: {
