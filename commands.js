@@ -56,11 +56,6 @@ export const commands = {
 	},
 	Img: {
 		r: /^(пикча|имг|картинк?а|изображение|галерея|img|image|pic(ture)?|gallery)[.!,:]?$/,
-		d: {
-			name: "имг [теги через пробел]",
-			value: "Рандомная пикча из [Галереи Околорандомья](https://stilltest.tk/gallery/).",
-			inline: true
-		},
 		async f (msg, args) {
 			let argsText = ""
 		
@@ -704,11 +699,6 @@ export const commands = {
 	},
 	IronDoor: {
 		r: /^(железнаядверь|жд)[.!]?$/,
-		d: {
-			name: "жд <вопрос с ответом да/нет>",
-			value: "Обратиться к мудрости Железной Двери.",
-			inline: true
-		},
 		f (msg, args, origCaseParams) {
 			let answer = "..."
 
@@ -1145,11 +1135,6 @@ export const commands = {
 	},
 	Coffee: {
 		r: /^(кофе|coff?ee?)[.!]?$/,
-		d: {
-			name: "кофе",
-			value: "Заказать кофе.",
-			inline: true
-		},
 		async f (msg, args, origCaseParams) {
 
 			let botMessage
