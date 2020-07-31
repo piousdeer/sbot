@@ -19,12 +19,12 @@ import {commands} from "./commands"
 import {simpleAnswers} from "./simpleAnswers"
 import {timeOptions, dateOptions} from "./config"
 
-export let logDateOptions = Object.assign(dateOptions, timeOptions)
+let logDateOptions = Object.assign(dateOptions, timeOptions)
 export let visibleServers = []
-export let requestsCounter = 0
-export let messagesCounter = 0
+let requestsCounter = 0
+let messagesCounter = 0
 
-export let userDB = {}
+let userDB = {}
 const floodRate = 5 * 1000; 
 const floodMax = 20 * 1000; 
 const floodChillsMax = 2;
