@@ -178,7 +178,6 @@ export const commands = {
 		
 			if (emoji) {
 				userDB[msg.author.id].reactionRequest = emoji
-				console.log(userDB)
 				msg.react("👌")
 				return true
 			} else {
