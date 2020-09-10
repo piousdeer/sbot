@@ -197,28 +197,30 @@ client.on('ready', () => {
 			}
 		});
 		let totalHumans = guild.memberCount - botsAmount
-		guild.channels.forEach(channel => {
-			if (channel.type == "text") {
-				let perms = channel.permissionsFor(client.user)
-				if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
-					chCount++
-					channel.fetchMessages({limit: 5})
-						.then(() => {
-							chCountAsync++
-							if (chCountAsync === chCountTotal) {
-								setActiveStatus()
-							}
-						})
-						.catch(error => {
-							chCountTotal = --chCount
-							if (chCountAsync === chCountTotal) {
-								setActiveStatus()
-							}
-							console.log(`Channel ${channel.name} (${channel.id}) from ${channel.guild.name} (${channel.guild.id}) is invalid!`)
-						})
+		if (totalHumans > 15 || guild.id == "166582786143027203") {
+			guild.channels.forEach(channel => {
+				if (channel.type == "text") {
+					let perms = channel.permissionsFor(client.user)
+					if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
+						chCount++
+						channel.fetchMessages({limit: 5})
+							.then(() => {
+								chCountAsync++
+								if (chCountAsync === chCountTotal) {
+									setActiveStatus()
+								}
+							})
+							.catch(error => {
+								chCountTotal = --chCount
+								if (chCountAsync === chCountTotal) {
+									setActiveStatus()
+								}
+								console.log(`Channel ${channel.name} (${channel.id}) from ${channel.guild.name} (${channel.guild.id}) is invalid!`)
+							})
+					}
 				}
-			}
-		})
+			})
+		}
 	})
 
 	chCountTotal = chCount
