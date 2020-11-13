@@ -341,6 +341,9 @@ export const commands = {
 						description: `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}> – ${emoji.name}`, 
 						image: {
 							url: imageLink
+						},
+						footer: {
+							text: `from: ${emoji.guild.name} (${emoji.guild.id})`
 						}
 					}
 				})
