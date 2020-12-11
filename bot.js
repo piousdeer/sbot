@@ -199,7 +199,7 @@ client.on('ready', () => {
 		let totalHumans = guild.memberCount - botsAmount
 		if (totalHumans > 15 || guild.id == "166582786143027203") {
 			guild.channels.forEach(channel => {
-				if (channel.type != "dm") {
+				if (!["category", "dm", "voice"].includes(channel.type)) {
 					let perms = channel.permissionsFor(client.user)
 					if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
 						chCount++
