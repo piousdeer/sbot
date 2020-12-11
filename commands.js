@@ -1139,7 +1139,7 @@ export const commands = {
 			let botMessage
 			let foamImageURL = msg.author.avatarURL
 
-			let nick = (msg.channel.type == "text") ? msg.member.displayName : msg.author.username
+			let nick = (msg.channel.type != "dm") ? msg.member.displayName : msg.author.username
 
 			if (msg.attachments.size) {
 				let att = msg.attachments.first()

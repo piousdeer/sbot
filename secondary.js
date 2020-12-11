@@ -8,7 +8,7 @@ import skmeans from "skmeans"
 // general methods
 
 export function sentLog(msg, text, options) {
-	console.log(`${(msg.channel.type == "text") ? msg.channel.id : "by direct messages"} | ${(new Date).toLocaleString("en-US", options)} <${msg.author.tag}> ${text}`)
+	console.log(`${(msg.channel.type != "dm") ? msg.channel.id : "by direct messages"} | ${(new Date).toLocaleString("en-US", options)} <${msg.author.tag}> ${text}`)
 }
 export function getRandomElem(arr) {
 	return arr[Math.floor(arr.length*Math.random())]
@@ -23,7 +23,7 @@ export function pluralize(n, arr) {
 }
 export function envelope(msg) {
 	// функция для реакции конвертом
-	if (msg.channel.type == "text") {
+	if (msg.channel.type != "dm") {
 		msg.react("✉")
 	}
 }
@@ -31,7 +31,7 @@ export function deleteUserMessage(msg, time) {
 	if (time === undefined) {
 		time = 10000
 	}
-	if (msg.channel.type == "text" && msg.guild.member(client.user.id).hasPermission('MANAGE_MESSAGES')) {
+	if (msg.channel.type != "dm" && msg.guild.member(client.user.id).hasPermission('MANAGE_MESSAGES')) {
 		msg.delete(time)
 		.then(() => {})
 		.catch(error => console.log(error))

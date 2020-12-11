@@ -49,7 +49,7 @@ function processMessage(msg) {
 	let isPrefixThere = components[0].match(BOT_PREFIX)
 
 	// проверка сообщения на наличие команды
-	if (!isPrefixThere && msg.channel.type == "text") {
+	if (!isPrefixThere && msg.channel.type != "dm") {
 		return
 	}
 
@@ -199,7 +199,7 @@ client.on('ready', () => {
 		let totalHumans = guild.memberCount - botsAmount
 		if (totalHumans > 15 || guild.id == "166582786143027203") {
 			guild.channels.forEach(channel => {
-				if (channel.type == "text") {
+				if (channel.type != "dm") {
 					let perms = channel.permissionsFor(client.user)
 					if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
 						chCount++
