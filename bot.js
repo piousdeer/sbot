@@ -182,28 +182,28 @@ client.on('ready', () => {
 
 	function setActiveStatus() {
 		console.log(`${chCountTotal} channels fetched in ${(new Date() - startFetching)/1000} seconds.`)
-		client.user.setPresence({game: {name: `${process.env.BOT_SHORT_NAME} help`, type: 0}})
+		client.user.setPresence({activity: {name: `${process.env.BOT_SHORT_NAME} help`, status:'idle'}})
 	}
 
 	// кэширование сообщений для реакций и сбор айдишников серверов
-	client.guilds.forEach(guild => {
+	client.guilds.cache.array().forEach(guild => {
 		if (guild.emojis.size) {
 			visibleServers.push(guild.id)
 		}
 		let botsAmount = 0
-		guild.members.forEach(member => {
+		guild.members.cache.array().forEach(member => {
 			if (member.user.bot) {
 				botsAmount++;
 			}
 		});
 		let totalHumans = guild.memberCount - botsAmount
 		if (totalHumans > 15 || guild.id == "166582786143027203") {
-			guild.channels.forEach(channel => {
+			guild.channels.cache.array().forEach(channel => {
 				if (!["category", "dm", "voice"].includes(channel.type)) {
 					let perms = channel.permissionsFor(client.user)
 					if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
 						chCount++
-						channel.fetchMessages({limit: 5})
+						channel.fetch()
 							.then(() => {
 								chCountAsync++
 								if (chCountAsync === chCountTotal) {
@@ -283,7 +283,7 @@ function actionsForReactions(messageReaction, user, wasReactionAdded) {
 }
 function checkReactionForAutoreact(messageReaction, user) {
 	if (userDB[user.id] && userDB[user.id].reactionRequest) {
-		let currentUser = client.users.get(user.id)
+		let currentUser = client.users.cache.get(user.id)
 		let currentEmoji = userDB[user.id].reactionRequest
 
 		userDB[user.id].reactionRequest = null
@@ -293,12 +293,12 @@ function checkReactionForAutoreact(messageReaction, user) {
 				let time = 15*1000
 		
 				let timerForDeletingAutoReaction = setTimeout(() => {
-					messageReaction.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
+					messageReaction.message.reactions.cache.get(currentEmoji.name + ":" + currentEmoji.id).users.remove(client.user)
 				}, time)
 		
 				messageReaction.message.awaitReactions((messageReactionAwaited, user) => {
 					if (user.id == currentUser.id && messageReactionAwaited.emoji.id == currentEmoji.id) {
-						messageReactionAwaited.message.reactions.get(currentEmoji.name + ":" + currentEmoji.id).remove(client.user)
+						let react = messageReactionAwaited.message.reactions.cache.find(r => r.emoji == currentEmoji).users.remove(client.user)
 						clearTimeout(timerForDeletingAutoReaction)
 					}
 				}, { time: time })

@@ -32,7 +32,7 @@ export function deleteUserMessage(msg, time) {
 		time = 10000
 	}
 	if (msg.channel.type != "dm" && msg.guild.member(client.user.id).hasPermission('MANAGE_MESSAGES')) {
-		msg.delete(time)
+		msg.delete({timeout:time})
 		.then(() => {})
 		.catch(error => console.log(error))
 		return true
@@ -95,14 +95,14 @@ export function getGuild(guildName, emojiName) {
 			}
 		})
 	}
-	return client.guilds.get(guildId)
+	return client.guilds.cache.get(guildId)
 }
 export function findEmoji(emojiName, guildName) {
 	let emoji
 	let emojiFull
 
 	if (emojiName.match(/^\d+$/g)) {
-		let emojiGotById = client.emojis.get(emojiName)
+		let emojiGotById = client.emojis.cache.get(emojiName)
 		if (emojiGotById) {
 			return emojiGotById
 		}
@@ -114,7 +114,7 @@ export function findEmoji(emojiName, guildName) {
 		storage = client
 	}
 
-	storage.emojis.forEach(key => {
+	storage.emojis.cache.forEach(key => {
 		if (emojiName == key.name.toLowerCase()) {
 			emojiFull = key
 		} else if (key.name.toLowerCase().startsWith(emojiName)) {
@@ -359,8 +359,8 @@ export async function findUser(args) {
 		let isDisplayNameSuitable = false
 		let isDisplayNameCanBeSuitable = false
 
-		client.guilds.forEach(guild => {
-			guild.members.forEach(member => {
+		client.guilds.cache.array().forEach(guild => {
+			guild.members.cache.array().forEach(member => {
 				if (username == getSimpleString(member.displayName)) {
 					result = member.user
 					isDisplayNameSuitable = true
