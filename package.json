@@ -2,12 +2,13 @@
   "name": "sbot",
   "version": "1.15.8",
   "scripts": {
-    "start": "node -r esm bot.js"
+    "start": "node -r esm bot.js",
+    "postinstall": "bash monkey-patch.sh"
   },
   "dependencies": {
     "canvas": "^2.8.0",
     "cheerio": "^1.0.0-rc.10",
-    "discord.js": "github:Rult/discord.js#master",
+    "discord.js": "11.6.4",
     "dotenv": "^6.2.0",
     "esm": "^3.2.4",
     "got": "^9.6.0",
