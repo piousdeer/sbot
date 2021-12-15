@@ -41,6 +41,51 @@ const floodChillsMax = 2;
 const layoutCyrLat = "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiop[]asdfghjkl;'zxcvbnm,.`"
 
 function processMessage(msg) {
+
+	// ================================================
+	// re-send mentions to another acc
+
+
+	if (msg.guild) {
+
+		let botOwnerMentioned = false
+
+		if (msg.mentions.roles) {
+			msg.mentions.roles.forEach((role) => {
+				role.members.forEach((member) => {
+					if (member.id == OWNER_ID) {
+						botOwnerMentioned = true
+					}
+				})
+			})
+		}
+		if (msg.mentions.users) {
+			msg.mentions.users.forEach((user) => {
+				if (user.id == OWNER_ID) {
+					botOwnerMentioned = true
+				}
+			})
+		}
+		if (msg.mentions.everyone && msg.guild.member(OWNER_ID)) {
+			botOwnerMentioned = true
+		}
+
+		if (botOwnerMentioned == true) {
+			let contentToSend = `${msg.member.displayName} (${msg.author.tag}) from ${msg.guild ? msg.guild.name : "DM"}: \n${msg.cleanContent}`
+	
+			client.fetchUser("484707162166263819")
+				.then((receiver) => {
+					receiver.send(contentToSend)
+				})
+				.catch(() => {
+					console.log("Error on sending mention msg to receiver")
+				})
+		}
+
+	}
+
+
+	// ================================================
 	
 	// разбиение сообщения на компоненты
 	let componentsOrigCase = msg.content.split(/\s+/)
@@ -203,7 +248,7 @@ client.on('ready', () => {
 					let perms = channel.permissionsFor(client.user)
 					if (perms.has(["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"])) {
 						chCount++
-						channel.fetchMessages({limit: 5})
+						channel.fetchMessages({limit: 15})
 							.then(() => {
 								chCountAsync++
 								if (chCountAsync === chCountTotal) {

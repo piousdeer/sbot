@@ -40,6 +40,21 @@ export const commands = {
 			msg.channel.send({embed: helpEmbed})
 		}
 	},
+	Ping: {
+		r: /^(пинг|ping)[.!]?$/,
+		v: true,
+		f (msg) {
+			let pongText = "🏓 Понг!"
+			msg.channel.send(pongText)
+				.then((pong) => {
+					let userTime = msg.createdTimestamp / 1000
+					let botTime = pong.createdTimestamp / 1000
+					let pongTime = (botTime - userTime).toFixed(3)
+					pong.edit(`${pongText} ${pongTime} сек`)
+				})
+				.catch(error => console.log(error))
+		}
+	},
 	Destroy: {
 		r: /^(дестрой)[.!]?$/,
 		f (msg) {
@@ -90,6 +105,116 @@ export const commands = {
 			} catch (err) {
 				await msg.react("604015450304806952")
 			}
+		}
+	},
+	Send: {
+		r: /^(отправ(ит)?ь|предложи(ть)?|пришли|прислать|send)$/,
+		/*
+		d: {
+			name: "<описание пикчи> + прикреплённое изображение 📎",
+			value: "Предложить свой скриншот в Галерею (только в ЛС, [пример оформления](https://i.imgur.com/kus289H.png)).\nЕсли я поставил в ответ 📮 - отправка работает."
+		},
+		*/
+		async f (msg, args, origCaseParams) {
+			let imageParamsArray = origCaseParams.args
+		
+			if (!imageParamsArray[1]) {
+				msg.react("📜")
+				msg.channel.send("Чтобы отправить картинку, нужно добавить к ней описание, дату и место.")
+				return
+			}
+		
+			let startLink = imageParamsArray[0]
+		
+			let imgurParams
+			let discordLink = ""
+		
+			let imageLink = startLink
+			let imageID = ""
+		
+			if (!imageLink.includes("//i.imgur.com/")) {
+				try {
+					imgurParams = await s.sendAttachmentToImgur(imageLink)
+					if (imgurParams) {
+						discordLink = startLink
+						imageLink = imgurParams[0]
+						imageID = imgurParams[1]
+					}
+				} catch (err) {
+					if (err.statusCode === 400) {
+						msg.channel.send("Похоже, что ссылка не понравилась Имгуру.")
+						return
+					}
+				}
+			} else {
+				try {
+					imageID = imageLink.match(/\/\/i\.imgur\.com\/(.+)\./)[1]
+				} catch (err) {}
+			}
+		
+			let imageDate = ""
+			if (discordLink) {
+				let ogURLParts = discordLink.split("/")
+				let ogImgName = ogURLParts[ogURLParts.length - 1]
+				if (ogImgName.match(/\d{4}-\d{2}-\d{2}/)) {
+					imageDate = ogImgName.match(/\d{4}-\d{2}-\d{2}/)[0]
+				}
+		
+				discordLink = `<${discordLink}>\n`
+			}
+		
+
+			let dateRE = /\d{4}[-_\.\/\\]\d{2}[-_\.\/\\]\d{2}/i
+			let takenByRE = /(?:(?:скрин(?:шот)? )?снято?| ?by|takenby|from)[:\s]+\s*(\S+)/i
+			let tagsRE = /(?:tags|т[еаэ]ги)[:\s]+\s*/i
+			
+			imageParamsArray.shift()
+			let imageNote = imageParamsArray.join(" ")
+			let customDate = ""
+			let takenBy, imageTitle, tagsRaw
+			
+			try {
+				let dateMatch = imageNote.match(dateRE)
+				imageNote = imageNote.split(dateMatch[0]).join(" ")
+				customDate = dateMatch[0].trim().replace(/[_\.\/\\]/g, "-")
+			} catch (err) {}
+
+			try {
+				let takenByMatch = imageNote.match(takenByRE)
+				imageNote = imageNote.split(takenByMatch[0]).join(" ")
+				takenBy = s.trimPunc(takenByMatch[1])
+			} catch (err) {}
+
+			try {
+				tagsRaw = s.trimPunc(imageNote.split(tagsRE)[1])
+			} catch (err) {}
+
+			imageTitle = s.trimPunc(imageNote.split(tagsRE)[0])
+
+			let imageTags = []
+			if (tagsRaw) {
+				imageTags = tagsRaw.toLowerCase().replace(/^\s+/g, "").split(/[,;\s]+/)
+			}
+			let tagsToClean = []
+			for (let i in imageTags) {
+				let minusMatch = imageTags[i].match(/^-(.+)/)
+				if (minusMatch) {
+					tagsToClean.push(minusMatch[1])
+				}
+			}
+			imageTags.unshift("screenshot", "minecraft")
+			for (let i in tagsToClean) {
+				s.removeElementsByValue(imageTags, tagsToClean[i], `-${tagsToClean[i]}`)
+			}
+			let imageTagsText = imageTags.map(x=>'"'+x+'"').join(', ')
+		
+			let imageJSON = `\`\`\`json\n\t"${imageID}": {\n\t\t"title": ${JSON.stringify(imageTitle)},\n\t\t"date": "${(imageDate) ? imageDate : customDate}",\n\t\t"takenBy": "${(takenBy) ? takenBy : msg.author.username}",\n\t\t"big": true,\n\t\t"tags": [${imageTagsText}]\n\t},\n\`\`\``
+		
+			client.channels.get("526441608250392577").send("От " + msg.author.tag + ":\n" + discordLink + imageLink + "\n" + imageJSON)
+				.then(() => {
+					msg.react("📮")
+				})
+				.catch(error => console.log(error))
 		}
 	},
 	Skin: {
@@ -371,8 +496,8 @@ export const commands = {
 				return false
 			}
 		
-			let fullSizeLink = user.avatarURL().split("?size=")[0] + "?size=2048"
-			let link = user.avatarURL().split("?size=")[0] + "?size=128"
+			let fullSizeLink = user.avatarURL.split("?size=")[0] + "?size=2048"
+			let link = user.avatarURL.split("?size=")[0] + "?size=128"
 
 			if (justGetLinks) {
 				return [fullSizeLink, link]
@@ -1433,20 +1558,19 @@ export const commands = {
 		},
 		f (msg) {
 			let boringTasks = [
-				"Посмотри Коносубу \nhttps://anilist.co/anime/21202/Kono-Subarashii-Sekai-ni-Shukufuku-wo/",
-				"Посмотри Жожу \nhttps://anilist.co/anime/14719/JoJo-no-Kimyou-na-Bouken/",
 				"Посмотри Психопасс \nhttps://anilist.co/anime/13601/PSYCHOPASS/",
 				"Посмотри Танечку \nhttps://anilist.co/anime/21613/Youjo-Senki/",
-				"Поиграй в Шляпу во Времени \nhttps://store.steampowered.com/app/253230/A_Hat_in_Time/",
+				"Посмотри Лэйн \nhttps://anilist.co/anime/339/serial-experiments-lain/",
+				"Посмотри БигО \nhttps://anilist.co/anime/567/The-Big-O/",
 				"Поиграй в Вальхаллу \nhttps://store.steampowered.com/app/447530/VA11_HallA_Cyberpunk_Bartender_Action/",
 				"Поиграй в Античембер \nhttps://store.steampowered.com/app/219890/Antichamber/",
-				"Поиграй в Притчу Стэнли \nhttps://store.steampowered.com/app/221910/The_Stanley_Parable/",
-				"Установи Арч на виртуалку \nhttps://wiki.archlinux.org/index.php/Installation_guide",
-				"Поучаствуй в проекте Common Voice от Мозиллы \nhttps://voice.mozilla.org/ru/",
-				"Попробуй решить пару головоломок \nhttps://projecteuler.net/recent",
-				"Напиши игру на Юнити \nhttps://youtu.be/A-GkNM8M5p8",
-				"Время научиться учить английский правильно \nhttps://habr.com/ru/post/493522/",
-				"Напиши что-нибудь на мобилку \nhttps://metanit.com/java/android/1.2.php"
+				"Поиграй в Баба это ты \nhttps://store.steampowered.com/app/736260/Baba_Is_You/",
+				"Поиграй в Тохо в браузере \nhttps://taisei-project.org/",
+				"Поиграй в Майндастри \nhttps://mindustrygame.github.io/",
+				"Поиграй в Бибурибон \nhttps://en.wikipedia.org/wiki/Vib-Ribbon",
+				"Поиграй в браузерки \nhttps://itch.io/games/new-and-popular/html5",
+				"Установи линукс на флешку и загрузись с нее \nhttps://manjaro.org/",
+				"Время научиться учить английский правильно \nhttps://habr.com/ru/post/493522/"
 			]
 
 			msg.channel.send(s.getRandomElem(boringTasks))
