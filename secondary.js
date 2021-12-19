@@ -7,8 +7,19 @@ import skmeans from "skmeans"
 
 // general methods
 
-export function sentLog(msg, text, options) {
-	console.log(`${(msg.channel.type != "dm") ? msg.channel.id : "by direct messages"} | ${(new Date).toLocaleString("en-US", options)} <${msg.author.tag}> ${text}`)
+export function getLogDate() {
+	const dateTimeOptions = {
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+		timeZone: "Europe/Moscow",
+		month: "2-digit",
+		day: "2-digit"
+	}
+	return (new Date).toLocaleString("en-US", dateTimeOptions)
+}
+export function sentLog(msg, text) {
+	console.log(`${(msg.channel.type != "dm") ? msg.channel.id : "by direct messages"} | ${getLogDate()} <${msg.author.tag}> ${text}`)
 }
 export function getRandomElem(arr) {
 	return arr[Math.floor(arr.length*Math.random())]

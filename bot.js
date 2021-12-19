@@ -127,7 +127,7 @@ function processMessage(msg) {
 		}
 		if (score > floodMax) {
 			if (udata.fchills == floodChillsMax - 1) {
-				console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | ${msg.author.tag} is flooding now!!`)
+				console.log(`| ${s.getLogDate()} | ${msg.author.tag} is flooding now!!`)
 				msg.channel.send(s.getRandomElem([
 					"🙅 СТОП! ✋ СТОЯТЬ! ⛔ \n🕑 Время флуда закончилось! 🕑",
 					"Дудос проведён успешно! <:sho:355426437639176194>",
@@ -171,7 +171,7 @@ function processMessage(msg) {
 
 	// если команда найдена, запишем сообщение в лог
 	requestsCounter++
-	s.sentLog(msg, componentsOrigPings.join(" "), logDateOptions)
+	s.sentLog(msg, componentsOrigPings.join(" "))
 
 
 	// попробовать сменить раскладку на всякий случай
@@ -281,7 +281,7 @@ client.on('message', msg => {
 
 	messagesCounter++
 	let um = messagesCounter - requestsCounter
-	if (um && um % 1000 == 0) console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Useless messages: ${um}`)
+	if (um && um % 1000 == 0) console.log(`| ${s.getLogDate()} | Useless messages: ${um}`)
 })
 function actionsForReactions(messageReaction, user, wasReactionAdded) {
 	let msg = messageReaction.message
@@ -379,14 +379,14 @@ client.on('guildCreate', (guild) => {
 	if (guild.emojis.size) {
 		visibleServers.push(guild.id)
 	}
-	console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Bot was added to ${guild.name} (${guild.id})`)
+	console.log(`| ${s.getLogDate()} | Bot was added to ${guild.name} (${guild.id})`)
 })
 client.on('guildDelete', (guild) => {
 	let index = visibleServers.indexOf(guild.id)
 	if (index) {
 		visibleServers.splice(index, 1)
 	}
-	console.log(`| ${(new Date).toLocaleString("en-US", logDateOptions)} | Bot was kicked from ${guild.name} (${guild.id})`)
+	console.log(`| ${s.getLogDate()} | Bot was kicked from ${guild.name} (${guild.id})`)
 })
 
 function login() {
