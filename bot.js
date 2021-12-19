@@ -390,6 +390,10 @@ client.on('guildDelete', (guild) => {
 })
 
 function login() {
-    client.login(TOKEN).catch(() => setTimeout(login, 5000))
+		console.log(`| ${s.getLogDate()} | Attempting login`)
+    client.login(TOKEN).catch((error) => {
+			console.warn(`| ${s.getLogDate()} | Login failed:`, error)
+			setTimeout(login, 5000)
+		})
 }
 login()
