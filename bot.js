@@ -242,7 +242,7 @@ client.on('ready', () => {
 			}
 		});
 		let totalHumans = guild.memberCount - botsAmount
-		if (totalHumans > 15 || guild.id == "166582786143027203") {
+		if (/* totalHumans > 15 || */ guild.id == "166582786143027203") {
 			guild.channels.forEach(channel => {
 				if (!["category", "dm", "voice"].includes(channel.type)) {
 					let perms = channel.permissionsFor(client.user)
